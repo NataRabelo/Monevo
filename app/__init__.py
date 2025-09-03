@@ -32,7 +32,9 @@ def create_app(config_class = None):
 
     db.init_app(app)
     bcrypt.init_app(app)
-    migrate.init_app(app)
+    migrate.init_app(app, db)
+
+    from . import models
 
     login_manager.init_app(app)
     login_manager.login_view = 'main.index'
