@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cad. Usuário | Monevo</title>
+    <title>Cadastro de Usuário | Monevo</title>
 
-    <!-- Estilos externos: Bootstrap, Font Awesome e CSS personalizado -->
+    <!-- Bootstrap e Font Awesome para estilo e ícones -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- CSS personalizado -->
     <link rel="stylesheet" href="/app/static/css/cadastro.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
 
@@ -18,51 +20,51 @@
 </head>
 
 <body>
-    <h1 id="h1">Monevo</h1>
+    <h1 id="titulo-site">Monevo</h1>
 
     <!-- Formulário de cadastro de usuário -->
-    <form action="{{ url_for('auth.cadastrar_usuario') }}" method="POST" class="form">
-        <h2 class="h2">Cadastro de Usuário</h2>
+    <form action="{{ url_for('auth.cadastrar_usuario') }}" method="POST" class="formulario-cadastro">
+        <h2 class="titulo-formulario">Cadastro de Usuário</h2>
 
         <!-- Campo: Nome -->
         <div class="mb-3">
-            <label for="nome" class="form-label">Nome Completo:</label>
+            <label for="campo-nome" class="form-label">Nome Completo:</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="text" class="form-control" id="nome" name="nome" required>
+                <input type="text" class="form-control" id="campo-nome" name="nome" required>
             </div>
         </div>
 
         <!-- Campo: Email -->
         <div class="mb-3">
-            <label for="email" class="form-label">Email:</label>
+            <label for="campo-email" class="form-label">Email:</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="campo-email" name="email" required>
             </div>
         </div>
 
         <!-- Campo: Senha -->
         <div class="mb-3">
-            <label for="senha" class="form-label">Senha:</label>
+            <label for="campo-senha" class="form-label">Senha:</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input type="password" class="form-control" id="senha" name="senha" required>
+                <input type="password" class="form-control" id="campo-senha" name="senha" required>
             </div>
         </div>
 
         <!-- Botão de envio -->
-        <button type="submit" class="button">
+        <button type="submit" class="botao-enviar">
             <i class="fas fa-user-plus"></i> Criar Conta
         </button>
-        
+
         <!-- Link para página de login -->
-        <div class="text-center mt-3">
+        <div class="texto-central mt-3">
             <a href="{{ url_for('auth.login') }}">← Já tem uma conta? Faça login</a>
         </div>
     </form>
 
-     <!-- Scripts do Bootstrap do Js-->
+    <!-- Scripts do Bootstrap e JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/app/static/js/cadastro.js"></script>
     <script src="{{ url_for('static', filename='js/cadastro.js') }}"></script>

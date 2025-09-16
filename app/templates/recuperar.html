@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recuperação Senha | Monevo</title>
+
+    <!-- Bootstrap e Font Awesome para estilo e ícones -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="/app/static/css/recuperar.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recuperar.css') }}">
+
+    <!-- Ícone da aba -->
+    <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <h1 id="titulo-site"> Monevo </h1>
+
+    <!-- Formulário de recuperação de senha -->
+    <form action="{{ url_for('auth.recuperar') }}" method="POST" id="recuperar-form">
+        <h2 class="texto-central mb-4">Recuperação de Senha</h2>
+
+        <!-- Campo de email -->
+        <div class="email mb-3">
+            <label for="email" class="form-label">Email cadastrado</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" class="form-control" id="campo-email" name="email" required>
+            </div>
+        </div>
+
+        <!-- Botão de envio -->
+        <button type="submit" class="botao w-100">
+            <i class="fas fa-paper-plane"></i> Enviar Link de Recuperação
+        </button>
+
+        <!-- Link de volta ao login -->
+        <div class="texto-central mt-3">
+            <a href="{{ url_for('auth.login') }}">← Voltar para o login</a>
+        </div>
+    </form>
+
+    <!-- Scripts do Bootstrap do Js-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/app/static/js/recuperar.js"></script>
+    <script src="{{ url_for('static', filename='js/recuperar.js') }}"></script>
+</body>
+
+</html>

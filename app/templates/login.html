@@ -20,33 +20,33 @@
 </head>
 
 <body>
-    <h1 id="h1"> <strong>Monevo</strong> </h1>
+    <h1 id="titulo-site"> Monevo </h1>
 
     <div class="login-container">
-        <h2 class="text-center">Login</h2>
+        <h2 class="texto-central">Login</h2>
 
         <!-- Formulário de login -->
         <form id="loginForm" action="{{ url_for('auth.login') }}" method="POST">
             <!-- Campo de email -->
-            <div class="mb-3">
+            <div class=" email mb-3">
                 <label for="email" class="form-label">Email</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="campo-email" name="email" required>
                 </div>
             </div>
 
             <!-- Campo de senha -->
-            <div class="mb-3">
+            <div class=" senha mb-3">
                 <label for="senha" class="form-label">Senha</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    <input type="password" class="form-control" id="senha" name="senha" required>
+                    <input type="password" class="form-control" id="campo-senha" name="senha" required>
                 </div>
             </div>
              
             <!-- Botão entrar -->
-            <button type="submit" class="btn btn-login w-100">
+            <button type="submit" class="btn botao-login w-100">
                 <i class="fas fa-right-to-bracket"></i> Entrar
             </button>
 
@@ -54,7 +54,7 @@
         </form>
 
         <!-- Links para recuperação de senha e cadastro -->
-        <div class="text-center mt-3">
+        <div class="texto-central mt-3">
             <a href="{{ url_for('auth.recuperar')}}">Recuperar Senha</a>
             <a href="{{ url_for('auth.cadastrar_usuario')}}">Cadastrar Conta</a>
         </div>
