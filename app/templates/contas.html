@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Contas | Monevo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap e Font Awesome para estilo e ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- CSS local -->
+  <link rel="stylesheet" href="/app/static/css/contas.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/contas.css') }}">
+
+  <!-- Ícone da aba -->
+  <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+  <!-- Barra de navegação -->
+  <nav class="barra-navegacao navbar navbar-expand-lg navbar-dark shadow-sm px-3">
+    <a class="navbar-brand fw-bold me-4" href="#">Monevo</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-navegacao"
+      aria-controls="menu-navegacao" aria-expanded="false" aria-label="Alternar navegação">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="menu-navegacao">
+      <ul class="navbar-nav align-items-center gap-3">
+        <li class="nav-item">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('main.menu') }}">
+            <i class="fas fa-home me-2"></i> Menu
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('user.usuario') }}">
+            <i class="fas fa-user me-2"></i> Usuário
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('auth.login') }}">
+            <i class="fas fa-sign-out-alt me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <!-- Título -->
+    <h1 class="mb-5 text-center">
+      Minhas Contas e Cartões
+    </h1>
+
+    <!-- Linha com Contas e Cartões lado a lado -->
+    <div class="row">
+      <!-- Contas Bancárias -->
+      <div class="col-md-6">
+        <h3 class="mb-3">
+          <i class="fas fa-university me-2"></i>Contas Bancárias
+        </h3>
+
+        <button class="btn btn-secondary mb-3" id="botao_cadastrar_conta">
+          <i class="fas fa-plus me-2"></i>Cadastrar Conta
+        </button>
+
+        <!-- Formulário de Conta -->
+        <div id="formulario_conta" class="card p-3 mb-4 shadow-sm d-none">
+          <h5 class="mb-3">Nova Conta Bancária</h5>
+          <form method="POST" action="{{ url_for('conta.cadastrar_conta') }}">
+            <div class="mb-2">
+              <label for="nome_banco" class="form-label">Nome do Banco</label>
+              <input type="text" class="form-control" id="nome_banco" name="banco" required>
+            </div>
+            <div class="mb-2">
+              <label for="saldo_inicial" class="form-label">Saldo Inicial</label>
+              <input type="text" class="form-control" id="saldo_inicial" name="saldo_inicial" placeholder="R$ 0,00"
+                required>
+            </div>
+            <div class="mt-3 d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-1"></i>Salvar
+              </button>
+              <button type="button" class="btn btn-outline-secondary" id="botao_cancelar_conta">
+                <i class="fas fa-times me-1"></i>Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Listagem de Contas -->
+        <div class="row">
+          {% for conta in contas %}
+          <div class="col-12">
+            <div class="card shadow-sm mb-3">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-landmark me-1"></i>Conta: {{ conta.banco }}
+                </h5>
+                <p class="card-text">
+                  <i class="fas fa-wallet me-1"></i>Saldo: R$ {{ "%.2f"|format(conta.saldo_inicial) }}
+                </p>
+                <div class="d-flex justify-content-end">
+                  <form method="POST" action="{{ url_for('conta.excluir_conta', id=conta.id) }}"
+                    onsubmit="return confirm('Tem certeza que deseja excluir esta conta?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <p class="text-muted">Nenhuma conta cadastrada.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Cartões -->
+      <div class="col-md-6">
+        <h3 class="mb-3">
+          <i class="fas fa-credit-card me-2"></i>Cartões de Crédito
+        </h3>
+
+        <button class="btn btn-secondary mb-3" id="botao_cadastrar_cartao">
+          <i class="fas fa-plus me-2"></i>Cadastrar Cartão
+        </button>
+
+        <!-- Formulário de Cartão -->
+        <div id="formulario_cartao" class="card p-3 mb-4 shadow-sm d-none">
+          <h5 class="mb-3">Novo Cartão de Crédito</h5>
+          <form method="POST" action="{{ url_for('cartao.cadastrar_cartao') }}">
+            <div class="mb-2">
+              <label for="credito_cartao" class="form-label">Crédito</label>
+              <input type="text" class="form-control" id="credito_cartao" name="credito" required>
+            </div>
+            <div class="mb-2">
+              <label for="conta_relacionada" class="form-label">Conta</label>
+              <select class="form-select" name="conta" id="conta_relacionada" required>
+                <option value="">Selecione...</option>
+                {% for conta in contas %}
+                <option value="{{ conta.id }}">{{ conta.banco }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mt-3 d-flex justify-content-between">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-1"></i>Salvar
+              </button>
+              <button type="button" class="btn btn-outline-secondary" id="botao_cancelar_cartao">
+                <i class="fas fa-times me-1"></i>Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Listagem de Cartões -->
+        <div class="row">
+          {% for cartao in cartoes %}
+          <div class="col-12">
+            <div class="card border-primary shadow-sm mb-3">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-coins me-2"></i>Crédito: R$ {{ "%.2f"|format(cartao.credito) }}
+                </h5>
+                <p class="card-text">
+                  <i class="fas fa-university me-1"></i>Conta: {{ cartao.conta.banco }}
+                </p>
+                <div class="d-flex justify-content-end">
+                  <form method="POST" action="{{ url_for('cartao.excluir_cartao', id=cartao.id) }}"
+                    onsubmit="return confirm('Tem certeza que deseja excluir este cartão?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <p class="text-muted">Nenhum cartão cadastrado.</p>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/Conta.js') }}"></script>
+  <script src="/app/static/js/conta.js"></script>
+</body>
+
+</html>

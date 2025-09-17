@@ -1,0 +1,75 @@
+/* Fundo geral */
+body {
+  background-color: #1D2128;
+  color: #ffffff;
+}
+
+/* Navbar */
+.barra-navegacao {
+  background-color: #3C90C0 !important;
+}
+
+.barra-navegacao .link-navegacao,
+.barra-navegacao .link-navegacao i {
+  color: white !important;
+}
+
+/* Títulos */
+h1,
+h3,
+.card-title {
+  color: white;
+}
+
+/* Cards */
+.card {
+  background-color: #3C90C0;
+  border-radius: 12px;
+  color: white;
+  transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+.card-text {
+  color: #f1f1f1;
+}
+
+/* Botões */
+.btn-primary {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #1D2128;
+}
+
+.btn-secondary {
+  background-color: #3C90C0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  transition: background-color 0.2s ease-in-out;
+}
+.btn-secondary:hover {
+  background-color: #3C90C0;
+  color: white;
+}
+
+.btn-outline-secondary {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+}
+.btn-outline-secondary:hover {
+  background-color: #1D2128;
+}
+
+/* Texto auxiliar */
+.text-muted {
+  color: #ccc !important;
+  font-style: italic;
+}
