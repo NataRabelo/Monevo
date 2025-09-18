@@ -53,7 +53,7 @@
   <div class="container py-5">
     <!-- Título -->
     <h1 class="mb-5 text-center">
-      Minhas Contas e Cartões
+      Minhas contas e cartões
     </h1>
 
     <!-- Linha com Contas e Cartões lado a lado -->
@@ -61,23 +61,23 @@
       <!-- Contas Bancárias -->
       <div class="col-md-6">
         <h3 class="mb-3">
-          <i class="fas fa-university me-2"></i>Contas Bancárias
+          <i class="fas fa-university me-2"></i>Contas bancárias
         </h3>
 
         <button class="btn btn-secondary mb-3" id="botao_cadastrar_conta">
-          <i class="fas fa-plus me-2"></i>Cadastrar Conta
+          <i class="fas fa-plus me-2"></i>Cadastrar conta
         </button>
 
         <!-- Formulário de Conta -->
         <div id="formulario_conta" class="card p-3 mb-4 shadow-sm d-none">
-          <h5 class="mb-3">Nova Conta Bancária</h5>
+          <h5 class="mb-3">Nova conta bancária</h5>
           <form method="POST" action="{{ url_for('conta.cadastrar_conta') }}">
             <div class="mb-2">
-              <label for="nome_banco" class="form-label">Nome do Banco</label>
+              <label for="nome_banco" class="form-label">Nome do banco</label>
               <input type="text" class="form-control" id="nome_banco" name="banco" required>
             </div>
             <div class="mb-2">
-              <label for="saldo_inicial" class="form-label">Saldo Inicial</label>
+              <label for="saldo_inicial" class="form-label">Saldo inicial</label>
               <input type="text" class="form-control" id="saldo_inicial" name="saldo_inicial" placeholder="R$ 0,00"
                 required>
             </div>
@@ -124,16 +124,16 @@
       <!-- Cartões -->
       <div class="col-md-6">
         <h3 class="mb-3">
-          <i class="fas fa-credit-card me-2"></i>Cartões de Crédito
+          <i class="fas fa-credit-card me-2"></i>Cartões de crédito
         </h3>
 
         <button class="btn btn-secondary mb-3" id="botao_cadastrar_cartao">
-          <i class="fas fa-plus me-2"></i>Cadastrar Cartão
+          <i class="fas fa-plus me-2"></i>Cadastrar cartão
         </button>
 
         <!-- Formulário de Cartão -->
         <div id="formulario_cartao" class="card p-3 mb-4 shadow-sm d-none">
-          <h5 class="mb-3">Novo Cartão de Crédito</h5>
+          <h5 class="mb-3">Novo cartão de crédito</h5>
           <form method="POST" action="{{ url_for('cartao.cadastrar_cartao') }}">
             <div class="mb-2">
               <label for="credito_cartao" class="form-label">Crédito</label>

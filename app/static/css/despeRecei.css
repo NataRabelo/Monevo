@@ -1,0 +1,221 @@
+/* ===== FUNDO GERAL ===== */
+body {
+  background-color: #1D2128;
+  color: #ffffff;
+}
+
+/* ===== NAVBAR ===== */
+.barra-navegacao {
+  background-color: #3C90C0 !important;
+}
+
+.barra-navegacao .link-navegacao,
+.barra-navegacao .link-navegacao i {
+  color: white !important;
+}
+
+.barra-navegacao .link-navegacao:hover {
+  color: #dddddd !important;
+}
+
+/* ===== CONTEÚDO CENTRAL ===== */
+.tela-central {
+  padding: 20px;
+}
+
+/* ===== CAIXAS PRINCIPAIS ===== */
+.caixa-receita,
+.caixa-despesa,
+.card.bg-info {
+  border-radius: 0.5rem;
+  padding: 20px;
+}
+
+.sombra-caixa {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+}
+
+/* RECEITAS */
+.caixa-receita {
+  background-color: #306733;
+  color: white;
+}
+
+/* DESPESAS */
+.caixa-despesa {
+  background-color: #C62828;
+  color: white;
+}
+
+/* Cabeçalhos */
+.caixa-receita h3,
+.caixa-despesa h3 {
+  margin-bottom: 1rem;
+}
+
+.valor-total {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ===== TABELAS ===== */
+.table {
+  background-color: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  vertical-align: middle !important;
+  padding: 10px;
+  font-size: 0.95rem;
+  color: #000;
+}
+
+.table thead th {
+  text-align: center;
+}
+
+/* ===== BOTÕES ===== */
+.btn {
+  border-radius: 0.5rem;
+}
+
+.btn-dark {
+  background-color: #1D2128;
+  border: none;
+}
+
+.btn-dark:hover {
+  background-color: #333944;
+}
+
+.btn-warning,
+.btn-danger {
+  border-radius: 0.5rem;
+  padding: 4px 8px;
+}
+
+.btn-sm i {
+  font-size: 0.85rem;
+}
+
+.tela-central {
+  padding: 20px;
+}
+
+.caixa-receita,
+.caixa-despesa {
+  border-radius: 0.5rem;
+  padding: 20px;
+  color: white;
+}
+
+.caixa-receita {
+  background-color: #306733;
+}
+
+.caixa-despesa {
+  background-color: #C62828;
+}
+
+.valor-total {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.sombra-caixa {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Garante que Receitas e Despesas fiquem lado a lado em telas grandes */
+@media (min-width: 992px) {
+  .col-lg-6 {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.caixa-importacao {
+  background-color: #3C90C0;
+  color: white;
+  padding: 20px;
+  border-radius: 0.5rem;
+  margin-bottom: 20px;
+  width: 900px;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+
+.botoes-importacao .btn {
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.texto-importacao h5 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.texto-importacao p {
+  margin: 2px 0;
+}
+
+/* Modal Cadastro - Aparência Geral */
+#modalCadastro .modal-content {
+  border-radius: 0.75rem;
+  border: none;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  background-color: #1D2128;
+  color: #fff;
+}
+
+#modalCadastro .modal-header {
+  background-color: #3C90C0;
+  border-bottom: none;
+  color: #fff;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+
+#modalCadastro .modal-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+#modalCadastro .btn-close {
+  filter: invert(1);
+}
+
+#modalCadastro .modal-body {
+  padding: 1.5rem;
+}
+
+#modalCadastro .form-control,
+#modalCadastro .form-select {
+  background-color: #ffffff;
+  border: 1px solid #3C90C0;
+  color: #000000;
+}
+
+#modalCadastro .form-control:focus,
+#modalCadastro .form-select:focus {
+  border-color: #3C90C0;
+  box-shadow: 0 0 0 0.2rem rgba(60,144,192,0.4);
+}
+
+#modalCadastro .form-label {
+  font-weight: 500;
+}
+
+#modalCadastro button[type="submit"] {
+  background-color: #3C90C0;
+  border: none;
+  font-weight: 600;
+}
+
+#modalCadastro button[type="submit"]:hover {
+  background-color: #337fa6;
+}

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Contas | Monevo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap e Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- CSS local -->
+  <link rel="stylesheet" href="/app/static/css/despeRecei.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/despeRecei.css') }}">
+
+  <!-- Ícone -->
+  <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+  <!--  NAVBAR -->
+  <nav class="barra-navegacao navbar navbar-expand-lg navbar-dark shadow-sm px-3">
+    <a class="navbar-brand fw-bold me-4" href="#">Monevo</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-navegacao"
+      aria-controls="menu-navegacao" aria-expanded="false" aria-label="Alternar navegação">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="menu-navegacao">
+      <ul class="navbar-nav align-items-center gap-3">
+        <li class="nav-item">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('main.menu') }}">
+            <i class="fas fa-home me-2"></i> Menu
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('user.usuario') }}">
+            <i class="fas fa-user me-2"></i> Usuário
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('auth.login') }}">
+            <i class="fas fa-sign-out-alt me-2"></i> Sair
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="container py-5">
+    <h1 class="mb-5 text-center">Minhas despesas e receitas</h1>
+
+    <div class="container-fluid tela-central">
+      <div class="row justify-content-center g-4">
+
+        <!-- CAIXA DE IMPORTAÇÃO -->
+        <div class="col-12">
+          <div class="caixa-importacao sombra-caixa">
+            <div class="row align-items-center">
+              <div class="col-md-4 botoes-importacao">
+                <button class="btn btn-light w-100 mb-2" id="btnSelecionar">Selecionar arquivo (.OFX)</button>
+                <input type="file" id="inputArquivo" accept=".ofx" style="display: none;">
+                <button class="btn btn-dark w-100 mb-2">Importar arquivo</button>
+                <button class="btn btn-light w-100">Finalizar importação</button>
+              </div>
+              <div class="col-md-8 texto-importacao">
+                <h5><i class="fas fa-check-circle me-2"></i> Importação concluída com sucesso!</h5>
+                <p>Transações lidas: <strong>120</strong></p>
+                <p>Duplicadas: <strong>5</strong></p>
+                <p>Importadas: <strong>115</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECEITAS -->
+        <div class="col-12 col-lg-6">
+          <div class="caixa-receita sombra-caixa">
+            <h3>Receitas</h3>
+            <div class="valor-total">
+              <h3 id="total-receitas">R$ 4.500,00</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered align-middle text-center" id="tabela-receitas">
+                <thead class="table-success">
+                  <tr>
+                    <th>Origem</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Pagamento</td>
+                    <td>Salário do mês</td>
+                    <td>Pix</td>
+                    <td>R$ 4.000,00</td>
+                    <td>02/09/2025</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Investimento</td>
+                    <td>CDB</td>
+                    <td>Dinheiro</td>
+                    <td>R$ 500,00</td>
+                    <td>02/09/2025</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-end">
+              <button class="btn btn-dark btn-sm rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#modalCadastro">
+                Adicionar Dados
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESPESAS -->
+        <div class="col-12 col-lg-6">
+          <div class="caixa-despesa sombra-caixa">
+            <h3>Despesas</h3>
+            <div class="valor-total">
+              <h3 id="total-despesas">R$ 1.100,00</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered align-middle text-center" id="tabela-despesas">
+                <thead class="table-danger">
+                  <tr>
+                    <th>Origem</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Carro</td>
+                    <td>Gasolina do mês</td>
+                    <td>Crédito</td>
+                    <td>R$ 300,00</td>
+                    <td>02/09/2025</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Alimentação</td>
+                    <td>Supermercado</td>
+                    <td>Débito</td>
+                    <td>R$ 800,00</td>
+                    <td>02/09/2025</td>
+                    <td>
+                      <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-end">
+              <button class="btn btn-dark btn-sm rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#modalCadastro">
+                Adicionar Dados
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE CADASTRO -->
+  <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCadastroLabel">Adicionar dados</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formCadastro">
+            <div class="mb-3">
+              <label class="form-label">Origem</label>
+              <input type="text" class="form-control" name="origem" required>
+            </div>
+            <div class="desricao mb-3">
+              <label class="form-label">Descrição</label>
+              <input type="text" class="form-control" name="descricao" required>
+            </div>
+            <div class="tipo mb-3">
+              <label class="form-label">Tipo</label>
+              <input type="text" class="form-control" name="tipo" required>
+            </div>
+            <div class="valor mb-3">
+              <label class="form-label">Valor (R$)</label>
+              <input type="number" step="0.01" class="form-control" name="valor" required>
+            </div>
+            <div class="data mb-3">
+              <label class="form-label">Data</label>
+              <input type="date" class="form-control" name="data" required>
+            </div>
+            <div class="categoria mb-3">
+              <label class="form-label">Categoria</label>
+              <select class="form-select" name="categoria" required>
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/app/static/js/despeRecei.js"></script>
+  <script src="{{ url_for('static', filename='js/despeRecei.js') }}"></script>
+</body>
+
+</html>

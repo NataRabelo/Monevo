@@ -62,7 +62,7 @@
         <div class="cartao cartao-verde">
           <div class="cartao-corpo">
             <h5 class="cartao-titulo">
-              <i class="fas fa-dollar-sign me-2"></i>Valor Total de Receitas
+              <i class="fas fa-dollar-sign me-2"></i>Valor total de receitas
             </h5>
             <p class="cartao-texto fs-4">R$ {{ '%.2f' | format(total_receitas) }}</p>
           </div>
@@ -74,7 +74,7 @@
         <div class="cartao cartao-vermelho">
           <div class="cartao-corpo">
             <h5 class="cartao-titulo">
-              <i class="fas fa-credit-card me-2"></i>Valor Total de Despesas
+              <i class="fas fa-credit-card me-2"></i>Valor total de despesas
             </h5>
             <p class="cartao-texto fs-4">R$ {{ '%.2f' | format(total_despesas) }}</p>
           </div>
@@ -86,7 +86,7 @@
         <div class="cartao cartao-azul">
           <div class="cartao-corpo">
             <h5 class="cartao-titulo">
-              <i class="fas fa-balance-scale me-2"></i>Diferença entre Receitas e Despesas
+              <i class="fas fa-balance-scale me-2"></i>Diferença entre receitas e despesas
             </h5>
             <p class="cartao-texto fs-4">R$ {{ '%.2f' | format(diferenca) }}</p>
           </div>
@@ -97,13 +97,13 @@
     <!-- Botões principais -->
     <div class="d-flex justify-content-center gap-3 mb-5">
       <a href="{{ url_for('desprec.desprecs') }}" class="botao-azul btn btn-lg">
-        <i class="fas fa-exchange-alt me-2"></i>Despesas e Receitas
+        <i class="fas fa-exchange-alt me-2"></i>Despesas e receitas
       </a>
       <a href="{{ url_for('projecao.projecoes') }}" class="botao-vermelho btn btn-lg">
-        <i class="fas fa-chart-line me-2"></i>Central de Projeção
+        <i class="fas fa-chart-line me-2"></i>Central de projeção
       </a>
       <a href="{{ url_for('conta.contas') }}" class="botao-verde btn btn-lg">
-        <i class="fas fa-university me-2"></i>Contas e Cartões
+        <i class="fas fa-university me-2"></i>Contas e cartões
       </a>
     </div>
   </div>

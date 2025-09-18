@@ -23,7 +23,7 @@
   <h1 id="titulo-principal"> Monevo </h1>
 
   <div class="container-senha">
-    <h4 class="texto-central mb-4">Criar Nova Senha</h4>
+    <h4 class="texto-central mb-4">Criar nova senha</h4>
 
     <!-- Formulário para criar e salvar nova senha -->
     <form action="{{ url_for('salvar_senha') }}" method="POST" id="formulario-nova-senha">
@@ -39,7 +39,7 @@
 
       <!-- Campo para confirmar a nova senha -->
       <div class="senha-confirmacao mb-3">
-        <label for="campo-senha-confirmacao" class="form-label">Confirme a Senha</label>
+        <label for="campo-senha-confirmacao" class="form-label">Confirme a senha</label>
         <div class="input-group">
           <span class="input-group-text"><i class="fas fa-lock"></i></span>
           <input type="password" class="form-control" id="campo-senha-confirmacao" name="senha_confirmacao" required>
@@ -48,12 +48,12 @@
 
       <!-- Botão para enviar o formulário -->
       <button type="submit" class="btn botao w-100">
-        <i class="fas fa-save"></i> Salvar Senha
+        <i class="fas fa-save"></i> Salvar senha
       </button>
 
       <!-- Link para voltar à tela de login -->
       <div class="texto-central mt-3">
-        <a href="{{ url_for('auth.login') }}">← Voltar para Login</a>
+        <a href="{{ url_for('auth.login') }}">← Voltar para login</a>
       </div>
   </div>
 

@@ -24,11 +24,11 @@
 
     <!-- Formulário de cadastro de usuário -->
     <form action="{{ url_for('auth.cadastrar_usuario') }}" method="POST" class="formulario-cadastro">
-        <h2 class="titulo-formulario">Cadastro de Usuário</h2>
+        <h2 class="titulo-formulario">Cadastro de usuário</h2>
 
         <!-- Campo: Nome -->
         <div class="mb-3">
-            <label for="campo-nome" class="form-label">Nome Completo:</label>
+            <label for="campo-nome" class="form-label">Nome completo:</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                 <input type="text" class="form-control" id="campo-nome" name="nome" required>
@@ -55,7 +55,7 @@
 
         <!-- Botão de envio -->
         <button type="submit" class="botao-enviar">
-            <i class="fas fa-user-plus"></i> Criar Conta
+            <i class="fas fa-user-plus"></i> Criar conta
         </button>
 
         <!-- Link para página de login -->
