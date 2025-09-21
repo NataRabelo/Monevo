@@ -16,14 +16,14 @@
 
     <!-- Ícone da aba -->
     <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
 <body>
     <h1 id="titulo-site"> Monevo </h1>
 
     <!-- Formulário de recuperação de senha -->
-    <form action="{{ url_for('auth.recuperar') }}" method="POST" id="recuperar-form">
+    <form action="{{ url_for('main.recuperar_senha') }}" method="POST" id="recuperar-form">
         <h2 class="texto-central mb-4">Recuperação de senha</h2>
 
         <!-- Campo de email -->
@@ -42,7 +42,7 @@
 
         <!-- Link de volta ao login -->
         <div class="texto-central mt-3">
-            <a href="{{ url_for('auth.login') }}">← Voltar para o login</a>
+            <a href="{{ url_for('main.login') }}">← Voltar para o login</a>
         </div>
     </form>
 

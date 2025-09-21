@@ -16,7 +16,7 @@
 
   <!-- Ícone da aba -->
   <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -26,8 +26,7 @@
     <h4 class="texto-central mb-4">Criar nova senha</h4>
 
     <!-- Formulário para criar e salvar nova senha -->
-    <form action="{{ url_for('salvar_senha') }}" method="POST" id="formulario-nova-senha">
-
+  <form action="{{ url_for('main.editar', user_id=user_id, keyValidation=keyValidation) }}" method="POST" id="formulario-nova-senha">
       <!-- Campo para digitar a nova senha -->
       <div class="nova-senha mb-3">
         <label for="campo-senha" class="form-label">Senha</label>
@@ -53,7 +52,7 @@
 
       <!-- Link para voltar à tela de login -->
       <div class="texto-central mt-3">
-        <a href="{{ url_for('auth.login') }}">← Voltar para login</a>
+        <a href="{{ url_for('main.login') }}">← Voltar para login</a>
       </div>
   </div>
 

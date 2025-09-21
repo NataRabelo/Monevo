@@ -16,7 +16,7 @@
 
   <!-- Ícone -->
   <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -36,12 +36,12 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('user.usuario') }}">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="#">
             <i class="fas fa-user me-2"></i> Usuário
           </a>
         </li>
         <li class="nav-item">
-          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('auth.login') }}">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="#">
             <i class="fas fa-sign-out-alt me-2"></i> Sair
           </a>
         </li>

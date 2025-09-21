@@ -2,7 +2,7 @@ from flask_login import UserMixin
 from app.extensions import db
 
 # Tabela de Usuários
-class usuarios(UserMixin, db.Model):
+class Usuarios(UserMixin, db.Model):
     __tablename__ = "usuarios"
 
     id                  = db.Column(db.Integer, primary_key=True) 
@@ -12,8 +12,9 @@ class usuarios(UserMixin, db.Model):
     criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
     atualizado_em       = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+
 # Tabela de contas
-class contas(db.Model):
+class Contas(db.Model):
     __tablename__ = "contas"
 
     id                  = db.Column(db.Integer, primary_key=True)
@@ -24,7 +25,7 @@ class contas(db.Model):
     criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 # Tabela de categorias
-class categorias(db.Model):
+class Categorias(db.Model):
     __tablename__ = "categorias"
 
     id                  = db.Column(db.Integer, primary_key=True)
@@ -34,7 +35,7 @@ class categorias(db.Model):
     criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 # Tabela de transacoes
-class transacoes(db.Model):
+class Transacoes(db.Model):
     __tablename__ = "transacoes"
 
     id                  = db.Column(db.Integer, primary_key=True)
@@ -49,7 +50,7 @@ class transacoes(db.Model):
     criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 # Tabela de extratos
-class extratos(db.Model):
+class Extratos(db.Model):
     __tablename__ = "extratos"
 
     id                  = db.Column(db.Integer, primary_key=True)
@@ -59,7 +60,7 @@ class extratos(db.Model):
     status              = db.Column(db.String)
 
 # Tabela de Projecoes
-class projecoes(db.Model):
+class Projecoes(db.Model):
     __tablename__ = "projecoes"
 
     id                  = db.Column(db.Integer, primary_key=True)
@@ -67,3 +68,11 @@ class projecoes(db.Model):
     data_inicio         = db.Column(db.DateTime, nullable=False)
     data_final          = db.Column(db.DateTime, nullable=False)
     criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+# Tabela de KeyValidation 
+class KeyValidation(db.Model):
+    __tablename__ = "keyvalidation"
+
+    id                  = db.Column(db.Integer, primary_key=True)
+    usuario_id          = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    Key                 = db.Column(db.Integer, nullable=False)

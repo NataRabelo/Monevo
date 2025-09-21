@@ -16,7 +16,7 @@
 
     <!-- Ícone da aba -->
     <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -26,7 +26,7 @@
         <h2 class="texto-central">Login</h2>
 
         <!-- Formulário de login -->
-        <form id="loginForm" action="{{ url_for('auth.login') }}" method="POST">
+        <form id="loginForm" action="{{ url_for('main.login')}}" method="POST">
             <!-- Campo de email -->
             <div class=" email mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -55,8 +55,8 @@
 
         <!-- Links para recuperação de senha e cadastro -->
         <div class="texto-central mt-3">
-            <a href="{{ url_for('auth.recuperar')}}">Recuperar senha</a>
-            <a href="{{ url_for('auth.cadastrar_usuario')}}">Cadastrar conta</a>
+            <a href="{{ url_for('main.recuperar_senha')}}">Recuperar senha</a>
+            <a href="{{ url_for('user.cadastroUsuario')}}">Cadastrar conta</a>
         </div>
 
     </div>

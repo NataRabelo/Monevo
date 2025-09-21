@@ -16,14 +16,14 @@
 
     <!-- Ícone da aba -->
     <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
 <body>
     <h1 id="titulo-site">Monevo</h1>
 
     <!-- Formulário de cadastro de usuário -->
-    <form action="{{ url_for('auth.cadastrar_usuario') }}" method="POST" class="formulario-cadastro">
+    <form action="{{ url_for('user.cadastroUsuario') }}" method="POST" class="formulario-cadastro">
         <h2 class="titulo-formulario">Cadastro de usuário</h2>
 
         <!-- Campo: Nome -->
@@ -60,7 +60,7 @@
 
         <!-- Link para página de login -->
         <div class="texto-central mt-3">
-            <a href="{{ url_for('auth.login') }}">← Já tem uma conta? Faça login</a>
+            <a href="{{ url_for('main.login') }}">← Já tem uma conta? Faça login</a>
         </div>
     </form>
 
