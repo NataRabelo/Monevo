@@ -10,7 +10,7 @@ user_bp = Blueprint('user', __name__, url_prefix='/usuario')
 def cadastroUsuario():
     if request.method == "GET":
         # apenas exibe o formulário
-        return render_template("cadastro.html")
+        return render_template("usuario/cadastro.html")
 
     if request.method == "POST":
         try:
@@ -48,7 +48,24 @@ def cadastroUsuario():
 
 @user_bp.route('/editar', methods=['GET', 'POST'])
 def editarUsuario():
-    return 0
+    if request.method == "GET":
+        current_app.logger.info('Tela de edicao de usuario')
+        return render_template("usuario/editar.html")
+    
+    if request.method == "POST":
+        try:
+            usuario = Usuarios.query.filter(id=id)  
+
+            new_nome = request.form.get('nome')
+            new_email = request.form.get('email')
+            
+            if new_nome == None:
+                new_nome == usuario.nome_completo
+                return 0
+        except Exception as e:
+            return 0 
+
+    
 
 @user_bp.errorhandler(500)
 def erro_interno(detalhe):

@@ -12,7 +12,6 @@ load_dotenv()
 
 def configure_logging(app):
 
-    # Usando .get() para evitar um KeyError se a chave não estiver definida
     if app.config.get("LOG_TO_STDOUT"):
         stream_handler = logging.StreamHandler()
         stream_handler.setLevel(logging.INFO)
@@ -36,7 +35,6 @@ def configure_logging(app):
 
     app.logger.setLevel(logging.INFO)
     app.logger.info("Aplicativo Flask iniciado")
-
 
 def create_app(config_class=None):
     if config_class is None:

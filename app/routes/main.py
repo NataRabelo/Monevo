@@ -70,7 +70,6 @@ def recuperar_senha():
 
     elif request.method == 'POST':
         destinatario = request.form.get('email')
-        print(destinatario)
         usuario = Usuarios.query.filter_by(email=destinatario).first()
 
         if not usuario:
