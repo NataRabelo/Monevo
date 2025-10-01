@@ -219,3 +219,9 @@ body {
 #modalCadastro button[type="submit"]:hover {
   background-color: #337fa6;
 }
+/* Scroll apenas nas tabelas */
+.caixa-receita .table-responsive,
+.caixa-despesa .table-responsive {
+  max-height: 300px; 
+  overflow-y: auto;   
+}
