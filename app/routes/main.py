@@ -23,7 +23,7 @@ def index():
 def login():
 
     if request.method == "GET":
-        return render_template('login.html')
+        return render_template("usuario/login.html")
     
     if request.method == "POST":
 
@@ -66,7 +66,7 @@ def logout():
 @main_bp.route('/recuperar_senha', methods=['GET', 'POST'])
 def recuperar_senha():
     if request.method == 'GET':
-        return render_template('recuperar.html')
+        return render_template("usuario/recuperar.html")
 
     elif request.method == 'POST':
         destinatario = request.form.get('email')
@@ -114,13 +114,12 @@ def recuperar_senha():
             current_app.logger.error('Erro ao enviar o email')
             return render_template('recuperar.html')
 
-        
 # Rota para cadastrar uma nova senha 
 @main_bp.route('/editar/<int:user_id>/<int:keyValidation>', methods=['GET', 'POST'])
 def editar(user_id, keyValidation):
     
     if request.method == 'GET':
-        return render_template('senhaNova.html', user_id=user_id, keyValidation=keyValidation)
+        return render_template("usuario/senhaNova.html", user_id=user_id, keyValidation=keyValidation)
     
     elif request.method == 'POST':
         current_app.logger.info('Entrou dentro da chamada de recuperação de senha')
@@ -157,4 +156,4 @@ def editar(user_id, keyValidation):
 def menu():
     if request.method == 'GET':
         usuario = current_user
-        return render_template('menu.html', usuario=usuario, total_receitas=3500, total_despesas=1500, diferenca=2000)
+        return render_template('dashboard/menu.html', usuario=usuario, total_receitas=3500, total_despesas=1500, diferenca=2000)
