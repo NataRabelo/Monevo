@@ -6,8 +6,11 @@ class Usuarios(UserMixin, db.Model):
     __tablename__ = "usuarios"
 
     id                  = db.Column(db.Integer, primary_key=True) 
-    nome_completo       = db.Column(db.String(200), nullable=False)
+    nome                = db.Column(db.String(200), nullable=False)
+    sobrenome           = db.Column(db.String(200), nullable=False)
     email               = db.Column(db.String(150), nullable=False, unique=True)
+    celular             = db.Column(db.String(50))
+    cpf                 = db.Column(db.String(50), nullable=False, unique=True)
     password_hash       = db.Column(db.String(256), nullable=False)
     criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
     atualizado_em       = db.Column(db.DateTime, default=db.func.current_timestamp())

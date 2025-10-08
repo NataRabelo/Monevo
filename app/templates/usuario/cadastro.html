@@ -6,16 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro de Usuário | Monevo</title>
 
-    <!-- Bootstrap e Font Awesome para estilo e ícones -->
+    <!-- Bootstrap e Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <!-- CSS personalizado -->
-    <link rel="stylesheet" href="/app/static/css/cadastro.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
 
     <!-- Ícone da aba -->
-    <link rel="shortcut icon" href="/app/static/img/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 
@@ -26,47 +24,81 @@
     <form action="{{ url_for('user.cadastroUsuario') }}" method="POST" class="formulario-cadastro">
         <h2 class="titulo-formulario">Cadastro de usuário</h2>
 
-        <!-- Campo: Nome -->
-        <div class="mb-3">
-            <label for="campo-nome" class="form-label">Nome completo:</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="text" class="form-control" id="campo-nome" name="nome" required>
+        <div class="row">
+            <!-- Nome -->
+            <div class="col-md-6 mb-3">
+                <label for="campo-nome" class="form-label">Nome:</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" class="form-control" id="campo-nome" name="nome" required>
+                </div>
+            </div>
+
+            <!-- Sobrenome -->
+            <div class="col-md-6 mb-3">
+                <label for="campo-sobrenome" class="form-label">Sobrenome:</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                    <input type="text" class="form-control" id="campo-sobrenome" name="sobrenome" required>
+                </div>
             </div>
         </div>
 
-        <!-- Campo: Email -->
-        <div class="mb-3">
-            <label for="campo-email" class="form-label">Email:</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                <input type="email" class="form-control" id="campo-email" name="email" required>
+        <div class="row">
+            <!-- Email -->
+            <div class="col-md-12 mb-3">
+                <label for="campo-email" class="form-label">Email:</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" class="form-control" id="campo-email" name="email" required>
+                </div>
             </div>
         </div>
 
-        <!-- Campo: Senha -->
-        <div class="mb-3">
-            <label for="campo-senha" class="form-label">Senha:</label>
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                <input type="password" class="form-control" id="campo-senha" name="senha" required>
+        <div class="row">
+            <!-- Celular -->
+            <div class="col-md-7 mb-3">
+                <label for="campo-celular" class="form-label">Celular:</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <input type="text" class="form-control" id="campo-celular" name="celular" placeholder="(XX) XXXXX-XXXX">
+                </div>
+            </div>
+
+            <!-- CPF -->
+            <div class="col-md-5 mb-3">
+                <label for="campo-cpf" class="form-label">CPF:</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                    <input type="text" class="form-control" id="campo-cpf" name="cpf" placeholder="000.000.000-00" required>
+                </div>
             </div>
         </div>
 
-        <!-- Botão de envio -->
+        <div class="row">
+            <!-- Senha -->
+            <div class="col-md-12 mb-3">
+                <label for="campo-senha" class="form-label">Senha:</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control" id="campo-senha" name="senha" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão -->
         <button type="submit" class="botao-enviar">
             <i class="fas fa-user-plus"></i> Criar conta
         </button>
 
-        <!-- Link para página de login -->
+        <!-- Link para login -->
         <div class="texto-central mt-3">
             <a href="{{ url_for('main.login') }}">← Já tem uma conta? Faça login</a>
         </div>
     </form>
 
-    <!-- Scripts do Bootstrap e JavaScript -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/app/static/js/cadastro.js"></script>
     <script src="{{ url_for('static', filename='js/cadastro.js') }}"></script>
 </body>
 

@@ -14,22 +14,33 @@ def cadastroUsuario():
 
     if request.method == "POST":
         try:
-            nome_completo = request.form.get('nome')
-            email = request.form.get('email')
-            password = request.form.get('senha')
+            nome            = request.form.get('nome')
+            sobrenome       = request.form.get('sobrenome')
+            email           = request.form.get('email')
+            celular         = request.form.get('celular')
+            cpf             = request.form.get('cpf')
+            password        = request.form.get('senha')
 
-            password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-            validar_email = Usuarios.query.filter_by(email=email).first()
+            password_hash   = bcrypt.generate_password_hash(password).decode('utf-8')
+            validar_email   = Usuarios.query.filter_by(email=email).first()
+            validar_cpf     = Usuarios.query.filter_by(cpf=cpf).first()
             
             if validar_email:
                 flash('Email já associado a uma conta', 'warning')
                 current_app.logger.info(f'Email já associado a uma conta: {email}')
                 return redirect(url_for('main.login'))
+            if validar_cpf :
+                flash('CPF já associado a uma conta', 'warning')
+                current_app.logger.info('CPF já associado a uma conta')
+                return redirect(url_for('main.login'))
             else:
                 new_usuario = Usuarios(
-                    nome_completo=nome_completo,
-                    email=email,
-                    password_hash=password_hash
+                    nome            = nome,
+                    sobrenome       = sobrenome,
+                    email           = email,
+                    celular         = celular,
+                    cpf             = cpf,
+                    password_hash   =password_hash
                 )
 
                 db.session.add(new_usuario)

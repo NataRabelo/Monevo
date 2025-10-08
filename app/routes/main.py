@@ -75,7 +75,7 @@ def recuperar_senha():
         if not usuario:
             flash("E-mail não encontrado no sistema.")
             current_app.logger.warning(f"Tentativa de recuperação com e-mail inexistente: {destinatario}")
-            return redirect(url_for('user.cadastrar'))
+            return redirect(url_for('user.cadastroUsuario'))
 
         keyValidation = KeyValidation(
             usuario_id=usuario.id,
