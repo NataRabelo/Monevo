@@ -15,6 +15,8 @@ class Usuarios(UserMixin, db.Model):
     criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
     atualizado_em       = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+    def get_id(self):
+        return str(self.id)
 
 # Tabela de contas
 class Contas(db.Model):
