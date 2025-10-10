@@ -1,15 +1,13 @@
-import random
 from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app
 from flask_login import current_user, login_user, logout_user
-from flask.cli import load_dotenv
-from app.extensions import mail, db, bcrypt
-from flask_mail import Message
 from app.models import Usuarios, KeyValidation
+from app.extensions import mail, db, bcrypt
+from flask.cli import load_dotenv
+from flask_mail import Message
+import random
+
 
 load_dotenv()
-
-import smtplib
-from email.mime.text import MIMEText
 
 main_bp = Blueprint('main', __name__)
 
@@ -58,7 +56,6 @@ def login():
 @main_bp.route('/logout', methods=['POST', 'GET'])
 def logout():
     if request.method == 'GET':
-        current_app.logger.info('Usuario deslogado do sistema')
         logout_user()
         return redirect(url_for('main.login'))
 
@@ -68,7 +65,7 @@ def recuperar_senha():
     if request.method == 'GET':
         return render_template("usuario/recuperar.html")
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         destinatario = request.form.get('email')
         usuario = Usuarios.query.filter_by(email=destinatario).first()
 
@@ -121,7 +118,7 @@ def editar(user_id, keyValidation):
     if request.method == 'GET':
         return render_template("usuario/senhaNova.html", user_id=user_id, keyValidation=keyValidation)
     
-    elif request.method == 'POST':
+    if request.method == 'POST':
         current_app.logger.info('Entrou dentro da chamada de recuperação de senha')
         confirmKeyValidation = KeyValidation.query.filter_by(usuario_id=user_id).first()
 

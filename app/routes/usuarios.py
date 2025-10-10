@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for
 from app.services.registrar_requisicao import registrar_requisicao
+from flask_login import current_user, logout_user
 from app.models import Usuarios
 from app import bcrypt, db
 
@@ -9,7 +10,6 @@ user_bp = Blueprint('user', __name__, url_prefix='/usuario')
 @user_bp.route('/cadastro', methods=["POST", "GET"])
 def cadastroUsuario():
     if request.method == "GET":
-        # apenas exibe o formulário
         return render_template("usuario/cadastro.html")
 
     if request.method == "POST":
@@ -35,51 +35,86 @@ def cadastroUsuario():
                 return redirect(url_for('main.login'))
             else:
                 new_usuario = Usuarios(
-                    nome            = nome,
-                    sobrenome       = sobrenome,
-                    email           = email,
-                    celular         = celular,
-                    cpf             = cpf,
-                    password_hash   =password_hash
+                    nome = nome,
+                    sobrenome = sobrenome,
+                    email = email,
+                    celular = celular,
+                    cpf = cpf,
+                    password_hash =password_hash
                 )
 
                 db.session.add(new_usuario)
                 db.session.commit()
 
-                flash('Cadastro realizado com sucesso!!', 'success')
+                flash('Cadastro realizado com sucesso.', 'success')
                 current_app.logger.info(f'Usuario cadastrado com sucesso: {email}')
 
                 return redirect(url_for('main.login'))
 
         except Exception as e:
-            current_app.logger.error(f"Erro ao tentar cadastrar novo usuario: {e}", exc_info=True)
-            registrar_requisicao(request, 500, 'erro enviado')
+            db.session.rollback()
+            flash('Ocorreu algum erro inesperado')
+            current_app.logger.warning(f'Erro ao cadastrar usuário: {e}')
             return {"erro": "Falha ao cadastrar usuario"}, 500
 
-
-@user_bp.route('/editar', methods=['GET', 'POST'])
+@user_bp.route('/editar/', methods=['GET', 'POST'])
 def editarUsuario():
-    if request.method == "GET":
-        current_app.logger.info('Tela de edicao de usuario')
-        return render_template("usuario/editar.html")
-    
-    if request.method == "POST":
-        try:
-            usuario = Usuarios.query.filter(id=id)  
+    try:
+        user_id = current_user.id
+        usuario = Usuarios.query.filter(Usuarios.id == user_id).first()
 
-            new_nome = request.form.get('nome')
-            new_email = request.form.get('email')
-            
-            if new_nome == None:
-                new_nome == usuario.nome_completo
-                return 0
-        except Exception as e:
-            return 0 
+        if not usuario:
+            flash('Usuário não encontrado.')
+            return redirect(url_for('main.menu'))
 
-    
+        if request.method == "GET":
+            return render_template("usuario/editar.html", usuario=usuario)
 
-@user_bp.errorhandler(500)
-def erro_interno(detalhe):
-    current_app.logger.exception("Erro interno do servidor")
-    registrar_requisicao(request, 500, "erro interno")
-    return {"erro": "Erro interno do servidor"}, 500
+        if request.method == "POST":
+            usuario.nome = request.form.get('nome') or usuario.nome
+            usuario.sobrenome = request.form.get('sobrenome') or usuario.sobrenome
+            usuario.email = request.form.get('email') or usuario.email
+            usuario.celular = request.form.get('celular') or usuario.celular
+            usuario.cpf = request.form.get('cpf') or usuario.cpf
+
+            senha = request.form.get('senha', '').strip()
+            if senha:
+                usuario.senha = bcrypt.generate_password_hash(senha).decode('utf-8')
+
+            db.session.commit()
+            flash('Usuário editado com sucesso!')
+            current_app.logger.info('Usuário editado com sucesso')
+            return redirect(url_for('main.menu'))
+
+    except Exception as e:
+        db.session.rollback()
+        flash('Ocorreu algum erro inesperado')
+        current_app.logger.warning(f'Erro ao editar usuário: {e}')
+        return redirect(url_for('main.menu'))
+
+@user_bp.route('/deletar/', methods=['GET', 'POST'])
+def deletarUsuario():
+    try:
+        
+        user_id = current_user.id
+        usuario = Usuarios.query.filter(Usuarios.id == user_id).first()
+
+        if not usuario:
+            flash('Usuário não encontrado')
+            return redirect(url_for('main.menu'))
+        
+        if request.method == "GET":
+            return render_template('usuario/deletar.html')
+        
+        if request.method == "POST":
+            logout_user()
+            db.session.delete(usuario)
+            db.session.commit()
+            flash('Sua conta foi excluída com sucesso.')
+            return redirect(url_for('main.login'))
+
+    except Exception as e:
+        db.session.rollback()
+        flash('Ocorreu algum erro inesperado')
+        current_app.logger.warning(f'Erro ao deletar usuario: {e}')
+        return redirect(url_for('main.menu'))

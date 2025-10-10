@@ -22,7 +22,6 @@ class Usuarios(UserMixin, db.Model):
     def get_id(self):
         return str(self.id)
 
-# Tabela de contas (Sem alterações)
 class Contas(db.Model):
     __tablename__ = "contas"
 
