@@ -1,81 +1,109 @@
 from flask_login import UserMixin
 from app.extensions import db
+from sqlalchemy import func
 
-# Tabela de Usuários
+# Tabela de Usuários (Sem alterações)
 class Usuarios(UserMixin, db.Model):
     __tablename__ = "usuarios"
 
-    id                  = db.Column(db.Integer, primary_key=True) 
-    nome                = db.Column(db.String(200), nullable=False)
-    sobrenome           = db.Column(db.String(200), nullable=False)
-    email               = db.Column(db.String(150), nullable=False, unique=True)
-    celular             = db.Column(db.String(50))
-    cpf                 = db.Column(db.String(50), nullable=False, unique=True)
-    password_hash       = db.Column(db.String(256), nullable=False)
-    criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
-    atualizado_em       = db.Column(db.DateTime, default=db.func.current_timestamp())
+    id = db.Column(db.Integer, primary_key=True) 
+    nome = db.Column(db.String(200), nullable=False)
+    sobrenome = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(150), nullable=False, unique=True)
+    celular = db.Column(db.String(50))
+    cpf = db.Column(db.String(50), nullable=False, unique=True)
+    password_hash = db.Column(db.String(256), nullable=False)
+    criado_em = db.Column(db.DateTime, default=func.current_timestamp())
+    atualizado_em = db.Column(db.DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
+    
+    # Relação: Um usuário pode ter muitos cartões
+    cartoes = db.relationship('Cartoes', backref='usuario', lazy=True)
+    
+    def get_id(self):
+        return str(self.id)
 
-
-# Tabela de contas
+# Tabela de contas (Sem alterações)
 class Contas(db.Model):
     __tablename__ = "contas"
 
-    id                  = db.Column(db.Integer, primary_key=True)
-    usuario_id          = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
-    instituicao         = db.Column(db.String, nullable=False)
-    tipo_conta          = db.Column(db.String, nullable=False)
-    saldo_inicial       = db.Column(db.Float, default=0)
-    criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    instituicao = db.Column(db.String, nullable=False)
+    tipo_conta = db.Column(db.String, nullable=False)
+    saldo_inicial = db.Column(db.Float, default=0)
+    criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-# Tabela de categorias
+# Tabela de Categorias (Sem alterações)
 class Categorias(db.Model):
     __tablename__ = "categorias"
 
-    id                  = db.Column(db.Integer, primary_key=True)
-    usuario_id          = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)  
-    nome                = db.Column(db.String, nullable=False)
-    tipo                = db.Column(db.String, nullable=False)
-    criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    nome = db.Column(db.String, nullable=False)
+    tipo = db.Column(db.String, nullable=False)
+    criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-# Tabela de transacoes
+# --- NOVA TABELA DE CARTÕES DE CRÉDITO ---
+class Cartoes(db.Model):
+    __tablename__ = "cartoes"
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    nome_cartao = db.Column(db.String(100), nullable=False)
+    bandeira = db.Column(db.String(50))  # Ex: Visa, Master, Elo
+    limite = db.Column(db.Float, nullable=False)
+    # Dia do mês em que a fatura fecha (ex: dia 25)
+    dia_fechamento_fatura = db.Column(db.Integer, nullable=False)
+    # Dia do mês em que a fatura vence (ex: dia 05)
+    dia_vencimento_fatura = db.Column(db.Integer, nullable=False)
+    criado_em = db.Column(db.DateTime, default=func.current_timestamp())
+
+    # Relação: Um cartão pode ter muitas transações
+    transacoes = db.relationship('Transacoes', backref='cartao', lazy=True)
+
+# Tabela de transacoes (ALTERADA para suportar cartão de crédito)
 class Transacoes(db.Model):
     __tablename__ = "transacoes"
 
-    id                  = db.Column(db.Integer, primary_key=True)
-    usuario_id          = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)  
-    conta_id            = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="CASCADE"), nullable=False)
-    categoria_id        = db.Column(db.Integer, db.ForeignKey("categorias.id", ondelete="CASCADE"), nullable=False)
-    tipo                = db.Column(db.String, nullable=False)
-    descricao           = db.Column(db.Text)
-    valor               = db.Column(db.Float, nullable=False)
-    data_transacao      = db.Column(db.DateTime, nullable=False)
-    recorrencia         = db.Column(db.String)
-    criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False) 
+    # ALTERADO: conta_id agora é opcional, pois a transação pode ser de um cartão
+    conta_id = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="SET NULL"), nullable=True) 
+    # NOVO CAMPO: Liga a transação a um cartão de crédito, se aplicável
+    cartao_id = db.Column(db.Integer, db.ForeignKey("cartoes.id", ondelete="SET NULL"), nullable=True)
+    categoria_id = db.Column(db.Integer, db.ForeignKey("categorias.id", ondelete="SET NULL"), nullable=False) # Mudando para SET NULL para não perder histórico
+    
+    tipo = db.Column(db.String, nullable=False) # Receita, Despesa ou Transferencia
+    descricao = db.Column(db.Text)
+    valor = db.Column(db.Float, nullable=False)
+    data_transacao = db.Column(db.DateTime, nullable=False)
+    recorrencia = db.Column(db.String)
+    criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-# Tabela de extratos
+# Tabela de extratos (Sem alterações)
 class Extratos(db.Model):
     __tablename__ = "extratos"
 
-    id                  = db.Column(db.Integer, primary_key=True)
-    usuario_id          = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)  
-    nome_arquivo        = db.Column(db.String, nullable=False)
-    importado_em        = db.Column(db.DateTime, default=db.func.current_timestamp())
-    status              = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False) 
+    nome_arquivo = db.Column(db.String, nullable=False)
+    importado_em = db.Column(db.DateTime, default=func.current_timestamp())
+    status = db.Column(db.String)
 
-# Tabela de Projecoes
+# Tabela de Projecoes (Sem alterações)
 class Projecoes(db.Model):
     __tablename__ = "projecoes"
 
-    id                  = db.Column(db.Integer, primary_key=True)
-    usuario_id          = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
-    data_inicio         = db.Column(db.DateTime, nullable=False)
-    data_final          = db.Column(db.DateTime, nullable=False)
-    criado_em           = db.Column(db.DateTime, default=db.func.current_timestamp())
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    data_inicio = db.Column(db.DateTime, nullable=False)
+    data_final = db.Column(db.DateTime, nullable=False)
+    criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-# Tabela de KeyValidation 
+# Tabela de KeyValidation (Sem alterações)
 class KeyValidation(db.Model):
     __tablename__ = "keyvalidation"
 
-    id                  = db.Column(db.Integer, primary_key=True)
-    usuario_id          = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
-    Key                 = db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    Key = db.Column(db.Integer, nullable=False)
