@@ -20,7 +20,7 @@
 <body>
     <h1 id="titulo-site">Monevo</h1>
 
-    <form action="{{ url_for('main.recuperar_senha') }}" method="POST" id="recuperar-form">
+    <form action="{{ url_for('auth.recuperar_senha') }}" method="POST" id="recuperar-form">
         <h2 class="texto-central mb-4">Recuperação de senha</h2>
 
         <div class="email mb-3">
@@ -36,7 +36,7 @@
         </button>
 
         <div class="texto-central mt-3">
-            <a href="{{ url_for('main.login') }}">← Voltar para o login</a>
+            <a href="{{ url_for('auth.login') }}">← Voltar para o login</a>
         </div>
     </form>
 

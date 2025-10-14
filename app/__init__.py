@@ -104,4 +104,7 @@ def create_app(config_class=None):
     from app.routes.contas import conta_bp
     app.register_blueprint(conta_bp)
 
+    from app.routes.autenticador import auth_bp
+    app.register_blueprint(auth_bp)
+
     return app

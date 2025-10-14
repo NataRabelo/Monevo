@@ -36,7 +36,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('user.usuario') }}">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('user.editarUsuario') }}">
             <i class="fas fa-user me-2"></i> Usuário
           </a>
         </li>
@@ -70,7 +70,7 @@
         <!-- Formulário de Conta -->
         <div id="formulario_conta" class="card p-3 mb-4 shadow-sm d-none">
           <h5 class="mb-3">Nova conta bancária</h5>
-          <form method="POST" action="{{ url_for('conta.cadastrar_conta') }}">
+          <form method="POST" action="{{ url_for('conta.cadastrarConta') }}">
             <div class="mb-2">
               <label for="nome_banco" class="form-label">Nome do banco</label>
               <input type="text" class="form-control" id="nome_banco" name="banco" required>
@@ -133,7 +133,7 @@
         <!-- Formulário de Cartão -->
         <div id="formulario_cartao" class="card p-3 mb-4 shadow-sm d-none">
           <h5 class="mb-3">Novo cartão de crédito</h5>
-          <form method="POST" action="{{ url_for('cartao.cadastrar_cartao') }}">
+          <form method="POST" action="#">
             <div class="mb-2">
               <label for="credito_cartao" class="form-label">Crédito</label>
               <input type="text" class="form-control" id="credito_cartao" name="credito" required>

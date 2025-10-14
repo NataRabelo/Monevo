@@ -41,7 +41,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('main.logout') }}">
+          <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('auth.logout') }}">
             <i class="fas fa-sign-out-alt me-2"></i> Sair
           </a>
         </li>
@@ -100,7 +100,7 @@
       <a href="#" class="botao-vermelho btn btn-lg">
         <i class="fas fa-chart-line me-2"></i>Central de projeção
       </a>
-      <a href="{{ url_for('conta.contas') }}" class="botao-verde btn btn-lg">
+      <a href="{{ url_for('conta.acessarConta') }}" class="botao-verde btn btn-lg">
         <i class="fas fa-university me-2"></i>Contas e cartões
       </a>
     </div>

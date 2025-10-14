@@ -33,12 +33,20 @@ h2 {
     transform: translateX(-50%);
     font-size: 2rem;
 }
-.texto-central a {
-    display: block;       
-    text-align: right;     
-    color: #fff;          
-    margin-top: 5px;       
 
+.texto-central {
+    text-align: center;
+}
+
+.texto-central.mt-3 {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.texto-central a {
+    color: #fff;             
+    margin-top: 5px;           
 }
 
 .botao-login {
