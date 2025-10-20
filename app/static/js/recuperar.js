@@ -1,15 +1,12 @@
-// Aguarda o carregamento completo do DOM
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("recuperacao-form");
-
-    // Validação ao enviar o formulário
-    form.addEventListener("submit", function (event) {
-        const email = document.getElementById("email").value;
-
-        // Verificação básica de email
-        if (!email.includes("@")) {
-            event.preventDefault(); // Impede envio do formulário
-            alert("Por favor, insira um email válido.");
+    let flashMessages = document.querySelectorAll('.flash-message');
+        if (flashMessages.length > 0) {
+            setTimeout(() => {
+                flashMessages.forEach(msg => {
+                    msg.style.transition = "opacity 0.5s ease";
+                    msg.style.opacity = "0";
+                    setTimeout(() => msg.remove(), 500);
+                });
+            }, 3000);
         }
     });
-});
