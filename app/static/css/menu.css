@@ -3,7 +3,7 @@ body {
   color: white;
 }
 
-.texto-central{
+.texto-central {
   text-align: center;
 }
 
@@ -24,12 +24,12 @@ body {
 .cartao {
   border: none;
   border-radius: 5px;
-  min-height: 120px; 
+  min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin-bottom: 15px;
-  
+
 }
 
 .cartao-verde {
@@ -67,7 +67,7 @@ body {
 
 /* ===== BOTÕES ===== */
 .botao-azul {
-  background-color: #306733!important;
+  background-color: #306733 !important;
   color: white !important;
   border: none;
 }
@@ -104,3 +104,90 @@ body {
   transition: all 0.2s ease-in-out;
 }
 
+/* ======= ÁREA EDUCACIONAL ======= */
+.area-educacional {
+  color: #ffffff;
+  /* Define o texto como branco */
+}
+
+/* Título principal da seção */
+.titulo-educacional {
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 3px solid #ffffff;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+/* Cartão geral */
+.cartao-educacional {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background-color: #232832;
+  color: #fff;
+  padding: 0;
+}
+
+/* Cabeçalhos dos cartões */
+.cabecalho-cartao {
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: none;
+  padding: 12px 16px;
+}
+
+/* Cores dos cabeçalhos */
+.cabecalho-video {
+  background: linear-gradient(90deg, #3C90C0, #2B6A8E);
+  color: white;
+}
+
+.cabecalho-noticia {
+  background: linear-gradient(90deg, #4CAF50, #357a38);
+  color: white;
+}
+
+/* Corpo dos cartões */
+.corpo-cartao {
+  padding: 16px;
+}
+
+/* Descrição abaixo dos títulos */
+.texto-descricao {
+  color: #cccccc;
+  font-size: 0.95rem;
+}
+
+/* Lista de notícias */
+.lista-noticias .list-group-item {
+  background-color: transparent;
+  border: none;
+  padding: 10px 0;
+  font-size: 0.95rem;
+}
+
+.lista-noticias a {
+  text-decoration: none;
+  color: #AEE2FF;
+  transition: color 0.2s ease;
+}
+
+.lista-noticias a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .titulo-educacional {
+    font-size: 1.3rem;
+  }
+
+  .cabecalho-cartao {
+    font-size: 1rem;
+  }
+}
