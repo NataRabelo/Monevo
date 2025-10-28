@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
-from app.models import Contas, Usuarios
+from app.models import Contas
 from flask_login import current_user
 from app import db
 
@@ -8,7 +8,8 @@ conta_bp = Blueprint('conta', __name__, url_prefix='/conta')
 @conta_bp.route('/', methods=['GET', 'POST'])
 def acessarConta():
     if request.method == "GET":
-        return render_template('dashboard/contas.html')
+        contas = Contas.query.all()
+        return render_template('dashboard/contas.html', contas=contas)
 
 @conta_bp.route('/cadastrar', methods=['GET', 'POST'])
 def cadastrarConta():
@@ -17,7 +18,7 @@ def cadastrarConta():
 
         # Buscar dados
         usuario         = usuario.id
-        institucao      = request.form.get('instituicao')
+        instituicao      = request.form.get('instituicao')
         tipo_conta      = request.form.get('tipo_conta')
         saldo_inicial   = request.form.get('saldo_inicial')
         
@@ -26,7 +27,7 @@ def cadastrarConta():
         # Criando o objeto Conta 
         new_conta = Contas (
             usuario_id      = usuario,
-            institucao      = institucao,
+            instituicao      = instituicao,
             tipo_conta      = tipo_conta,
             saldo_inicial   = saldo_inicial
         )
@@ -36,16 +37,16 @@ def cadastrarConta():
         db.session.commit()
 
         # notificação + log
-        flash(f'Conta do banco {institucao}, cadastrada com sucesso')
-        current_app.logger.info(f'Conta cadastrada com sucesso: {institucao} - { tipo_conta}')
+        flash(f'Conta do banco {instituicao}, cadastrada com sucesso')
+        current_app.logger.info(f'Conta cadastrada com sucesso: {instituicao} - { tipo_conta}')
 
         return redirect(url_for('conta.acessarConta'))
     
     except Exception as e:
         db.session.rollback()
         flash('Ocorreu algum erro inesperado')
-        current_app.logger.warning(f'Erro ao cadastrar usuário: {e}')
-        return redirect(url_for('main.menu'))
+        current_app.logger.warning(f'Erro ao cadastrar conta: {e}')
+        return redirect(url_for('conta.acessarConta'))
 
 @conta_bp.route('/editar/<int:conta_id>', methods=['GET', 'POST'])
 def editarConta(conta_id):
@@ -62,7 +63,7 @@ def editarConta(conta_id):
         
         if request.method == "POST":
             # Passando os dados alterados ( or not )
-            conta.institucao        = request.form.get('instituicao') or conta.instituicao
+            conta.instituicao        = request.form.get('instituicao') or conta.instituicao
             conta.tipo_conta        = request.form.get('tipo_conta') or conta.tipo_conta
             conta.saldo_inciail     = request.form.get('saldo_incial') or conta.saldo_inicial
 
@@ -77,7 +78,7 @@ def editarConta(conta_id):
         current_app.logger.warning(f'Erro ao editar conta: {e}')
         return redirect(url_for('main.menu'))
     
-@conta_bp.route('/deletar/<int:conta_id>-', methods=['GET', 'POST'])
+@conta_bp.route('/deletar/<int:conta_id>', methods=['GET', 'POST'])
 def deletarConta(conta_id):
     try:
         # Valida a existencia

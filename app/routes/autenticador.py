@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app
+from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app, session
 from flask_login import current_user, login_user, logout_user
 from app.models import Usuarios, KeyValidation
 from app.extensions import mail, db, bcrypt
@@ -32,6 +32,8 @@ def login():
                     flash('Senha incorreta!')
 
                 return redirect(url_for('auth.login'))
+            
+            session.pop('_flashes', None)
             return redirect(url_for('main.menu'))
 
         except Exception as e:
@@ -45,6 +47,7 @@ def login():
 def logout():
     if request.method == 'GET':
         logout_user()
+        session.pop('_flashes', None)
         return redirect(url_for('auth.login'))
 
 

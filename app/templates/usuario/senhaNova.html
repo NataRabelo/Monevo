@@ -25,7 +25,7 @@
     <h4 class="texto-central mb-4">Criar nova senha</h4>
 
     <!-- Formulário para criar e salvar nova senha -->
-  <form action="{{ url_for('main.editar', user_id=user_id, keyValidation=keyValidation) }}" method="POST" id="formulario-nova-senha">
+  <form action="{{ url_for('auth.editar', user_id=user_id, keyValidation=keyValidation) }}" method="POST" id="formulario-nova-senha">
       <!-- Campo para digitar a nova senha -->
       <div class="nova-senha mb-3">
         <label for="campo-senha" class="form-label">Senha</label>

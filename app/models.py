@@ -2,7 +2,7 @@ from flask_login import UserMixin
 from app.extensions import db
 from sqlalchemy import func
 
-# Tabela de Usuários (Sem alterações)
+# Tabela de Usuários 
 class Usuarios(UserMixin, db.Model):
     __tablename__ = "usuarios"
 
@@ -32,7 +32,7 @@ class Contas(db.Model):
     saldo_inicial = db.Column(db.Float, default=0)
     criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-# Tabela de Categorias (Sem alterações)
+# Tabela de Categorias 
 class Categorias(db.Model):
     __tablename__ = "categorias"
 
@@ -79,7 +79,7 @@ class Transacoes(db.Model):
     recorrencia = db.Column(db.String)
     criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-# Tabela de extratos (Sem alterações)
+# Tabela de extratos 
 class Extratos(db.Model):
     __tablename__ = "extratos"
 
@@ -89,7 +89,7 @@ class Extratos(db.Model):
     importado_em = db.Column(db.DateTime, default=func.current_timestamp())
     status = db.Column(db.String)
 
-# Tabela de Projecoes (Sem alterações)
+# Tabela de Projecoes 
 class Projecoes(db.Model):
     __tablename__ = "projecoes"
 
@@ -99,7 +99,7 @@ class Projecoes(db.Model):
     data_final = db.Column(db.DateTime, nullable=False)
     criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-# Tabela de KeyValidation (Sem alterações)
+# Tabela de KeyValidation 
 class KeyValidation(db.Model):
     __tablename__ = "keyvalidation"
 

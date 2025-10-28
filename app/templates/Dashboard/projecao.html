@@ -21,7 +21,7 @@
 <body>
     <!--  NAVBAR -->
     <nav class="barra-navegacao navbar navbar-expand-lg navbar-dark shadow-sm px-3">
-        <a class="navbar-brand fw-bold me-4" href="#">Monevo</a>
+        <a class="navbar-brand fw-bold me-4" href="{{ url_for('main.menu') }}">Monevo</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-navegacao"
             aria-controls="menu-navegacao" aria-expanded="false" aria-label="Alternar navegação">
             <span class="navbar-toggler-icon"></span>
@@ -35,12 +35,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="link-navegacao nav-link d-flex align-items-center" href="#">
+                    <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('user.editarUsuario') }}">
                         <i class="fas fa-user me-2"></i> Usuário
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="link-navegacao nav-link d-flex align-items-center" href="#">
+                    <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('auth.login') }}">
                         <i class="fas fa-sign-out-alt me-2"></i> Sair
                     </a>
                 </li>
