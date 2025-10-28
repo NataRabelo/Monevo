@@ -109,4 +109,7 @@ def create_app(config_class=None):
 
     from app.routes.cartoes import cartao_bp
     app.register_blueprint(cartao_bp)
+
+    from app.routes.categorias import categoria_bp
+    app.register_blueprint(categoria_bp)
     return app
