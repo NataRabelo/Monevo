@@ -122,7 +122,7 @@
                   <i class="fas fa-wallet me-1"></i>Saldo: R$ {{ "%.2f"|format(conta.saldo_inicial) }}
                 </p>
                 <div class="d-flex justify-content-end">
-                  <form method="POST" action="{{ url_for('conta.excluir_conta', id=conta.id) }}"
+                  <form method="POST" action="{{ url_for('conta.deletarConta', conta_id=conta.id) }}"
                     onsubmit="return confirm('Tem certeza que deseja excluir esta conta?');">
                     <button type="submit" class="btn btn-sm btn-outline-danger">
                       <i class="fas fa-trash-alt"></i>

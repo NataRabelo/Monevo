@@ -107,4 +107,6 @@ def create_app(config_class=None):
     from app.routes.autenticador import auth_bp
     app.register_blueprint(auth_bp)
 
+    from app.routes.cartoes import cartao_bp
+    app.register_blueprint(cartao_bp)
     return app

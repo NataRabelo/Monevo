@@ -78,7 +78,6 @@ def editarCartao(cartao_id):
         current_app.logger.warning(f'Erro ao editar o cartao: {e}')
         return redirect(url_for('main.menu'))
     
-
 @cartao_bp.route('/deletar/<int:cartao_id>', methods=['GET', 'POST'])
 def deletarCartao(cartao_id):
     try:
@@ -102,9 +101,8 @@ def deletarCartao(cartao_id):
         current_app.logger.warning(f'Erro ao deletar cartao: {e}')
         return redirect(url_for('conta.acessarConta'))
     
-
 @cartao_bp.route('/listar', methods=['GET', 'POST'])
-def listarCartao():
+def listarCartao(): 
     try:
         # Buscar todos os objetos
         cartoes = Cartoes.query.all()
