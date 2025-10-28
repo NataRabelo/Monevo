@@ -1,0 +1,147 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1D2128;
+}
+
+.formulario-editar {
+    background-color: #3C90C0;
+    color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 650px;
+    width: 90%;
+    margin: auto;
+}
+
+.titulo-formulario {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: rgb(255, 255, 255);
+}
+
+.botao-enviar {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1D2128;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.botao-voltar {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1D2128;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.botao-deletar {
+    background-color: #C62828;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: 0.3s;
+    margin: 5px;
+    margin-bottom: 10px;
+}
+
+.texto-central {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.texto-central a {
+    color: #ffffff;
+}
+
+.texto-central a:hover {
+    text-decoration: underline;
+}
+
+#titulo-site {
+    color: white;
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+}
+/* Estilo do modal de confirmação */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    background-color: #1D2128;
+    color: #fff;
+    border-bottom: none;
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+.modal-footer button {
+    border-radius: 6px;
+    padding: 6px 16px;
+}
+.modal-body {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.6;
+}
+
+.modal-body strong {
+    color: #1D2128;
+}
+
+/* ====== Rodapé do modal ====== */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: none;
+    padding-top: 15px;
+}
+
+.btn-cancelar {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    transition: all 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    background-color: #5a6268;
+}
+
+.btn-excluir {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    transition: all 0.2s ease;
+}
+
+.btn-excluir:hover {
+    background-color: #bb2d3b;
+}

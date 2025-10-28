@@ -44,6 +44,7 @@ h3,
 }
 .btn-primary:hover {
   background-color: #1D2128;
+  color: white;
 }
 
 .btn-secondary {
@@ -63,9 +64,62 @@ h3,
   background-color: #ffffff;
   color: #000000;
   border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  transition: all 0.2s ease-in-out;
 }
 .btn-outline-secondary:hover {
   background-color: #1D2128;
+  color: #ffffff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Botão Editar específico (opcional, mesma aparência do btn-outline-secondary) */
+.btn-editar {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  transition: all 0.2s ease-in-out;
+}
+.btn-editar:hover {
+  background-color: #1D2128;
+  color: #ffffff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Modais */
+.modal-content {
+  background-color: #3C90C0;
+  color: white;
+  border-radius: 12px;
+}
+.modal-header .modal-title {
+  color: white;
+}
+.modal-body label {
+  color: white;
+}
+.modal-footer .btn-primary {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+}
+.modal-footer .btn-primary:hover {
+  background-color: #1D2128;
+  color: white;
+}
+.modal-footer .btn-outline-secondary {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+}
+.modal-footer .btn-outline-secondary:hover {
+  background-color: #1D2128;
+  color: #ffffff;
 }
 
 /* Texto auxiliar */

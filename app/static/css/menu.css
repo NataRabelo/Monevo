@@ -142,12 +142,12 @@ body {
 
 /* Cores dos cabeçalhos */
 .cabecalho-video {
-  background: linear-gradient(90deg, #3C90C0, #2B6A8E);
+  background: linear-gradient(90deg, #3C90C0);
   color: white;
 }
 
 .cabecalho-noticia {
-  background: linear-gradient(90deg, #4CAF50, #357a38);
+  background: linear-gradient(90deg, #306733);
   color: white;
 }
 

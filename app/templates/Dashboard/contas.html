@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Contas | Monevo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap e Font Awesome para estilo e ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -51,11 +51,8 @@
 
   <div class="container py-5">
     <!-- Título -->
-    <h1 class="mb-5 text-center">
-      Minhas contas e cartões
-    </h1>
+    <h1 class="mb-5 text-center">Minhas contas e cartões</h1>
 
-    <!-- Linha com Contas e Cartões lado a lado -->
     <div class="row">
       <!-- Contas Bancárias -->
       <div class="col-md-6">
@@ -125,7 +122,7 @@
                   <i class="fas fa-wallet me-1"></i>Saldo: R$ {{ "%.2f"|format(conta.saldo_inicial) }}
                 </p>
                 <div class="d-flex justify-content-end">
-                  <form method="POST" action="{{ url_for('conta.deletarConta', conta_id=conta.id) }}"
+                  <form method="POST" action="{{ url_for('conta.excluir_conta', id=conta.id) }}"
                     onsubmit="return confirm('Tem certeza que deseja excluir esta conta?');">
                     <button type="submit" class="btn btn-sm btn-outline-danger">
                       <i class="fas fa-trash-alt"></i>
@@ -191,7 +188,14 @@
                 <p class="card-text">
                   <i class="fas fa-university me-1"></i>Conta: {{ cartao.conta.banco }}
                 </p>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end gap-2">
+                  <!-- Botão Editar Cartão -->
+                  <button type="button" class="btn btn-outline-secondary botao-editar-cartao" data-id="{{ cartao.id }}"
+                    data-credito="{{ " %.2f"|format(cartao.credito) }}" data-conta="{{ cartao.conta.id }}">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+
+                  <!-- Botão Excluir Cartão -->
                   <form method="POST" action="{{ url_for('cartao.excluir_cartao', id=cartao.id) }}"
                     onsubmit="return confirm('Tem certeza que deseja excluir este cartão?');">
                     <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -206,15 +210,87 @@
           <p class="text-muted">Nenhum cartão cadastrado.</p>
           {% endfor %}
         </div>
-
       </div>
     </div>
   </div>
+
+  <!-- Modal Editar Conta -->
+  <div class="modal fade" id="modalEditarConta" tabindex="-1" aria-labelledby="modalEditarContaLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formEditarConta" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalEditarContaLabel">Editar Conta</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editar_conta_id" name="id">
+
+            <div class="mb-3">
+              <label for="editar_nome_banco" class="form-label">Nome do banco</label>
+              <input type="text" class="form-control" id="editar_nome_banco" name="banco" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="editar_saldo_inicial" class="form-label">Saldo inicial</label>
+              <input type="text" class="form-control" id="editar_saldo_inicial" name="saldo_inicial" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar Cartão -->
+  <div class="modal fade" id="modalEditarCartao" tabindex="-1" aria-labelledby="modalEditarCartaoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formEditarCartao" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalEditarCartaoLabel">Editar Cartão</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editar_cartao_id" name="id">
+
+            <div class="mb-3">
+              <label for="editar_credito_cartao" class="form-label">Crédito</label>
+              <input type="text" class="form-control" id="editar_credito_cartao" name="credito" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="editar_conta_relacionada" class="form-label">Conta</label>
+              <select class="form-select" id="editar_conta_relacionada" name="conta" required>
+                <option value="">Selecione...</option>
+                {% for conta in contas %}
+                <option value="{{ conta.id }}">{{ conta.banco }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{{ url_for('static', filename='js/Conta.js') }}"></script>
   <script src="/app/static/js/conta.js"></script>
+
+  
 </body>
 
 </html>
