@@ -32,6 +32,10 @@ class Contas(db.Model):
     saldo_inicial = db.Column(db.Float, default=0)
     criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
+    # Relação: uma conta pode ter vários cartões
+    cartoes = db.relationship('Cartoes', backref='conta', lazy=True)
+
+
 # Tabela de Categorias 
 class Categorias(db.Model):
     __tablename__ = "categorias"
@@ -49,16 +53,18 @@ class Cartoes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     nome_cartao = db.Column(db.String(100), nullable=False)
-    bandeira = db.Column(db.String(50))  # Ex: Visa, Master, Elo
+    bandeira = db.Column(db.String(50))
     limite = db.Column(db.Float, nullable=False)
-    # Dia do mês em que a fatura fecha (ex: dia 25)
     dia_fechamento_fatura = db.Column(db.Integer, nullable=False)
-    # Dia do mês em que a fatura vence (ex: dia 05)
     dia_vencimento_fatura = db.Column(db.Integer, nullable=False)
+
+    # Campo correto para referência à conta
+    conta_id = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="CASCADE"), nullable=False)
+
     criado_em = db.Column(db.DateTime, default=func.current_timestamp())
 
-    # Relação: Um cartão pode ter muitas transações
     transacoes = db.relationship('Transacoes', backref='cartao', lazy=True)
+
 
 # Tabela de transacoes (ALTERADA para suportar cartão de crédito)
 class Transacoes(db.Model):

@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
-from app.models import Contas
+from app.models import Contas, Cartoes
 from flask_login import current_user
 from app import db
 
@@ -9,7 +9,8 @@ conta_bp = Blueprint('conta', __name__, url_prefix='/conta')
 def acessarConta():
     if request.method == "GET":
         contas = Contas.query.all()
-        return render_template('dashboard/contas.html', contas=contas)
+        cartoes = Cartoes.query.all()
+        return render_template('dashboard/contas.html', contas=contas, cartoes=cartoes)
 
 @conta_bp.route('/cadastrar', methods=['GET', 'POST'])
 def cadastrarConta():
