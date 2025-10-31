@@ -38,19 +38,27 @@ label {
 }
 
 button {
-   width: 100%;
+    width: 100%;
     padding: 10px;
     border: none;
     border-radius: 5px;
     background-color: #1D2128;
     color: #ffffff;
     font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #2C313A;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
 }
 
 a {
     color: #ffffff;
 }
 
-.texto-central{
+.texto-central {
     text-align: center;
 }

@@ -37,6 +37,13 @@ body {
   justify-content: center;
   gap: 8px;
   font-weight: normal;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #2C313A;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
 }
 
 .texto-central a {

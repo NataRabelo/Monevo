@@ -33,10 +33,13 @@ body {
     font-size: 16px;
     cursor: pointer;
     margin-bottom: 10px;
+    transition: all 0.3s ease;
 }
 
 .botao-enviar:hover {
-    background-color: #1D2128;
+    background-color: #2C313A;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
 }
 
 .botao-voltar {
