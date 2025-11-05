@@ -112,4 +112,8 @@ def create_app(config_class=None):
 
     from app.routes.categorias import categoria_bp
     app.register_blueprint(categoria_bp)
+
+    from app.routes.transacoes import transacao_bp
+    app.register_blueprint(transacao_bp)
+
     return app
