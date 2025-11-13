@@ -1,157 +1,179 @@
-/* Fundo geral */
 body {
-    background-color: #1D2128;
-    color: #ffffff;
+  background-color: #1D2128;
+  color: #ffffff;
 }
 
-/* Navbar */
-.barra-navegacao {
-    background-color: #3C90C0 !important;
-}
-
-.barra-navegacao .link-navegacao,
-.barra-navegacao .link-navegacao i {
-    color: white !important;
-}
-
-/* Títulos */
-h1,
-h3,
-.card-title {
+h3 {
     color: white;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
 }
 
-/* Cards */
 .card {
-    background-color: #3C90C0;
-    border-radius: 12px;
+  background-color: #2b2f36;
+  border-radius: 12px;
+  border: 1px solid #3c434d;
+  padding: 24px;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #3c434d;
+}
+
+.nav-tabs .nav-link {
+  color: #bfc6d1;
+  background: transparent;
+  border: none;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #3C90C0;
+  color: #fff;
+  border-radius: 8px 8px 0 0;
+}
+
+/* ==== CARDS DE CONTA ==== */
+.conta-card {
+  background-color: #1f232a;
+  border-radius: 12px;
+  border: 1px solid #343b45;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.conta-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+}
+
+.conta-card .conta-nome {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.conta-card .tipo {
+  font-size: 0.85rem;
+  background-color: #3C90C0;
+  padding: 2px 10px;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.conta-card .banco {
+  color: #aaa;
+  margin-bottom: 4px;
+}
+
+.conta-card .saldo {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.conta-card .acoes {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+/* ==== CARDS DE CARTÃO ==== */
+.cartao-card {
+  background: linear-gradient(145deg, #2b2f36, #24282f);
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #3c434d;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cartao-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+.cartao-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.nome-cartao{
     color: white;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Adicionado box-shadow na transição */
 }
 
-/* Estilo para o cabeçalho do Card de Listagem (Usado para Contas e Cartões) */
-.card-header {
-    background-color: #317da7 !important; /* Um tom ligeiramente mais escuro que o card para destacar */
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.cartao-header .bandeira {
+  font-size: 0.85rem;
+  color: #ccc;
 }
 
-.card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Sombra mais destacada no hover */
+.cartao-body p {
+  margin: 2px 0;
+  color: #ddd;
 }
 
-.card-text {
-    color: #f1f1f1;
+.cartao-footer {
+  margin-top: 10px;
 }
 
-/* Botões */
-.btn-primary {
-    background-color: #ffffff;
-    color: #000000;
-    border: none;
-    border-radius: 8px; /* Adicionado border-radius para consistência */
+.btn {
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
 }
 
-.btn-primary:hover {
-    background-color: #1D2128;
-    color: white;
+.btn-dark {
+  background-color: #3C90C0;
+  color: #fff;
+  border: none;
 }
 
-.btn-secondary {
-    background-color: #3C90C0;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 18px;
-    transition: background-color 0.2s ease-in-out;
+.btn-dark:hover {
+  background-color: #317da7;
 }
 
-.btn-secondary:hover {
-    background-color: #317da7; /* Pequena mudança no hover para dar feedback */
-    color: white;
+.btn-outline-secondary {
+  border: 1px solid #ccc;
+  color: #ccc;
+  background: transparent;
 }
 
-/* Botões de Contorno */
-.btn-outline-secondary,
-.btn-outline-primary, /* Adicionado para botões de ação (editar) */
-.btn-outline-danger { /* Adicionado para botões de exclusão */
-    background-color: #ffffff;
-    color: #000000;
-    border: none; /* Mantido sem borda real para o estilo "outline" atual */
-    border-radius: 8px;
-    padding: 6px 12px;
-    transition: all 0.2s ease-in-out;
+.btn-outline-secondary:hover {
+  background-color: #3C90C0;
+  color: #fff;
 }
 
-.btn-outline-secondary:hover,
-.btn-outline-primary:hover,
+.btn-outline-danger {
+  border: 1px solid #ff6b6b;
+  color: #ff6b6b;
+  background: transparent;
+}
+
 .btn-outline-danger:hover {
-    background-color: #1D2128;
-    color: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: #ff6b6b;
+  color: #fff;
 }
 
-
-/* Botão Editar específico (Pode ser removido se o .btn-outline-primary for suficiente) */
-.btn-editar {
-    background-color: #ffffff;
-    color: #000000;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 12px;
-    transition: all 0.2s ease-in-out;
-}
-
-.btn-editar:hover {
-    background-color: #1D2128;
-    color: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Modais */
+/* MODAIS */
 .modal-content {
-    background-color: #3C90C0;
-    color: white;
-    border-radius: 12px;
+  background-color: #2b2f36;
+  border-radius: 12px;
+  color: #ffffff;
+  border: 1px solid #3c434d;
 }
 
-.modal-header .modal-title {
-    color: white;
+.modal-header {
+  border-bottom: 1px solid #3c434d;
 }
 
 .modal-body label {
-    color: white;
+  color: #ccc;
 }
 
-/* Mantém o estilo dos botões no modal como no restante do site */
-.modal-footer .btn-primary {
-    background-color: #ffffff;
-    color: #000000;
-    border: none;
+.form-control, .form-select {
+  background-color: #1D2128;
+  color: #fff;
+  border: 1px solid #3c434d;
 }
 
-.modal-footer .btn-primary:hover {
-    background-color: #1D2128;
-    color: white;
-}
-
-.modal-footer .btn-outline-secondary {
-    background-color: #ffffff;
-    color: #000000;
-    border: none;
-}
-
-.modal-footer .btn-outline-secondary:hover {
-    background-color: #1D2128;
-    color: #ffffff;
-}
-
-/* Texto auxiliar */
-.text-muted {
-    color: #ccc !important;
-    font-style: italic;
+.form-control:focus, .form-select:focus {
+  border-color: #3C90C0;
+  box-shadow: none;
 }

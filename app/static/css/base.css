@@ -1,0 +1,68 @@
+/* ======== BASE ======== */
+body {
+  background-color: #1D2128;
+  color: #FFFFFF;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.texto-central {
+  text-align: center;
+}
+
+/* ======== NAVBAR ======== */
+.barra-navegacao {
+  background-color: #3C90C0 !important;
+  transition: background-color 0.3s ease;
+}
+
+.barra-navegacao .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.barra-navegacao .nav-link:hover {
+  color: #e8f4ff !important;
+  transform: scale(1.05);
+}
+
+.barra-navegacao .navbar-brand {
+  color: #ffffff !important;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+}
+
+/* ======== CONTEÚDO PRINCIPAL ======== */
+main {
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+/* ======== FLASH MESSAGES (se quiser usar depois) ======== */
+.flash-message {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.flash-success {
+  background-color: #2E7D32;
+  color: #fff;
+}
+
+.flash-error {
+  background-color: #C62828;
+  color: #fff;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  .nav-link i {
+    margin-right: 6px;
+  }
+}

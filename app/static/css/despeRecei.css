@@ -1,227 +1,65 @@
-/* ===== FUNDO GERAL ===== */
 body {
-  background-color: #1D2128;
-  color: #ffffff;
+  background: #1D2128;
+  color: #FFF;
 }
 
-/* ===== NAVBAR ===== */
-.barra-navegacao {
-  background-color: #3C90C0 !important;
+/* Importação mais discreta */
+.import-banner {
+  background: #232832;
+  border-left: 4px solid #3C90C0;
 }
 
-.barra-navegacao .link-navegacao,
-.barra-navegacao .link-navegacao i {
-  color: white !important;
-}
-
-.barra-navegacao .link-navegacao:hover {
-  color: #dddddd !important;
-}
-
-/* ===== CONTEÚDO CENTRAL ===== */
-.tela-central {
-  padding: 20px;
-}
-
-/* ===== CAIXAS PRINCIPAIS ===== */
-.caixa-receita,
-.caixa-despesa,
-.card.bg-info {
-  border-radius: 0.5rem;
-  padding: 20px;
-}
-
-.sombra-caixa {
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-}
-
-/* RECEITAS */
-.caixa-receita {
-  background-color: #306733;
-  color: white;
-}
-
-/* DESPESAS */
-.caixa-despesa {
-  background-color: #C62828;
-  color: white;
-}
-
-/* Cabeçalhos */
-.caixa-receita h3,
-.caixa-despesa h3 {
-  margin-bottom: 1rem;
-}
-
-.valor-total {
+/* Cards principais */
+.valor-card {
+  border-radius: 14px;
   text-align: center;
-  margin-bottom: 1rem;
+  padding: 22px;
+  transition: 0.3s ease;
 }
 
-/* ===== TABELAS ===== */
-.table {
-  background-color: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
+.valor-card:hover {
+  transform: scale(1.03);
 }
 
-.table th,
-.table td {
-  vertical-align: middle !important;
-  padding: 10px;
-  font-size: 0.95rem;
-  color: #000;
+/* Tons pastel */
+.receita-card {
+  background: #7ac99321;
+  border: 1px solid #6DC98B;
 }
 
-.table thead th {
-  text-align: center;
+.despesa-card {
+  background: #ff757521;
+  border: 1px solid #FF8686;
 }
 
-/* ===== BOTÕES ===== */
-.btn {
-  border-radius: 0.5rem;
+.label-card {
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
-.btn-dark {
-  background-color: #1D2128;
-  border: none;
-}
-
-.btn-dark:hover {
-  background-color: #333944;
-}
-
-.btn-warning,
-.btn-danger {
-  border-radius: 0.5rem;
-  padding: 4px 8px;
-}
-
-.btn-sm i {
-  font-size: 0.85rem;
-}
-
-.tela-central {
-  padding: 20px;
-}
-
-.caixa-receita,
-.caixa-despesa {
-  border-radius: 0.5rem;
-  padding: 20px;
-  color: white;
-}
-
-.caixa-receita {
-  background-color: #306733;
-}
-
-.caixa-despesa {
-  background-color: #C62828;
-}
-
-.valor-total {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.sombra-caixa {
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-}
-
-/* Garante que Receitas e Despesas fiquem lado a lado em telas grandes */
-@media (min-width: 992px) {
-  .col-lg-6 {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.caixa-importacao {
-  background-color: #3C90C0;
-  color: white;
-  padding: 20px;
-  border-radius: 0.5rem;
-  margin-bottom: 20px;
-  width: 900px;
-  max-width: 80%;
-  margin: 0 auto;
-}
-
-
-.botoes-importacao .btn {
-  border-radius: 0.5rem;
-  font-weight: 500;
-}
-
-.texto-importacao h5 {
+.valor-numero {
+  font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
-.texto-importacao p {
-  margin: 2px 0;
+/* Caixas das tabelas */
+.caixa-table {
+  background: #232832;
+  border-radius: 14px;
 }
 
-/* Modal Cadastro - Aparência Geral */
-#modalCadastro .modal-content {
-  border-radius: 0.75rem;
-  border: none;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-  background-color: #1D2128;
-  color: #fff;
+/* Cabeçalhos suaves */
+.thead-receita th {
+  background: #6DC98B !important;
+  color: #1D2128 !important;
 }
 
-#modalCadastro .modal-header {
-  background-color: #3C90C0;
-  border-bottom: none;
-  color: #fff;
-  border-top-left-radius: 0.75rem;
-  border-top-right-radius: 0.75rem;
+.thead-despesa th {
+  background: #FF8686 !important;
+  color: #1D2128 !important;
 }
 
-#modalCadastro .modal-title {
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-#modalCadastro .btn-close {
-  filter: invert(1);
-}
-
-#modalCadastro .modal-body {
-  padding: 1.5rem;
-}
-
-#modalCadastro .form-control,
-#modalCadastro .form-select {
-  background-color: #ffffff;
-  border: 1px solid #3C90C0;
-  color: #000000;
-}
-
-#modalCadastro .form-control:focus,
-#modalCadastro .form-select:focus {
-  border-color: #3C90C0;
-  box-shadow: 0 0 0 0.2rem rgba(60,144,192,0.4);
-}
-
-#modalCadastro .form-label {
-  font-weight: 500;
-}
-
-#modalCadastro button[type="submit"] {
-  background-color: #3C90C0;
-  border: none;
-  font-weight: 600;
-}
-
-#modalCadastro button[type="submit"]:hover {
-  background-color: #337fa6;
-}
-/* Scroll apenas nas tabelas */
-.caixa-receita .table-responsive,
-.caixa-despesa .table-responsive {
-  max-height: 300px; 
-  overflow-y: auto;   
+/* Hover tabela */
+.table-hover tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
 }

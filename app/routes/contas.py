@@ -19,16 +19,18 @@ def cadastrarConta():
 
         # Buscar dados
         usuario         = usuario.id
-        instituicao      = request.form.get('instituicao')
-        tipo_conta      = request.form.get('tipo_conta')
-        saldo_inicial   = request.form.get('saldo_inicial')
+        nome_conta      = request.form.get('nome-conta')
+        instituicao     = request.form.get('instituicao')
+        tipo_conta      = request.form.get('tipo-conta')
+        saldo_inicial   = request.form.get('saldo-inicial')
         
         # Verificações 
 
         # Criando o objeto Conta 
         new_conta = Contas (
             usuario_id      = usuario,
-            instituicao      = instituicao,
+            nome_conta      = nome_conta,
+            instituicao     = instituicao,
             tipo_conta      = tipo_conta,
             saldo_inicial   = saldo_inicial
         )
@@ -49,11 +51,12 @@ def cadastrarConta():
         current_app.logger.warning(f'Erro ao cadastrar conta: {e}')
         return redirect(url_for('conta.acessarConta'))
 
-@conta_bp.route('/editar/<int:conta_id>', methods=['GET', 'POST'])
-def editarConta(conta_id):
+@conta_bp.route('/editar', methods=['GET', 'POST'])
+def editarConta():
     try:
         # Validar a existencia da conta 
-        conta = Contas.query.filter(Contas.id == conta_id).first()
+        conta_id    = request.form.get('conta_id')
+        conta       = Contas.query.filter(Contas.id == conta_id).first()
 
         if not conta:
             flash('Conta não encontrada')
@@ -64,7 +67,8 @@ def editarConta(conta_id):
         
         if request.method == "POST":
             # Passando os dados alterados ( or not )
-            conta.instituicao        = request.form.get('instituicao') or conta.instituicao
+            conta.nome_conta        = request.form.get('nome-conta') or conta.nome_conta
+            conta.instituicao       = request.form.get('instituicao') or conta.instituicao
             conta.tipo_conta        = request.form.get('tipo_conta') or conta.tipo_conta
             conta.saldo_inciail     = request.form.get('saldo_incial') or conta.saldo_inicial
 
@@ -84,6 +88,7 @@ def deletarConta(conta_id):
     try:
         # Valida a existencia
         conta = Contas.query.filter(Contas.id == conta_id).first()
+        print(conta_id)
 
         if not conta:
             flash('Conta não encontrada')

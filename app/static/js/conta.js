@@ -70,3 +70,55 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+  // ----------------- MODAL EDITAR CONTA -----------------
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Seleciona o modal de edição
+    var modalEditarConta = document.getElementById('modalEditarConta');
+    
+    if (modalEditarConta) {
+        
+        // 2. Adiciona o listener para o evento que ocorre antes do modal ser exibido
+        modalEditarConta.addEventListener('show.bs.modal', function (event) {
+            
+            // Botão que disparou o modal (o botão "Editar" clicado)
+            var button = event.relatedTarget; 
+
+            // 3. Extrai as informações dos atributos data- do botão
+            var contaId = button.getAttribute('data-conta-id');
+            var nomeConta = button.getAttribute('data-nome');
+            var instituicao = button.getAttribute('data-instituicao');
+            var saldo = button.getAttribute('data-saldo'); // Saldo é capturado como string
+            var tipo = button.getAttribute('data-tipo');
+
+            // 4. Preenche os campos do formulário no modal, usando os IDs definidos
+
+            // Campo Oculto (ID da Conta)
+            var inputId = modalEditarConta.querySelector('#edit-conta-id');
+            if(inputId) { inputId.value = contaId; }
+
+            // Nome da Conta
+            var inputNome = modalEditarConta.querySelector('#edit-nome-conta');
+            if(inputNome) { inputNome.value = nomeConta; }
+
+            // Banco/Instituição
+            var inputInstituicao = modalEditarConta.querySelector('#edit-instituicao');
+            if(inputInstituicao) { inputInstituicao.value = instituicao; }
+
+            // Saldo Atual: Converte para float e ajusta para 2 casas decimais
+            var inputSaldo = modalEditarConta.querySelector('#edit-saldo-atual');
+            if(inputSaldo) { 
+                // Garante que o valor é um número válido antes de tentar formatar
+                if (saldo && !isNaN(parseFloat(saldo))) {
+                    inputSaldo.value = parseFloat(saldo).toFixed(2);
+                } else {
+                    inputSaldo.value = ''; // Limpa se o valor for inválido
+                }
+            }
+
+            // Tipo (Dropdown/Select)
+            var selectTipo = modalEditarConta.querySelector('#edit-tipo-conta');
+            if(selectTipo) { selectTipo.value = tipo; }
+        });
+    }
+});

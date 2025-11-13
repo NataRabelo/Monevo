@@ -27,6 +27,7 @@ class Contas(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    nome_conta  = db.Column(db.String, nullable=True)
     instituicao = db.Column(db.String, nullable=False)
     tipo_conta = db.Column(db.String, nullable=False)
     saldo_inicial = db.Column(db.Float, default=0)
@@ -34,7 +35,7 @@ class Contas(db.Model):
 
     # Relação: uma conta pode ter vários cartões
     cartoes = db.relationship('Cartoes', backref='conta', lazy=True)
-
+ 
 
 # Tabela de Categorias 
 class Categorias(db.Model):

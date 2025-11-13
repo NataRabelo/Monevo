@@ -1,389 +1,232 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Contas | Monevo</title>
+{% block title %}Contas & Cartões | Monevo{% endblock %}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contas.css') }}">
+{% endblock %}
 
-    <link rel="stylesheet" href="/app/static/css/contas.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/contas.css') }}">
+{% block content %}
+<div class="container py-5 tela-central">
+  <div class="card sombra-caixa p-4">
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-</head>
+    <!-- Abas -->
+    <ul class="nav nav-tabs mb-4" id="abaCadastro" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="contas-tab" data-bs-toggle="tab" data-bs-target="#contas" type="button"
+          role="tab">Contas</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="cartoes-tab" data-bs-toggle="tab" data-bs-target="#cartoes" type="button"
+          role="tab">Cartões</button>
+      </li>
+    </ul>
 
-<body>
-    <nav class="barra-navegacao navbar navbar-expand-lg navbar-dark shadow-sm px-3">
-        <a class="navbar-brand fw-bold me-4" href="{{ url_for('main.menu') }}">Monevo</a>
+    <div class="tab-content" id="conteudoAbas">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-navegacao"
-            aria-controls="menu-navegacao" aria-expanded="false" aria-label="Alternar navegação">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-end" id="menu-navegacao">
-            <ul class="navbar-nav align-items-center gap-3">
-                <li class="nav-item">
-                    <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('main.menu') }}">
-                        <i class="fas fa-home me-2"></i> Menu
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="link-navegacao nav-link d-flex align-items-center"
-                        href="{{ url_for('user.editarUsuario') }}">
-                        <i class="fas fa-user me-2"></i> Usuário
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="link-navegacao nav-link d-flex align-items-center" href="{{ url_for('auth.login') }}">
-                        <i class="fas fa-sign-out-alt me-2"></i> Sair
-                    </a>
-                </li>
-            </ul>
+      <div class="tab-pane fade show active" id="contas" role="tabpanel" aria-labelledby="contas-tab">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="mb-0">Minhas Contas</h3>
+          <button class="btn btn-dark btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalConta">Nova
+            Conta</button>
         </div>
-    </nav>
 
-    <div class="container py-5">
-        <h1 class="mb-5 text-center">Minhas contas e cartões</h1>
+        <div class="row g-3">
+          {% for conta in contas %}
+          <div class="col-md-6 col-lg-4">
+            <div class="conta-card p-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="conta-nome">{{ conta.nome_conta }}</h5>
+                <span class="tipo">{{ conta.tipo_conta }}</span>
+              </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <h3 class="mb-3">
-                    <i class="fas fa-university me-2"></i>Contas bancárias
-                </h3>
+              <p class="banco">Banco: {{ conta.instituicao }}</p>
+              <p class="saldo">Saldo: <strong>R$ {{ conta.saldo_inicial }}</strong></p>
 
-                <button class="btn btn-secondary mb-3" id="botao_cadastrar_conta">
-                    <i class="fas fa-plus me-2"></i>Cadastrar conta
+              <div class="acoes d-flex gap-2 mt-3">
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
+                  data-bs-target="#modalEditarConta" data-conta-id="{{ conta.id }}" data-nome="{{ conta.nome_conta }}"
+                  data-instituicao="{{ conta.instituicao }}" data-saldo="{{ conta.saldo_inicial }}"
+                  data-tipo="{{ conta.tipo_conta }}">
+                  Editar
                 </button>
 
-                <div id="formulario_conta" class="card p-3 mb-4 shadow-sm d-none">
-                    <h5 class="mb-3">Nova conta bancária</h5>
-                    <form method="POST" action="{{ url_for('conta.cadastrarConta') }}">
-
-                        <div class="mb-2">
-                            <label for="instituicao" class="form-label">Instituição</label>
-                            <input type="text" class="form-control" id="instituicao" name="instituicao"
-                                placeholder="Ex: Banco do Brasil, Nubank..." required>
-                        </div>
-
-                        <div class="mb-2">
-                            <label for="tipo_conta" class="form-label">Tipo de conta</label>
-                            <select class="form-select" id="tipo_conta" name="tipo_conta" required>
-                                <option value="" disabled selected>Selecione o tipo</option>
-                                <option value="Corrente">Conta Corrente</option>
-                                <option value="Poupança">Conta Poupança</option>
-                                <option value="Pagamento">Conta de Pagamento</option>
-                                <option value="Investimento">Conta de Investimento</option>
-                                <option value="Outro">Outro</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-2">
-                            <label for="saldo_inicial" class="form-label">Saldo inicial</label>
-                            <input type="text" class="form-control" id="saldo_inicial" name="saldo_inicial"
-                                placeholder="R$ 0,00" required>
-                        </div>
-
-                        <div class="mt-3 d-flex justify-content-between">
-                            <button type="button" class="btn btn-outline-secondary" id="botao_cancelar_conta">
-                                <i class="fas fa-times me-1"></i>Cancelar
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i>Salvar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-
-                <div class="row">
-                    {% for conta in contas %}
-                    <div class="col-12 mb-3">
-                        <div class="card shadow-sm border-0 rounded-3">
-                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-university me-2"></i>{{ conta.instituicao }}</span>
-                                <span class="badge bg-light text-primary">{{ conta.tipo_conta }}</span>
-                            </div>
-                            <div class="card-body">
-                                <p class="mb-3">
-                                    <strong><i class="fas fa-wallet me-2"></i>Saldo:</strong> <span class="fw-bold">R$ {{ "%.2f"|format(conta.saldo_inicial) }}</span>
-                                </p>
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button type="button" class="btn btn-outline-primary btn-sm botao-editar-conta"
-                                        data-bs-toggle="modal" data-bs-target="#modalEditarConta"
-                                        data-id="{{ conta.id }}" data-instituicao="{{ conta.instituicao }}"
-                                        data-tipo_conta="{{ conta.tipo_conta }}"
-                                        data-saldo_inicial="{{ "%.2f"|format(conta.saldo_inicial) }}">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </button>
-                                    
-                                    <form method="POST" action="{{ url_for('conta.deletarConta', conta_id=conta.id) }}"
-                                        onsubmit="return confirm('Tem certeza que deseja excluir esta conta?');">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash-alt"></i> Excluir
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% else %}
-                    <p class="text-muted">Nenhuma conta cadastrada.</p>
-                    {% endfor %}
-                </div>
+                <form method="POST" action="{{ url_for('conta.deletarConta', conta_id=conta.id) }}">
+                  <button class="btn btn-outline-danger btn-sm">Excluir</button>
+                </form>
+              </div>
             </div>
+          </div>
+          {% else %}
+          <p class="text-muted">Nenhuma conta cadastrada.</p>
+          {% endfor %}
+        </div>
 
-            <div class="col-md-6">
-                <h3 class="mb-3">
-                    <i class="fas fa-credit-card me-2"></i>Cartões de crédito
-                </h3>
+      </div>
 
-                <button class="btn btn-secondary mb-3" id="botao_cadastrar_cartao">
-                    <i class="fas fa-plus me-2"></i>Cadastrar cartão
-                </button>
+      <!-- Aba de Cartões -->
+      <div class="tab-pane fade" id="cartoes" role="tabpanel" aria-labelledby="cartoes-tab">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="mb-0">Meus Cartões</h3>
+          <button class="btn btn-dark btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalCartao">Novo
+            Cartão</button>
+        </div>
 
-                <div id="formulario_cartao" class="card p-3 mb-4 shadow-sm d-none">
-                    <h5 class="mb-3">Novo cartão de crédito</h5>
-                    <form method="POST" action="{{ url_for('cartao.cadastrarCartao') }}">
+        <div class="row g-4">
+          <!-- Card de Cartão -->
+          {% for cartao in cartoes %}
+          <div class="col-md-6 col-lg-4">
+            <div class="cartao-card">
+              <div class="cartao-header">
+                <span class="nome-cartao">{{ cartao.nome_cartao }}</span>
+                <span class="bandeira">{{ cartao.bandeira }}</span>
+              </div>
+              <div class="cartao-body">
+                <p class="limite">Limite: {{ cartao.limite }}</p>
+                <p>Fechamento: dia {{ cartao.dia_fechamento_fatura }}</p>
+                <p>Vencimento: dia {{ cartao.dia_vencimento_fatura }}</p>
+              </div>
+              <div class="cartao-footer d-flex justify-content-end gap-2">
+                <button class="btn btn-outline-secondary btn-sm">Editar</button>
+                <button class="btn btn-outline-danger btn-sm">Excluir</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <p class="text-muted">Nenhum cartão cadastrado.</p>
+        {% endfor %}
+      </div>
 
-                        <div class="mb-2">
-                            <label for="nome_cartao" class="form-label">Nome do Cartão</label>
-                            <input type="text" class="form-control" id="nome_cartao" name="nome_cartao"
-                                placeholder="Ex: Nubank Roxo" required>
-                        </div>
+    </div>
+  </div>
+</div>
 
-                        <div class="mb-2">
-                            <label for="bandeira" class="form-label">Bandeira</label>
-                            <select class="form-select" id="bandeira" name="bandeira" required>
-                                <option value="" disabled selected>Selecione...</option>
-                                <option value="Visa">Visa</option>
-                                <option value="Mastercard">Mastercard</option>
-                                <option value="Elo">Elo</option>
-                                <option value="American Express">American Express</option>
-                                <option value="Hipercard">Hipercard</option>
-                            </select>
-                        </div>
+<!-- Modal Conta -->
+<div class="modal fade" id="modalConta" tabindex="-1" aria-labelledby="modalContaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cadastrar Conta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('conta.cadastrarConta') }}" method="POST">
+          <div class="mb-3">
+            <label class="form-label">Nome da Conta</label>
+            <input type="text" class="form-control" id="nome-conta" name="nome-conta" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Banco</label>
+            <input type="text" class="form-control" id="instituicao" name="instituicao">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Saldo Inicial</label>
+            <input type="number" step="0.01" class="form-control" id="saldo-inicial" name="saldo-inicial">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" id="tipo-conta" name="tipo-conta">
+              <option value="Corrente">Corrente</option>
+              <option value="Poupança">Poupança</option>
+              <option value="Investimento">Investimento</option>
+            </select>
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-dark">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-                        <div class="mb-2">
-                            <label for="limite" class="form-label">Limite de Crédito</label>
-                            <input type="text" class="form-control" id="limite" name="limite" placeholder="R$ 0,00"
-                                required>
-                        </div>
-
-                        <div class="mb-2">
-                            <label for="dia_fechamento_fatura" class="form-label">Dia de fechamento da fatura</label>
-                            <input type="number" class="form-control" id="dia_fechamento_fatura"
-                                name="dia_fechamento_fatura" min="1" max="31" required>
-                        </div>
-
-                        <div class="mb-2">
-                            <label for="dia_vencimento_fatura" class="form-label">Dia de vencimento da fatura</label>
-                            <input type="number" class="form-control" id="dia_vencimento_fatura"
-                                name="dia_vencimento_fatura" min="1" max="31" required>
-                        </div>
-
-                        <div class="mb-2">
-                            <label for="conta_relacionada" class="form-label">Conta relacionada</label>
-                            <select class="form-select" name="conta_id" id="conta_id" required>
-                                <option value="">Selecione...</option>
-                                {% for conta in contas %}
-                                <option value="{{ conta.id }}">{{ conta.instituicao }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-
-                        <div class="mt-3 d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i>Salvar
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary" id="botao_cancelar_cartao">
-                                <i class="fas fa-times me-1"></i>Cancelar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-
-                <div class="row">
-                    {% for cartao in cartoes %}
-                    <div class="col-12 col-md-12 col-lg-6 mb-3"> 
-                        <div class="card shadow-sm border-0 rounded-3">
-
-                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-credit-card me-2"></i>{{ cartao.nome_cartao }}</span>
-                                <span class="badge bg-light text-primary">{{ cartao.bandeira }}</span>
-                            </div>
-
-                            <div class="card-body">
-                                <p class="mb-1">
-                                    <strong><i class="fas fa-money-bill-wave me-2"></i>Limite:</strong> R$ {{ "%.2f"|format(cartao.limite) }}
-                                </p>
-                                <p class="mb-1">
-                                    <strong><i class="fas fa-university me-2"></i>Conta:</strong> {{ cartao.conta.instituicao }}
-                                </p>
-                                <p class="mb-1">
-                                    <strong><i class="fas fa-calendar-alt me-2"></i>Fechamento:</strong> dia {{ cartao.dia_fechamento_fatura }}
-                                </p>
-                                <p class="mb-3">
-                                    <strong><i class="fas fa-calendar-check me-2"></i>Vencimento:</strong> dia {{ cartao.dia_vencimento_fatura }}
-                                </p>
-
-                                <div class="d-flex justify-content-end gap-2">
-
-                                    <button type="button" class="btn btn-outline-primary btn-sm botao-editar-cartao"
-                                        data-bs-toggle="modal" data-bs-target="#modalEditarCartao"
-                                        data-id="{{ cartao.id }}" data-nome_cartao="{{ cartao.nome_cartao }}"
-                                        data-bandeira="{{ cartao.bandeira }}" data-limite="{{ "%.2f"|format(cartao.limite) }}"
-                                        data-dia_fechamento_fatura="{{ cartao.dia_fechamento_fatura }}"
-                                        data-dia_vencimento_fatura="{{ cartao.dia_vencimento_fatura }}"
-                                        data-conta="{{ cartao.conta_id }}">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </button>
-
-                                    <form method="POST" action="{{ url_for('cartao.deletarCartao', cartao_id=cartao.id) }}"
-                                        onsubmit="return confirm('Tem certeza que deseja excluir este cartão?');">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="fas fa-trash-alt"></i> Excluir
-                                        </button>
-                                    </form>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    {% else %}
-                    <p class="text-muted">Nenhum cartão cadastrado.</p>
-                    {% endfor %}
-                </div>
-
-
-                <div class="modal fade" id="modalEditarConta" tabindex="-1" aria-labelledby="modalEditarContaLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form id="formEditarConta" method="POST"> 
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalEditarContaLabel">Editar Conta Bancária</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Fechar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="editar_conta_id" name="id">
-
-                                    <div class="mb-3">
-                                        <label for="editar_instituicao" class="form-label">Instituição</label>
-                                        <input type="text" class="form-control" id="editar_instituicao"
-                                            name="instituicao" required> 
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="editar_tipo_conta" class="form-label">Tipo de conta</label>
-                                        <select class="form-select" id="editar_tipo_conta" name="tipo_conta" required>
-                                            <option value="Corrente">Conta Corrente</option>
-                                            <option value="Poupança">Conta Poupança</option>
-                                            <option value="Pagamento">Conta de Pagamento</option>
-                                            <option value="Investimento">Conta de Investimento</option>
-                                            <option value="Outro">Outro</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="editar_saldo_inicial" class="form-label">Saldo inicial</label>
-                                        <input type="text" class="form-control" id="editar_saldo_inicial"
-                                            name="saldo_inicial" required>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-secondary"
-                                        data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="modalEditarCartao" tabindex="-1" aria-labelledby="modalEditarCartaoLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form id="formEditarCartao" method="POST"> 
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalEditarCartaoLabel">Editar Cartão de Crédito</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Fechar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="editar_cartao_id" name="id">
-
-                                    <div class="mb-3">
-                                        <label for="editar_nome_cartao" class="form-label">Nome do Cartão</label>
-                                        <input type="text" class="form-control" id="editar_nome_cartao"
-                                            name="nome_cartao" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="editar_bandeira" class="form-label">Bandeira</label>
-                                        <select class="form-select" id="editar_bandeira" name="bandeira" required>
-                                            <option value="Visa">Visa</option>
-                                            <option value="Mastercard">Mastercard</option>
-                                            <option value="Elo">Elo</option>
-                                            <option value="American Express">American Express</option>
-                                            <option value="Hipercard">Hipercard</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="editar_limite_cartao" class="form-label">Limite de Crédito</label> 
-                                        <input type="text" class="form-control" id="editar_limite_cartao"
-                                            name="limite" required> 
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="editar_dia_fechamento_fatura" class="form-label">Dia de fechamento da fatura</label>
-                                        <input type="number" class="form-control" id="editar_dia_fechamento_fatura"
-                                            name="dia_fechamento_fatura" min="1" max="31" required>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="editar_dia_vencimento_fatura" class="form-label">Dia de vencimento da fatura</label>
-                                        <input type="number" class="form-control" id="editar_dia_vencimento_fatura"
-                                            name="dia_vencimento_fatura" min="1" max="31" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="editar_conta_relacionada" class="form-label">Conta Relacionada</label> 
-                                        <select class="form-select" id="editar_conta_relacionada" name="conta_id"
-                                            required> 
-                                            <option value="">Selecione...</option>
-                                            {% for conta in contas %}
-                                            <option value="{{ conta.id }}">{{ conta.instituicao }}</option> 
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-secondary"
-                                        data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+<!-- Modal Cartão -->
+<div class="modal fade" id="modalCartao" tabindex="-1" aria-labelledby="modalCartaoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cadastrar Cartão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('cartao.cadastrarCartao') }}" method="POST">
+          <div class="mb-3">
+            <label class="form-label">Nome do Cartão</label>
+            <input type="text" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Bandeira</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Limite</label>
+            <input type="number" step="0.01" class="form-control">
+          </div>
+          <div class="mb-3 d-flex gap-3">
+            <div class="flex-fill">
+              <label class="form-label">Fechamento</label>
+              <input type="number" class="form-control" min="1" max="31">
+            </div>
+            <div class="flex-fill">
+              <label class="form-label">Vencimento</label>
+              <input type="number" class="form-control" min="1" max="31">
+            </div>
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-dark">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
+<!-- Modal de edicao de conta -->
+<div class="modal fade" id="modalEditarConta" tabindex="-1" aria-labelledby="modalEditarContaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Conta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditarConta" action="{{ url_for('conta.editarConta') }}" method="POST">
 
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="{{ url_for('static', filename='js/Conta.js') }}"></script> 
-                <script src="/app/static/js/conta.js"></script>
+          <input type="hidden" id="edit-conta-id" name="conta_id">
 
+          <div class="mb-3">
+            <label class="form-label">Nome da Conta</label>
+            <input type="text" class="form-control" id="edit-nome-conta" name="nome-conta" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Banco</label>
+            <input type="text" class="form-control" id="edit-instituicao" name="instituicao">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Saldo Atual</label>
+            <input type="number" step="0.01" class="form-control" id="edit-saldo-atual" name="saldo-atual">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" id="edit-tipo-conta" name="tipo-conta">
+              <option value="Corrente">Corrente</option>
+              <option value="Poupança">Poupança</option>
+              <option value="Investimento">Investimento</option>
+            </select>
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-dark">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
-</body>
-
-</html>
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/Conta.js') }}"></script>
+{% endblock %}
