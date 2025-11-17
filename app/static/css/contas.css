@@ -74,6 +74,12 @@ h3 {
   justify-content: flex-end;
 }
 
+.sem-contas {
+  color: #ffffff !important;
+  text-align: center;
+  opacity: 0.8;
+}
+
 /* ==== CARDS DE CARTÃO ==== */
 .cartao-card {
   background: linear-gradient(145deg, #2b2f36, #24282f);
@@ -149,6 +155,12 @@ h3 {
 .btn-outline-danger:hover {
   background-color: #ff6b6b;
   color: #fff;
+}
+
+.sem-cartoes {
+  color: #ffffff !important;
+  text-align: center;
+  opacity: 0.8;
 }
 
 /* MODAIS */

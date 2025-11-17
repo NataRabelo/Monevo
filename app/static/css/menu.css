@@ -7,19 +7,6 @@ body {
   text-align: center;
 }
 
-/* ===== NAVBAR ===== */
-.barra-navegacao {
-  background-color: #3C90C0 !important;
-}
-
-.barra-navegacao .link-navegacao {
-  color: white !important;
-}
-
-.barra-navegacao .link-navegacao i {
-  color: white !important;
-}
-
 /* ===== CARTÕES ===== */
 .cartao {
   border: none;
