@@ -2,6 +2,7 @@ from flask import Blueprint, current_app, render_template, request, flash, redir
 from app.models import Contas, Cartoes
 from flask_login import current_user
 from app import db
+from app.utils import limpar_currency
 
 conta_bp = Blueprint('conta', __name__, url_prefix='/conta')
 
@@ -19,10 +20,10 @@ def cadastrarConta():
 
         # Buscar dados
         usuario         = usuario.id
-        nome_conta      = request.form.get('nome-conta')
+        nome_conta      = request.form.get('nome_conta')
         instituicao     = request.form.get('instituicao')
-        tipo_conta      = request.form.get('tipo-conta')
-        saldo_inicial   = request.form.get('saldo-inicial')
+        tipo_conta      = request.form.get('tipo_conta')
+        saldo_inicial   = limpar_currency(request.form.get('saldo_inicial'))
         
         # Verificações 
 
@@ -67,10 +68,10 @@ def editarConta():
         
         if request.method == "POST":
             # Passando os dados alterados ( or not )
-            conta.nome_conta        = request.form.get('nome-conta') or conta.nome_conta
+            conta.nome_conta        = request.form.get('nome_conta') or conta.nome_conta
             conta.instituicao       = request.form.get('instituicao') or conta.instituicao
             conta.tipo_conta        = request.form.get('tipo_conta') or conta.tipo_conta
-            conta.saldo_inciail     = request.form.get('saldo_incial') or conta.saldo_inicial
+            conta.saldo_inicial     = limpar_currency(request.form.get('saldo_inicial') or conta.saldo_inicial)
 
             # passsando para o banco 
             db.session.commit()

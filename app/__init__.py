@@ -4,6 +4,7 @@ import logging
 from flask import Flask
 from flask.cli import load_dotenv
 from logging.handlers import RotatingFileHandler
+from app.filters import formatar_currency
 from config import DevelopmentConfig, ProductionConfig
 from app.extensions import db, bcrypt, migrate, login_manager, mail
 
@@ -115,5 +116,8 @@ def create_app(config_class=None):
 
     from app.routes.transacoes import transacao_bp
     app.register_blueprint(transacao_bp)
+
+    # Registro de filtros 
+    app.jinja_env.filters["currency"] = formatar_currency
 
     return app

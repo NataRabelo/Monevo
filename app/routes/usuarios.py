@@ -3,6 +3,7 @@ from app.services.registrar_requisicao import registrar_requisicao
 from flask_login import current_user, logout_user
 from app.models import Usuarios
 from app import bcrypt, db
+from app.utils import limpar_espacos
 
 user_bp = Blueprint('user', __name__, url_prefix='/usuario')
 
@@ -14,8 +15,8 @@ def cadastroUsuario():
 
     if request.method == "POST":
         try:
-            nome            = request.form.get('nome')
-            sobrenome       = request.form.get('sobrenome')
+            nome            = limpar_espacos(request.form.get('nome'))
+            sobrenome       = limpar_espacos(request.form.get('sobrenome'))
             email           = request.form.get('email')
             celular         = request.form.get('celular')
             cpf             = request.form.get('cpf')
@@ -71,9 +72,9 @@ def editarUsuario():
             return render_template("usuario/editar.html", usuario=usuario)
 
         if request.method == "POST":
-            usuario.nome        = request.form.get('nome') or usuario.nome
-            usuario.sobrenome   = request.form.get('sobrenome') or usuario.sobrenome
-            usuario.email       = request.form.get('email') or usuario.email
+            usuario.nome        = limpar_espacos(request.form.get('nome') or usuario.nome)
+            usuario.sobrenome   = limpar_espacos(request.form.get('sobrenome') or usuario.sobrenome)
+            usuario.email       = limpar_espacos(request.form.get('email') or usuario.email)
             usuario.celular     = request.form.get('celular') or usuario.celular
             usuario.cpf         = request.form.get('cpf') or usuario.cpf
 

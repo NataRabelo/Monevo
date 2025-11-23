@@ -67,18 +67,15 @@ class Cartoes(db.Model):
     transacoes = db.relationship('Transacoes', backref='cartao', lazy=True)
 
 
-# Tabela de transacoes (ALTERADA para suportar cartão de crédito)
+# Tabela de transacoes
 class Transacoes(db.Model):
     __tablename__ = "transacoes"
 
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False) 
-    # ALTERADO: conta_id agora é opcional, pois a transação pode ser de um cartão
     conta_id = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="SET NULL"), nullable=True) 
-    # NOVO CAMPO: Liga a transação a um cartão de crédito, se aplicável
     cartao_id = db.Column(db.Integer, db.ForeignKey("cartoes.id", ondelete="SET NULL"), nullable=True)
-    categoria_id = db.Column(db.Integer, db.ForeignKey("categorias.id", ondelete="SET NULL"), nullable=False) # Mudando para SET NULL para não perder histórico
-    
+    categoria_id = db.Column(db.Integer, db.ForeignKey("categorias.id", ondelete="SET NULL"), nullable=False)
     tipo = db.Column(db.String, nullable=False) # Receita, Despesa ou Transferencia
     descricao = db.Column(db.Text)
     valor = db.Column(db.Float, nullable=False)

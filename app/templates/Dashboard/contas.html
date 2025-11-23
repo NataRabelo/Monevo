@@ -41,7 +41,7 @@
               </div>
 
               <p class="banco">Banco: {{ conta.instituicao }}</p>
-              <p class="saldo">Saldo: <strong>R$ {{ conta.saldo_inicial }}</strong></p>
+              <p class="saldo">Saldo: <strong>{{ conta.saldo_inicial | currency }}</strong></p>
 
               <div class="acoes d-flex gap-2 mt-3">
                 <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
@@ -114,19 +114,19 @@
         <form action="{{ url_for('conta.cadastrarConta') }}" method="POST">
           <div class="mb-3">
             <label class="form-label">Nome da Conta</label>
-            <input type="text" class="form-control" id="nome-conta" name="nome-conta" required>
+            <input type="text" class="form-control" id="nome_conta" name="nome_conta" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Banco</label>
             <input type="text" class="form-control" id="instituicao" name="instituicao">
           </div>
           <div class="mb-3">
-            <label class="form-label">Saldo Inicial</label>
-            <input type="number" step="0.01" class="form-control" id="saldo-inicial" name="saldo-inicial">
+            <label class="form-label">Saldo Atual</label>
+            <input type="text" class="form-control currency" id="saldo_inicial" name="saldo_inicial">
           </div>
           <div class="mb-3">
             <label class="form-label">Tipo</label>
-            <select class="form-select" id="tipo-conta" name="tipo-conta">
+            <select class="form-select" id="tipo_conta" name="tipo_conta">
               <option value="Corrente">Corrente</option>
               <option value="Poupança">Poupança</option>
               <option value="Investimento">Investimento</option>
@@ -155,13 +155,19 @@
             <label class="form-label">Nome do Cartão</label>
             <input type="text" class="form-control" required>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Bandeira</label>
-            <input type="text" class="form-control">
-          </div>
+          <label class="form-label">Bandeira do Cartão</label>
+            <select class="form-select" id="bandeira_cartao" name="bandeira_cartao">
+              <option value="" disabled selected>Selecione a bandeira</option>
+              <option value="Visa">Visa</option>
+              <option value="Mastercard">Mastercard</option>
+              <option value="Elo">Elo</option>
+              <option value="American Express">American Express</option>
+              <option value="Diners Club">Diners Club</option>
+              <option value="Hipercard">Hipercard</option>
+            </select>
           <div class="mb-3">
             <label class="form-label">Limite</label>
-            <input type="number" step="0.01" class="form-control">
+            <input type="text" class="form-control currency">
           </div>
           <div class="mb-3 d-flex gap-3">
             <div class="flex-fill">
@@ -172,6 +178,11 @@
               <label class="form-label">Vencimento</label>
               <input type="number" class="form-control" min="1" max="31">
             </div>
+            <label class="form-label">Conta do cartão</label>
+            <select class="form-select" id="conta_cartao" name="conta_cartao">
+              <option value="" disabled selected>Selecione a conta</option>
+              
+            </select>
           </div>
           <div class="text-end">
             <button type="submit" class="btn btn-dark">Salvar</button>
@@ -198,7 +209,7 @@
 
           <div class="mb-3">
             <label class="form-label">Nome da Conta</label>
-            <input type="text" class="form-control" id="edit-nome-conta" name="nome-conta" required>
+            <input type="text" class="form-control" id="edit-nome-conta" name="nome_conta" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Banco</label>
@@ -206,11 +217,11 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Saldo Atual</label>
-            <input type="number" step="0.01" class="form-control" id="edit-saldo-atual" name="saldo-atual">
+            <input type="text" class="form-control currency" id="edit-saldo-inicial" name="saldo_inicial">
           </div>
           <div class="mb-3">
             <label class="form-label">Tipo</label>
-            <select class="form-select" id="edit-tipo-conta" name="tipo-conta">
+            <select class="form-select" id="edit-tipo_conta" name="tipo_conta">
               <option value="Corrente">Corrente</option>
               <option value="Poupança">Poupança</option>
               <option value="Investimento">Investimento</option>
