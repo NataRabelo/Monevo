@@ -189,3 +189,7 @@ h3 {
   border-color: #3C90C0;
   box-shadow: none;
 }
+
+.btn-close {
+    filter: invert(1);
+}
