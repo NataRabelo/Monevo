@@ -103,12 +103,16 @@ h3 {
 }
 
 .nome-cartao{
-    color: white;
+  color: white;
+  font-weight: 600;
 }
 
 .cartao-header .bandeira {
   font-size: 0.85rem;
-  color: #ccc;
+  background-color: #3C90C0;
+  padding: 2px 10px;
+  border-radius: 12px;
+  color: #fff;
 }
 
 .cartao-body p {

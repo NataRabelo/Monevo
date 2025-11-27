@@ -78,17 +78,30 @@
           <div class="col-md-6 col-lg-4">
             <div class="cartao-card">
               <div class="cartao-header">
-                <span class="nome-cartao">{{ cartao.nome_cartao }}</span>
+                <h5 class="nome-cartao">{{ cartao.nome_cartao }}</h5>
                 <span class="bandeira">{{ cartao.bandeira }}</span>
               </div>
               <div class="cartao-body">
-                <p class="limite">Limite: {{ cartao.limite }}</p>
+                <p class="limite">Limite: {{ cartao.limite | currency  }}</p>
                 <p>Fechamento: dia {{ cartao.dia_fechamento_fatura }}</p>
                 <p>Vencimento: dia {{ cartao.dia_vencimento_fatura }}</p>
               </div>
               <div class="cartao-footer d-flex justify-content-end gap-2">
-                <button class="btn btn-outline-secondary btn-sm">Editar</button>
-                <button class="btn btn-outline-danger btn-sm">Excluir</button>
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
+                  data-bs-target="#modalEditarCartao" 
+                  data-cartao-id="{{ cartao.id }}" 
+                  data-nome="{{ cartao.nome_cartao }}"
+                  data-bandeira="{{ cartao.bandeira }}" 
+                  data-limite="{{ cartao.limite }}"
+                  data-fechamento="{{ cartao.dia_fechamento_fatura }}"
+                  data-vencimento="{{ cartao.dia_vencimento_fatura }}"
+                  data-conta="{{ cartao.conta_id }}">
+                  Editar
+                </button>
+
+                <form method="POST" action="{{ url_for('cartao.deletarCartao', cartao_id=cartao.id) }}">
+                  <button class="btn btn-outline-danger btn-sm">Excluir</button>
+                </form>
               </div>
             </div>
           </div>
@@ -153,10 +166,10 @@
         <form action="{{ url_for('cartao.cadastrarCartao') }}" method="POST">
           <div class="mb-3">
             <label class="form-label">Nome do Cartão</label>
-            <input type="text" class="form-control" required>
+            <input type="text" class="form-control" id="nome_cartao" name="nome_cartao" required>
           </div>
           <label class="form-label">Bandeira do Cartão</label>
-            <select class="form-select" id="bandeira_cartao" name="bandeira_cartao">
+            <select class="form-select" id="bandeira" name="bandeira">
               <option value="" disabled selected>Selecione a bandeira</option>
               <option value="Visa">Visa</option>
               <option value="Mastercard">Mastercard</option>
@@ -167,21 +180,25 @@
             </select>
           <div class="mb-3">
             <label class="form-label">Limite</label>
-            <input type="text" class="form-control currency">
+            <input type="text" class="form-control currency" id="limite" name="limite">
           </div>
           <div class="mb-3 d-flex gap-3">
             <div class="flex-fill">
               <label class="form-label">Fechamento</label>
-              <input type="number" class="form-control" min="1" max="31">
+              <input type="number" class="form-control" min="1" max="31" id="dia_fechamento_fatura" name="dia_fechamento_fatura">
             </div>
             <div class="flex-fill">
               <label class="form-label">Vencimento</label>
-              <input type="number" class="form-control" min="1" max="31">
+              <input type="number" class="form-control" min="1" max="31" id="dia_vencimento_fatura" name="dia_vencimento_fatura">
             </div>
+          </div>
+          <div class="mb-3">
             <label class="form-label">Conta do cartão</label>
             <select class="form-select" id="conta_cartao" name="conta_cartao">
               <option value="" disabled selected>Selecione a conta</option>
-              
+              {% for conta in contas %}
+              <option value="{{ conta.id }}">{{ conta.nome_conta}}</option>
+              {% endfor %}
             </select>
           </div>
           <div class="text-end">
@@ -225,6 +242,65 @@
               <option value="Corrente">Corrente</option>
               <option value="Poupança">Poupança</option>
               <option value="Investimento">Investimento</option>
+            </select>
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-dark">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de edicao de Cartão -->
+<div class="modal fade" id="modalEditarCartao" tabindex="-1" aria-labelledby="modalEditarCartaoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Cartão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditarCartao" action="{{ url_for('cartao.editarCartao') }}" method="POST">
+
+          <input type="hidden" id="edit-cartao-id" name="cartao_id">
+
+          <div class="mb-3">
+            <label class="form-label">Nome do Cartão</label>
+            <input type="text" class="form-control" id="edit-nome-cartao" name="nome_cartao" required>
+          </div>
+          <label class="form-label">Bandeira do Cartão</label>
+            <select class="form-select" id="edit-bandeira" name="bandeira">
+              <option value="" disabled selected>Selecione a bandeira</option>
+              <option value="Visa">Visa</option>
+              <option value="Mastercard">Mastercard</option>
+              <option value="Elo">Elo</option>
+              <option value="American Express">American Express</option>
+              <option value="Diners Club">Diners Club</option>
+              <option value="Hipercard">Hipercard</option>
+            </select>
+          <div class="mb-3">
+            <label class="form-label">Limite</label>
+            <input type="text" class="form-control currency" id="edit-limite" name="limite">
+          </div>
+          <div class="mb-3 d-flex gap-3">
+            <div class="flex-fill">
+              <label class="form-label">Fechamento</label>
+              <input type="number" class="form-control" min="1" max="31" id="edit-dia-fechamento-fatura" name="dia_fechamento_fatura">
+            </div>
+            <div class="flex-fill">
+              <label class="form-label">Vencimento</label>
+              <input type="number" class="form-control" min="1" max="31" id="edit-dia-vencimento-fatura" name="dia_vencimento_fatura">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Conta do cartão</label>
+            <select class="form-select" id="edit-conta-cartao" name="conta_cartao">
+              <option value="" disabled selected>Selecione a conta</option>
+              {% for conta in contas %}
+              <option value="{{ conta.id }}">{{ conta.nome_conta}}</option>
+              {% endfor %}
             </select>
           </div>
           <div class="text-end">

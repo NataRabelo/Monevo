@@ -1,7 +1,9 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
-from app.models import Cartoes
+from app.utils import limpar_currency
 from flask_login import current_user
+from app.models import Cartoes
 from app import db
+
 
 cartao_bp = Blueprint('cartao', __name__, url_prefix='/cartao')
 
@@ -13,10 +15,10 @@ def cadastrarCartao():
         # Capturar dados do formulário
         nome_cartao             = request.form.get('nome_cartao')
         bandeira                = request.form.get('bandeira')
-        limite                  = request.form.get('limite')
+        limite                  = limpar_currency(request.form.get('limite'))
         dia_fechamento_fatura   = request.form.get('dia_fechamento_fatura')
         dia_vencimento_fatura   = request.form.get('dia_vencimento_fatura')
-        conta_id                = request.form.get('conta_id')
+        conta_id                = request.form.get('conta_cartao')
 
         # Verificacões
 
@@ -47,10 +49,11 @@ def cadastrarCartao():
         return redirect(url_for('conta.acessarConta'))
 
     
-@cartao_bp.route('/editar/<int:cartao_id>', methods=['GET', 'POST'])
-def editarCartao(cartao_id):
+@cartao_bp.route('/editar', methods=['GET', 'POST'])
+def editarCartao():
     try:
         # Validar a existencia do cartão
+        cartao_id    = request.form.get('cartao_id')
         cartao = Cartoes.query.filter(Cartoes.id == cartao_id).first()
 
         if not cartao:
@@ -64,14 +67,14 @@ def editarCartao(cartao_id):
             # Passando os dados alterados ( or not )
             cartao.nome_cartao              = request.form.get('nome_cartao') or cartao.nome_cartao
             cartao.bandeira                 = request.form.get('bandeira') or cartao.bandeira
-            cartao.limite                   = request.form.get('limite') or cartao.limite
+            cartao.limite                   = limpar_currency(request.form.get('limite') or cartao.limite)
             cartao.dia_fechamento_fatura    = request.form.get('dia_fechamento_fatura') or cartao.dia_fechamento_cartao
             cartao.dia_vencimento_fatura    = request.form.get('dia_vencimento_fatura') or cartao.dia_vencimento_cartao
 
             # Passando para o banco
             db.session.commit()
             flash('Cartão atualizado com sucesso')
-            return redirect(url_for('conta.acessoConta'))
+            return redirect(url_for('conta.acessarConta'))
 
     except Exception as e:
         db.session.rollback()
