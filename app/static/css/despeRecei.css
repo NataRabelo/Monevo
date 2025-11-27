@@ -35,21 +35,13 @@ body {
 .label-card {
   font-size: 0.9rem;
   opacity: 0.8;
-<<<<<<< Updated upstream
-  color: #ffffff;
-=======
-  color: #FFF;
->>>>>>> Stashed changes
+  color: white;
 }
 
 .valor-numero {
   font-size: 2rem;
   font-weight: bold;
-<<<<<<< Updated upstream
-  color: #ffffff;
-=======
-  color: #FFF;
->>>>>>> Stashed changes
+  color: white;
 }
 
 /* Caixas das tabelas */
@@ -72,7 +64,7 @@ body {
 /* Hover tabela */
 .table-hover tbody tr:hover {
   background: rgba(255, 255, 255, 0.05);
-<<<<<<< Updated upstream
+
 }
 
 .btn-adicionar {
@@ -84,6 +76,3 @@ body {
     background-color: #3C90C0; 
 }
 
-=======
-}
->>>>>>> Stashed changes

@@ -71,21 +71,21 @@
           <button class="btn btn-dark btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalCartao">Novo
             Cartão</button>
         </div>
-
         <div class="row g-4">
-          <!-- Card de Cartão -->
-          {% for cartao in cartoes %}
+        {% for cartao in cartoes %} 
           <div class="col-md-6 col-lg-4">
             <div class="cartao-card">
               <div class="cartao-header">
                 <h5 class="nome-cartao">{{ cartao.nome_cartao }}</h5>
                 <span class="bandeira">{{ cartao.bandeira }}</span>
               </div>
+
               <div class="cartao-body">
-                <p class="limite">Limite: {{ cartao.limite | currency  }}</p>
+                <p class="limite">Limite: {{ cartao.limite | currency }}</p>
                 <p>Fechamento: dia {{ cartao.dia_fechamento_fatura }}</p>
                 <p>Vencimento: dia {{ cartao.dia_vencimento_fatura }}</p>
               </div>
+
               <div class="cartao-footer d-flex justify-content-end gap-2">
                 <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal"
                   data-bs-target="#modalEditarCartao" 
@@ -103,13 +103,14 @@
                   <button class="btn btn-outline-danger btn-sm">Excluir</button>
                 </form>
               </div>
+
             </div>
           </div>
-        </div>
         {% else %}
-        <p class="sem-cartoes">Nenhum cartão cadastrado.</p>
+          <p class="sem-cartoes">Nenhum cartão cadastrado.</p>
         {% endfor %}
-      </div>
+      </div>  <!-- encerra a row só aqui -->
+
 
     </div>
   </div>
