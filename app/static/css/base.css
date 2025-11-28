@@ -38,6 +38,54 @@ main {
   padding-bottom: 40px;
 }
 
+/* ======== BOTÕES ======== */
+.btn-modal {
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-modal-dark {
+  background-color: #3C90C0;
+  color: #fff;
+  border: none;s
+}
+
+.btn-modal-dark:hover {
+  background-color: #317da7;
+}
+
+/* ======== MODAIS ======== */
+.modal-content {
+  background-color: #2b2f36;
+  border-radius: 12px;
+  color: #ffffff;
+  border: 1px solid #3c434d;
+}
+
+.modal-header {
+  border-bottom: 1px solid #3c434d;
+}
+
+.modal-body label {
+  color: #ccc;
+}
+
+.form-control, .form-select {
+  background-color: #1D2128;
+  color: #fff;
+  border: 1px solid #3c434d;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #3C90C0;
+  box-shadow: none;
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
 /* ======== FLASH MESSAGES (se quiser usar depois) ======== */
 .flash-message {
   margin: 1rem 0;

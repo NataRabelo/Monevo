@@ -8,4 +8,4 @@ transacao_bp = Blueprint('transacao', __name__, url_prefix='/transacao')
 @transacao_bp.route('/', methods=['GET', 'POST'])
 def acessarTransacao():
     if request.method == "GET":
-        return render_template('dashboard/despeRecei.html')
+        return render_template('dashboard/transacao.html')

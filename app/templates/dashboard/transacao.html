@@ -3,7 +3,7 @@
 {% block title %}Menu | Monevo{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/desperecei.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transacao.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -98,18 +98,39 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modalReceita" tabindex="-1" aria-labelledby="modalReceitaLabel" aria-hidden="true">
+    <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div modal-header>
-            <h5 class="modal-title"> Cadastrar receita</h5>
-            <button type="button" class="btn-close" data-bs-dimiss="modal" aria-label="Fechar"></button>
+          <div class="modal-header">
+            <h5 class="modal-title"> Cadastrar transação</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
           </div>
           <div class="modal-body">
-            <form action="" method="POST">
+            <form id="formCadastrarTransacao" action="" method="POST">
               <div class="mb-3">
-                <label class="form-label">Descrição</label>
+                <label class="form-label">Descrição:</label>
                 <input type="text" class="form-control" id="descrição" name="descrição" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Valor:</label>
+                <input type="text" class="form-control currency" id="valor" name="valor">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Data da transação:</label>
+                <input type="date" class="form-control" id="data-faturamento" name="data-faturamento">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Recorrencia</label>
+                <select class="form-select" id="recorrencia" name="recorrencia">
+                  <option value="Sem recorrencia" selected>Sem recorrencia</option>
+                  <option value="Diária">Diária</option>
+                  <option value="Semanal">Semanal</option>
+                  <option value="Mensal">Mensal</option>
+                  <option value="Anual">Anual</option>
+                </select>
+              </div>
+              <div class="text-end">
+                <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
               </div>
             </form>
           </div>
@@ -121,5 +142,5 @@
 {% endblock %}
 {% block extra_js %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ url_for('static', filename='js/despeRecei.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/transacao.js') }}"></script>
 {% endblock %}

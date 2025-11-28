@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // --- Salvar a aba quando o usuário trocar ---
+    // Salvar a aba quando o usuário trocar
     const tabs = document.querySelectorAll('button[data-bs-toggle="tab"]');
     tabs.forEach(tab => {
         tab.addEventListener("shown.bs.tab", function (event) {
