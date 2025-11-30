@@ -82,14 +82,13 @@ def editarConta():
         db.session.rollback()
         flash('Ocorreu algum erro inesperado')
         current_app.logger.warning(f'Erro ao editar conta: {e}')
-        return redirect(url_for('main.menu'))
+        return redirect(url_for('conta.acessarConta'))
     
 @conta_bp.route('/deletar/<int:conta_id>', methods=['GET', 'POST'])
 def deletarConta(conta_id):
     try:
         # Valida a existencia
         conta = Contas.query.filter(Contas.id == conta_id).first()
-        print(conta_id)
 
         if not conta:
             flash('Conta não encontrada')

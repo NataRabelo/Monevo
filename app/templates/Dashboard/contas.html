@@ -10,7 +10,7 @@
 <div class="container py-5 tela-central">
   <div class="card sombra-caixa p-4">
 
-    <!-- Abas -->
+    <!-- ABAS -->
     <ul class="nav nav-tabs mb-4" id="abaCadastro" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="contas-tab" data-bs-toggle="tab" data-bs-target="#contas" type="button"
@@ -21,9 +21,10 @@
           role="tab">Cartões</button>
       </li>
     </ul>
-
+    
     <div class="tab-content" id="conteudoAbas">
 
+      <!-- ABA CONTA -->
       <div class="tab-pane fade show active" id="contas" role="tabpanel" aria-labelledby="contas-tab">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h3 class="mb-0">Minhas Contas</h3>
@@ -64,7 +65,7 @@
 
       </div>
 
-      <!-- Aba de Cartões -->
+      <!-- ABA CARTÃO -->
       <div class="tab-pane fade" id="cartoes" role="tabpanel" aria-labelledby="cartoes-tab">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h3 class="mb-0">Meus Cartões</h3>
@@ -109,14 +110,14 @@
         {% else %}
           <p class="sem-cartoes">Nenhum cartão cadastrado.</p>
         {% endfor %}
-      </div>  <!-- encerra a row só aqui -->
+      </div> 
 
 
     </div>
   </div>
 </div>
 
-<!-- Modal Conta -->
+<!-- MODAL CADASTRAR CONTA -->
 <div class="modal fade" id="modalConta" tabindex="-1" aria-labelledby="modalContaLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -155,7 +156,7 @@
   </div>
 </div>
 
-<!-- Modal Cartão -->
+<!-- MODAL CADASTRAR CARTÃO -->
 <div class="modal fade" id="modalCartao" tabindex="-1" aria-labelledby="modalCartaoLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -212,7 +213,7 @@
 </div>
 
 
-<!-- Modal de edicao de conta -->
+<!-- MODAL EDITAR CONTA -->
 <div class="modal fade" id="modalEditarConta" tabindex="-1" aria-labelledby="modalEditarContaLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -254,7 +255,7 @@
   </div>
 </div>
 
-<!-- Modal de edicao de Cartão -->
+<!-- MODAL EDITAR CARTÃO -->
 <div class="modal fade" id="modalEditarCartao" tabindex="-1" aria-labelledby="modalEditarCartaoLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

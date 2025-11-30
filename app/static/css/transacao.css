@@ -3,76 +3,118 @@ body {
   color: #FFF;
 }
 
-/* Importação mais discreta */
+/* Importação */
 .import-banner {
   background: #3C90C0;
   border-left: 4px solid #3C90C0;
 }
 
-/* Cards principais */
+/* ======== CARDS ======== */
+
 .valor-card {
   border-radius: 14px;
   text-align: center;
   padding: 22px;
   transition: 0.3s ease;
+  border-left: 5px solid;
+  background-color: #2b2f36;
 }
 
 .valor-card:hover {
   transform: scale(1.03);
 }
 
-/* Tons pastel */
 .receita-card {
   background: #7ac99321;
   border: 1px solid #6DC98B;
+  border-color: #28a745; /* versão mantida */
 }
 
 .despesa-card {
   background: #ff757521;
   border: 1px solid #FF8686;
+  border-color: #dc3545; /* versão mantida */
 }
 
 .label-card {
   font-size: 0.9rem;
   opacity: 0.8;
   color: white;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  color: #ccc; /* versão atual */
 }
 
 .valor-numero {
   font-size: 2rem;
   font-weight: bold;
   color: white;
+  font-size: 2.2rem; /* versão atual */
+  font-weight: 700;
 }
 
-/* Caixas das tabelas */
+/* ======== TABELAS ======== */
+
 .caixa-table {
-  background: #232832;
+  background-color: #2b2f36;
+  border: 1px solid #3c434d;
   border-radius: 14px;
 }
 
-/* Cabeçalhos suaves */
+/* Cabeçalho Receita */
 .thead-receita th {
-  background: #6DC98B !important;
-  color: #1D2128 !important;
+  background-color: #1a4f27 !important;
+  color: #fff !important;
+  border-bottom: 2px solid #28a745;
 }
 
+/* Cabeçalho Despesa */
 .thead-despesa th {
-  background: #FF8686 !important;
-  color: #1D2128 !important;
+  background-color: #4f1d23 !important;
+  color: #fff !important;
+  border-bottom: 2px solid #dc3545;
 }
 
 /* Hover tabela */
-.table-hover tbody tr:hover {
-  background: rgba(255, 255, 255, 0.05);
-
+.table-hover > tbody > tr:hover {
+  --bs-table-hover-bg: #3c434d;
 }
 
+.table > :not(caption) > * > * {
+  background-color: #1D2128;
+  color: #fff;
+  border-color: #3c434d;
+}
+
+/* ======== BOTÕES ======== */
+
 .btn-adicionar {
-    background-color: #3C90C0; 
-    color: #ffffff;
+  background-color: #3C90C0;
+  color: #ffffff;
 }
 
 .btn-adicionar:hover {
-    background-color: #3C90C0; 
+  background-color: #3C90C0;
 }
 
+/* Botão Receita */
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
+/* Botão Despesa */
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+}

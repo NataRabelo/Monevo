@@ -3,49 +3,49 @@
 {% block title %}Menu | Monevo{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/transacao.css') }}">
 {% endblock %}
 
 {% block content %}
-  <div class="container py-4 tela-central">
+<div class="container py-4 tela-central">
 
-  <!-- IMPORTAÇÃO COMPACTA -->
-  <div class="import-banner d-flex flex-column flex-md-row align-items-md-center justify-content-between shadow-sm p-3 mb-4 rounded">
+  <div
+    class="import-banner d-flex flex-column flex-md-row align-items-md-center justify-content-between shadow-sm p-3 mb-4 rounded">
     <div class="d-flex align-items-center gap-2">
-      <i class="fas fa-file-import fs-4"></i>
-      <span class="fw-semibold">Importação OFX</span>
+      <i class="fas fa-file-import fs-4 text-info"></i> <span class="fw-semibold">Importação OFX</span>
     </div>
-    <div class="d-flex gap-2 mt-3 mt-md-0">
-      <button class="btn btn-light" id="btnSelecionar">Selecionar (.OFX)</button>
-      <input type="file" id="inputArquivo" accept=".ofx" style="display:none;">
-      <button class="btn btn-dark">Importar</button>
-    </div>
-  </div>
 
-  <!-- CARDS DE VALORES -->
+    <form action="{{ url_for('transacao.importarOfx') }}" method="POST" enctype="multipart/form-data"
+      class="d-flex gap-2 mt-3 mt-md-0">
+      <button type="button" class="btn btn-outline-light" id="btnSelecionar">Selecionar (.OFX)</button> <input type="file" id="inputArquivo" name="arquivo_ofx" accept=".ofx" style="display:none;" required>
+      <button type="submit" class="btn btn-dark">Importar</button>
+    </form>
+  </div>
+  <!-- CARDS DOS VALORES DE RECEITA E DESPESA-->
   <div class="row mb-4">
     <div class="col-md-6 mb-3">
-      <div class="card valor-card receita-card shadow-sm p-3">
-        <span class="label-card">Receitas</span>
-        <h2 class="valor-numero" id="total-receitas">R$ 4.500,00</h2>
+      <div class="card valor-card receita-card shadow-lg p-3 border-0"> <span class="label-card">Receitas</span>
+        <h2 class="valor-numero" id="total-receitas">
+          {{ total_receitas if total_receitas else "R$ 0,00" }}
+        </h2>
       </div>
     </div>
     <div class="col-md-6 mb-3">
-      <div class="card valor-card despesa-card shadow-sm p-3">
-        <span class="label-card">Despesas</span>
-        <h2 class="valor-numero" id="total-despesas">R$ 1.100,00</h2>
+      <div class="card valor-card despesa-card shadow-lg p-3 border-0"> <span class="label-card">Despesas</span>
+        <h2 class="valor-numero" id="total-despesas">
+          {{ total_despesas if total_despesas else "R$ 0,00" }}
+        </h2>
       </div>
     </div>
   </div>
 
   <div class="row g-4">
-
-    <!-- RECEITAS -->
+    <!-- TABELA DE RECEITAS -->
     <div class="col-lg-6">
-      <div class="caixa-table shadow-sm p-3 rounded">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h4 class="mb-0">Receitas</h4>
-          <button class="btn btn-adicionar btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalCadastro">Adicionar</button>
+      <div class="caixa-table shadow-sm p-3 rounded h-100"> <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2"> <h4 class="mb-0 text-success">Receitas</h4> <button class="btn btn-success btn-sm rounded-pill" data-bs-toggle="modal"
+            data-bs-target="#modalCadastroReceita"> <i class="bi bi-plus-lg me-1"></i> Adicionar
+          </button>
         </div>
 
         <div class="table-responsive">
@@ -54,74 +54,133 @@
               <tr>
                 <th>Origem</th>
                 <th>Descrição</th>
-                <th>Tipo</th>
+                <th>Conta</th>
                 <th>Valor</th>
                 <th>Data</th>
-                <th></th>
-              </tr>
+                <th>Ações</th> </tr>
             </thead>
             <tbody>
-              <!-- Conteúdo mantido -->
-              {{ super() }}
+              {% if transacoes %}
+              {% for transacao in transacoes %}
+              {% if transacao.tipo == 'Receita' %}
+              <tr class="table-row-receita"> <td>{{ transacao.categoria.nome }}</td>
+                <td>{{ transacao.descricao }}</td>
+                <td>{{ transacao.conta.nome_conta }}</td>
+                <td class="fw-bold text-success">{{ transacao.valor | currency }}</td> <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
+                <td class="text-nowrap"> <button class="btn btn-sm btn-outline-secondary me-1" title="Editar Transação" data-bs-toggle="modal" data-bs-target="#modalEditarReceita" data-receita-id="{{ transacao.id }}" data-conta-id="{{ transacao.conta_id }}" data-categoria-id="{{ transacao.categoria_id }}" data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}" data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}" data-recorrencia="{{ transacao.recorrencia }}">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" title="Excluir Transação">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="6" class="text-muted py-3">Nenhuma receita cadastrada.</td>
+              </tr>
+              {% endif %}
             </tbody>
           </table>
         </div>
+
       </div>
     </div>
-
-    <!-- DESPESAS -->
+    <!-- TABELA DE DESPESAS -->
     <div class="col-lg-6">
-      <div class="caixa-table shadow-sm p-3 rounded">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h4 class="mb-0">Despesas</h4>
-          <button class="btn btn-adicionar btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalCadastro">Adicionar</button>
+      <div class="caixa-table shadow-sm p-3 rounded h-100"> <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2"> <h4 class="mb-0 text-danger">Despesas</h4> <button class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
+            data-bs-target="#modalCadastroDespesa"> <i class="bi bi-plus-lg me-1"></i> Adicionar
+          </button>
         </div>
 
         <div class="table-responsive">
-          <table class="table table-hover align-middle text-center" id="tabela-despesas">
-            <thead class="thead-despesa">
+          <table class="table table-hover align-middle text-center" id="tabela-receitas">
+            <thead class="thead-receita">
               <tr>
                 <th>Origem</th>
                 <th>Descrição</th>
-                <th>Tipo</th>
+                <th>Conta</th>
                 <th>Valor</th>
                 <th>Data</th>
-                <th></th>
-              </tr>
+                <th>Ações</th> </tr>
             </thead>
             <tbody>
-              <!-- Conteúdo mantido -->
-              {{ super() }}
+              {% if transacoes %}
+              {% for transacao in transacoes %}
+              {% if transacao.tipo == 'Despesa' %}
+              <tr class="table-row-receita"> <td>{{ transacao.categoria.nome }}</td>
+                <td>{{ transacao.descricao }}</td>
+                <td>{{ transacao.conta.nome_conta }}</td>
+                <td class="fw-bold text-danger">{{ transacao.valor | currency }}</td> <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
+                <td class="text-nowrap"> <button class="btn btn-sm btn-outline-secondary me-1" title="Editar Transação">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" title="Excluir Transação">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="6" class="text-muted py-3">Nenhuma receita cadastrada.</td>
+              </tr>
+              {% endif %}
             </tbody>
           </table>
         </div>
+
       </div>
     </div>
 
-    <div class="modal fade" id="modalCadastro" tabindex="-1" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+    <!-- MODAL CADASTRO RECEITA -->
+    <div class="modal fade" id="modalCadastroReceita" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
+
           <div class="modal-header">
-            <h5 class="modal-title"> Cadastrar transação</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            <h5 class="modal-title">Cadastrar Receita</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
+
           <div class="modal-body">
-            <form id="formCadastrarTransacao" action="" method="POST">
+            <form action="{{ url_for('transacao.cadastrarTransacao') }}" method="POST">
+
+              <input type="hidden" name="tipo_transacao" value="Receita">
+
               <div class="mb-3">
-                <label class="form-label">Descrição:</label>
-                <input type="text" class="form-control" id="descrição" name="descrição" required>
+                <label class="form-label">Descrição</label>
+                <input type="text" class="form-control" name="descricao" required>
               </div>
+
               <div class="mb-3">
-                <label class="form-label">Valor:</label>
-                <input type="text" class="form-control currency" id="valor" name="valor">
+                <label class="form-label">Valor</label>
+                <input type="text" class="form-control currency" name="valor_transacao" required>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Data da transação:</label>
-                <input type="date" class="form-control" id="data-faturamento" name="data-faturamento">
+
+              <div class="mb-3 d-flex gap-3">
+                <div class="flex-fill">
+                  <label class="form-label">Conta</label>
+                  <select class="form-select" name="conta_transacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    {% for conta in contas %}
+                    <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="flex-fill">
+                  <label class="form-label">Data</label>
+                  <input type="date" class="form-control" name="data_transacao" required>
+                </div>
               </div>
+
               <div class="mb-3">
-                <label class="form-label">Recorrencia</label>
-                <select class="form-select" id="recorrencia" name="recorrencia">
+                <label class="form-label">Recorrência</label>
+                <select class="form-select" name="recorrencia">
                   <option value="Sem recorrencia" selected>Sem recorrencia</option>
                   <option value="Diária">Diária</option>
                   <option value="Semanal">Semanal</option>
@@ -129,18 +188,158 @@
                   <option value="Anual">Anual</option>
                 </select>
               </div>
+
               <div class="text-end">
                 <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
               </div>
+
             </form>
           </div>
+
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- MODAL CADASTRO DESPESA -->
+    <div class="modal fade" id="modalCadastroDespesa" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Cadastrar Despesa</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <form action="{{ url_for('transacao.cadastrarTransacao') }}" method="POST">
+
+              <input type="hidden" name="tipo_transacao" value="Despesa">
+
+              <div class="mb-3">
+                <label class="form-label">Descrição</label>
+                <input type="text" class="form-control" name="descricao" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Valor</label>
+                <input type="text" class="form-control currency" name="valor_transacao" required>
+              </div>
+
+              <div class="mb-3 d-flex gap-3">
+                <div class="flex-fill">
+                  <label class="form-label">Conta</label>
+                  <select class="form-select" name="conta_transacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    {% for conta in contas %}
+                    <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="flex-fill">
+                  <label class="form-label">Data</label>
+                  <input type="date" class="form-control" name="data_transacao" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Recorrência</label>
+                <select class="form-select" name="recorrencia">
+                  <option value="Sem recorrencia" selected>Sem recorrencia</option>
+                  <option value="Diária">Diária</option>
+                  <option value="Semanal">Semanal</option>
+                  <option value="Mensal">Mensal</option>
+                  <option value="Anual">Anual</option>
+                </select>
+              </div>
+
+              <div class="text-end">
+                <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL EDITAR RECEITA -->
+    <div class="modal fade" id="modalEditarReceita" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Receita</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <form id="formEditarReceitaA" action="{{ url_for('transacao.editarTransacao') }}" method="POST">
+
+              <input type="hidden" id="receita-id" name="receita_id">
+              <input type="hidden" id="edit_tipo_transacao" name="tipo_transacao" value="Receita">
+
+              <div class="mb-3">
+                <label class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="edit-descricao" name="descricao" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Valor</label>
+                <input type="text" class="form-control currency" id="edit-valor-transacao" name="valor_transacao" required>
+              </div>
+
+              <div class="mb-3 d-flex gap-3">
+                <div class="flex-fill">
+                  <label class="form-label">Conta</label>
+                  <select class="form-select" id="edit-conta-transacao" name="conta_transacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    {% for conta in contas %}
+                    <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="flex-fill">
+                  <label class="form-label">Data</label>
+                  <input type="date" class="form-control" id="edit-data-transacao" name="data_transacao" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Recorrência</label>
+                <select class="form-select" id="edit-recorrencia" name="recorrencia">
+                  <option value="Sem recorrencia" selected>Sem recorrencia</option>
+                  <option value="Diária">Diária</option>
+                  <option value="Semanal">Semanal</option>
+                  <option value="Mensal">Mensal</option>
+                  <option value="Anual">Anual</option>
+                </select>
+              </div>
+
+              <div class="text-end">
+                <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    </div>
 </div>
 {% endblock %}
+
 {% block extra_js %}
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ url_for('static', filename='js/transacao.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // FUNÇÃO PARA ABRIR O OFX 
+  document.getElementById("btnSelecionar").addEventListener("click", () => {
+    document.getElementById("inputArquivo").click();
+  });
+</script>
+<script src="{{ url_for('static', filename='js/transacao.js') }}"></script>
 {% endblock %}
