@@ -1,180 +1,161 @@
-body {
-  background-color: #1D2128;
-  color: white;
+/* ===== CARTÕES DE ESTATÍSTICAS (Dashboard Style) ===== */
+.card-stat {
+    background-color: #232832; /* Fundo cinza escuro para destaque */
+    border: 1px solid #3c434d;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.texto-central {
-  text-align: center;
+.card-stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== CARTÕES ===== */
-.cartao {
-  border: none;
-  border-radius: 5px;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 15px;
-
+.card-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
-.cartao-verde {
-  background-color: #306733 !important;
-  color: white;
+.card-description {
+    font-size: 0.85rem;
 }
 
-.cartao-vermelho {
-  background-color: #C62828 !important;
-  color: white;
+/* Ícones coloridos para os cards */
+.icon-receita {
+    color: #4CAF50; /* Verde vibrante */
 }
 
-.cartao-azul {
-  background-color: #3C90C0 !important;
-  color: white;
+.icon-despesa {
+    color: #FF5252; /* Vermelho vibrante */
 }
 
-.cartao i {
-  color: black !important;
+.icon-diferenca {
+    color: #3C90C0; /* Azul principal */
 }
 
-.cartao-titulo {
-  color: white !important;
+/* ===== BOTÕES PRINCIPAIS (Menu Tiles) ===== */
+.menu-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cartao-texto {
-  color: white !important;
+.menu-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    color: white; /* Garante que a cor do texto permaneça branca no hover */
 }
 
-.cartao:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  transition: all 0.3s ease-in-out;
+.menu-tile h4 {
+    font-weight: 600;
 }
 
-/* ===== BOTÕES ===== */
-.botao-azul {
-  background-color: #306733 !important;
-  color: white !important;
-  border: none;
+/* Cores dos Tiles */
+.tile-azul {
+    background: linear-gradient(45deg, #3C90C0, #2a698a); /* Gradiente no Azul */
 }
 
-.botao-azul i {
-  color: black !important;
+.tile-vermelho {
+    background: linear-gradient(45deg, #C62828, #9a2020); /* Gradiente no Vermelho */
 }
 
-.botao-vermelho {
-  background-color: #C62828 !important;
-  color: white !important;
-  border: none;
+.tile-verde {
+    background: linear-gradient(45deg, #306733, #244d27); /* Gradiente no Verde */
 }
 
-.botao-vermelho i {
-  color: black !important;
+/* Ajustes de cores dos ícones para contraste */
+.menu-tile i {
+    color: white; /* Ícones brancos */
 }
 
-.botao-verde {
-  background-color: #3C90C0 !important;
-  color: white !important;
-  border: none;
-}
 
-.botao-verde i {
-  color: black !important;
-}
-
-.botao-azul:hover,
-.botao-vermelho:hover,
-.botao-verde:hover {
-  opacity: 0.9;
-  transform: scale(1.03);
-  transition: all 0.2s ease-in-out;
-}
-
-/* ======= ÁREA EDUCACIONAL ======= */
-.area-educacional {
-  color: #ffffff;
-  /* Define o texto como branco */
-}
-
-/* Título principal da seção */
+/* ======= ÁREA EDUCACIONAL (Ajustes de Limpeza) ======= */
 .titulo-educacional {
-  color: #ffffff;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  border-bottom: 3px solid #ffffff;
-  display: inline-block;
-  padding-bottom: 6px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    padding-bottom: 6px;
+    position: relative;
+    /* Sublinhado mais moderno */
+}
+
+.titulo-educacional::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; /* Largura menor para um visual mais limpo */
+    height: 3px;
+    background-color: #3C90C0; /* Azul principal */
+    border-radius: 2px;
 }
 
 /* Cartão geral */
-.cartao-educacional {
-  border: none;
-  border-radius: 16px;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  background-color: #232832;
-  color: #fff;
-  padding: 0;
+.card-educacional {
+    border: 1px solid #3c434d;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #2b2f36; /* Cinza ligeiramente mais claro que o fundo */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 /* Cabeçalhos dos cartões */
-.cabecalho-cartao {
-  font-weight: 600;
-  font-size: 1.1rem;
-  border-bottom: none;
-  padding: 12px 16px;
+.card-header-custom {
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 12px 16px;
+    color: white;
+    /* Adicionando um pequeno gradiente sutil para profundidade */
 }
 
-/* Cores dos cabeçalhos */
-.cabecalho-video {
-  background: linear-gradient(90deg, #3C90C0);
-  color: white;
+.header-video {
+    background-color: #3C90C0;
+    border-bottom: 3px solid #2a698a;
 }
 
-.cabecalho-noticia {
-  background: linear-gradient(90deg, #306733);
-  color: white;
+.header-noticia {
+    background-color: #306733;
+    border-bottom: 3px solid #244d27;
 }
 
-/* Corpo dos cartões */
-.corpo-cartao {
-  padding: 16px;
-}
-
-/* Descrição abaixo dos títulos */
-.texto-descricao {
-  color: #cccccc;
-  font-size: 0.95rem;
+.card-body-custom {
+    padding: 16px;
 }
 
 /* Lista de notícias */
 .lista-noticias .list-group-item {
-  background-color: transparent;
-  border: none;
-  padding: 10px 0;
-  font-size: 0.95rem;
+    background-color: transparent;
+    border-top: 1px solid #3c434d; /* Separadores mais visíveis */
+    padding: 12px 0;
+    font-size: 0.95rem;
+}
+
+.lista-noticias .list-group-item:first-child {
+    border-top: none;
 }
 
 .lista-noticias a {
-  text-decoration: none;
-  color: #AEE2FF;
-  transition: color 0.2s ease;
+    text-decoration: none;
+    color: #4FC3F7; /* Usando o azul mais claro */
+    transition: color 0.2s ease;
 }
 
 .lista-noticias a:hover {
-  color: #ffffff;
-  text-decoration: underline;
+    color: #ffffff;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .titulo-educacional {
-    font-size: 1.3rem;
-  }
-
-  .cabecalho-cartao {
-    font-size: 1rem;
-  }
+.lista-noticias strong {
+    font-weight: 700;
 }

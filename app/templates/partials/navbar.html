@@ -1,30 +1,36 @@
-<nav class="navbar navbar-expand-lg navbar-dark barra-navegacao shadow-sm px-3">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold me-4" href="{{ url_for('main.menu') }}">Monevo</a>
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold me-4" href="{{ url_for('main.menu') }}">
+            <i class="fas fa-chart-pie me-2 logo-icon"></i>
+            Monevo
+        </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-navegacao"
-      aria-controls="menu-navegacao" aria-expanded="false" aria-label="Alternar navegação">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-navegacao"
+            aria-controls="menu-navegacao" aria-expanded="false" aria-label="Alternar navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse justify-content-end" id="menu-navegacao">
-      <ul class="navbar-nav align-items-center gap-3">
-        <li class="nav-item">
-          <a class="nav-link link-navegacao d-flex align-items-center" href="{{ url_for('main.menu') }}">
-            <i class="fas fa-home me-2"></i> Menu
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link link-navegacao d-flex align-items-center" href="{{ url_for('user.editarUsuario') }}">
-            <i class="fas fa-user me-2"></i> Usuário
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link link-navegacao d-flex align-items-center" href="{{ url_for('auth.logout') }}">
-            <i class="fas fa-sign-out-alt me-2"></i> Sair
-          </a>
-        </li>
-      </ul>
+        <div class="collapse navbar-collapse justify-content-end" id="menu-navegacao">
+            <ul class="navbar-nav align-items-center gap-2">
+                
+                <li class="nav-item">
+                    <a class="nav-link menu-link active-link d-flex align-items-center" href="{{ url_for('main.menu') }}">
+                        <i class="fas fa-home me-2"></i> Dashboard
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link menu-link d-flex align-items-center" href="{{ url_for('user.editarUsuario') }}">
+                        <i class="fas fa-user me-2"></i> Usuário
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link btn-logout d-flex align-items-center" href="{{ url_for('auth.logout') }}">
+                        <i class="fas fa-sign-out-alt me-2"></i> Sair
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>

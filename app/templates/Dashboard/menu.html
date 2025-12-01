@@ -7,129 +7,132 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container mt-4">
-    <!-- Boas-vindas -->
-    <h1 class="texto-central">Bem-vindo, {{ usuario.nome }}!</h1>
-    <p class="texto-central">Use os botões abaixo para acessar as funcionalidades.</p>
+    <div class="container py-4">
+        <header class="mb-5">
+            <h1 class="display-5 fw-bold text-white text-center mb-2">👋 Bem-vindo(a), {{ usuario.nome }}!</h1>
+            <p class="lead text-center text-muted">Acompanhe seu resumo financeiro e acesse as principais funcionalidades.</p>
+        </header>
 
-    <div class="row texto-central mb-4">
-      <!-- Cartão de receitas -->
-      <div class="col-md-4">
-        <div class="cartao cartao-verde">
-          <div class="cartao-corpo">
-            <h5 class="cartao-titulo">
-              <i class="fas fa-dollar-sign me-2"></i>Valor total de receitas
-            </h5>
-            <p class="cartao-texto fs-4">R$ {{ '%.2f' | format(total_receitas) }}</p>
-          </div>
-        </div>
-      </div>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card-stat card-receitas h-100 p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-arrow-circle-up fa-2x me-3 icon-receita"></i>
+                        <h5 class="card-title mb-0 text-uppercase text-muted">Receitas totais</h5>
+                    </div>
+                    <p class="card-value fs-3 fw-bold text-success-light">R$ {{ '%.2f' | format(total_receitas) }}</p>
+                    <p class="card-description mb-0 text-muted">Tudo o que entrou no mês.</p>
+                </div>
+            </div>
 
-      <!-- Cartão de despesas -->
-      <div class="col-md-4">
-        <div class="cartao cartao-vermelho">
-          <div class="cartao-corpo">
-            <h5 class="cartao-titulo">
-              <i class="fas fa-credit-card me-2"></i>Valor total de despesas
-            </h5>
-            <p class="cartao-texto fs-4">R$ {{ '%.2f' | format(total_despesas) }}</p>
-          </div>
-        </div>
-      </div>
+            <div class="col-md-4">
+                <div class="card-stat card-despesas h-100 p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-arrow-circle-down fa-2x me-3 icon-despesa"></i>
+                        <h5 class="card-title mb-0 text-uppercase text-muted">Despesas totais</h5>
+                    </div>
+                    <p class="card-value fs-3 fw-bold text-danger-light">R$ {{ '%.2f' | format(total_despesas) }}</p>
+                    <p class="card-description mb-0 text-muted">Tudo o que saiu no mês.</p>
+                </div>
+            </div>
 
-      <!-- Cartão de diferença -->
-      <div class="col-md-4">
-        <div class="cartao cartao-azul">
-          <div class="cartao-corpo">
-            <h5 class="cartao-titulo">
-              <i class="fas fa-balance-scale me-2"></i>Diferença entre receitas e despesas
-            </h5>
-            <p class="cartao-texto fs-4">R$ {{ '%.2f' | format(diferenca) }}</p>
-          </div>
+            <div class="col-md-4">
+                <div class="card-stat card-diferenca h-100 p-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-balance-scale fa-2x me-3 icon-diferenca"></i>
+                        <h5 class="card-title mb-0 text-uppercase text-muted">Balanço</h5>
+                    </div>
+                    <p class="card-value fs-3 fw-bold text-primary-light">R$ {{ '%.2f' | format(diferenca) }}</p>
+                    <p class="card-description mb-0 text-muted">Diferença (Receitas - Despesas).</p>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <h2 class="text-center text-white mb-4">Acesso Rápido</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center mb-5">
+            <div class="col">
+                <a href="{{ url_for('transacao.acessarTransacao') }}" class="menu-tile tile-azul h-100">
+                    <i class="fas fa-exchange-alt fa-3x mb-3"></i>
+                    <h4 class="mb-1">Despesas e Receitas</h4>
+                    <p class="text-white-50">Gerencie seus movimentos financeiros.</p>
+                </a>
+            </div>
+            <div class="col">
+                <a href="{{ url_for('transacao.acessarTransacao') }}" class="menu-tile tile-vermelho h-100">
+                    <i class="fas fa-chart-line fa-3x mb-3"></i>
+                    <h4 class="mb-1">Central de Projeção</h4>
+                    <p class="text-white-50">Visualize e projete seu futuro financeiro.</p>
+                </a>
+            </div>
+            <div class="col">
+                <a href="{{ url_for('conta.acessarConta') }}" class="menu-tile tile-verde h-100">
+                    <i class="fas fa-university fa-3x mb-3"></i>
+                    <h4 class="mb-1">Contas e Cartões</h4>
+                    <p class="text-white-50">Organize suas formas de pagamento.</p>
+                </a>
+            </div>
+        </div>
+
+        <section class="area-educacional mt-5 pt-4 border-top border-secondary-subtle">
+            <h2 class="titulo-educacional text-center mb-5">
+                <i class="fas fa-graduation-cap me-2 text-primary-light"></i>Área Educacional
+            </h2>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card-educacional sombra h-100">
+                        <div class="card-header-custom header-video">
+                            <i class="fas fa-video me-2"></i>Vídeos sobre Finanças
+                        </div>
+                        <div class="card-body-custom">
+                            <p class="texto-descricao mb-3">
+                                Assista conteúdos selecionados para aprender a gerenciar melhor seu dinheiro.
+                            </p>
+
+                            <div class="ratio ratio-16x9 mb-3">
+                                <iframe src="https://www.youtube.com/embed/N2vARzvWxwY" title="Dicas de educação financeira"
+                                    allowfullscreen class="rounded-3"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card-educacional sombra h-100">
+                        <div class="card-header-custom header-noticia">
+                            <i class="fas fa-newspaper me-2"></i>Notícias e Atualizações
+                        </div>
+                        <div class="card-body-custom">
+                            <p class="texto-descricao mb-3">
+                                Fique por dentro das principais novidades do mercado financeiro.
+                            </p>
+
+                            <ul class="lista-noticias list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <a href="https://www.infomoney.com.br/" target="_blank">
+                                        📈 **Infomoney** – Últimas notícias sobre economia
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://g1.globo.com/economia/" target="_blank">
+                                        💰 **G1 Economia** – Dicas e atualizações financeiras
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://valor.globo.com/" target="_blank">
+                                        🏦 **Valor Econômico** – Mercado e investimentos
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://www.seudinheiro.com/" target="_blank">
+                                        💡 **Seu Dinheiro** – Guias e análises de finanças pessoais
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-
-    <!-- Botões principais -->
-    <div class="d-flex justify-content-center gap-3 mb-5">
-      <a href="{{ url_for('transacao.acessarTransacao') }}" class="botao-azul btn btn-lg">
-        <i class="fas fa-exchange-alt me-2"></i>Despesas e receitas
-      </a>
-      <a href="{{ url_for('transacao.acessarTransacao') }}" class="botao-vermelho btn btn-lg">
-        <i class="fas fa-chart-line me-2"></i>Central de projeção
-      </a>
-      <a href="{{ url_for('conta.acessarConta') }}" class="botao-verde btn btn-lg">
-        <i class="fas fa-university me-2"></i>Contas e cartões
-      </a>
-    </div>
-    <!-- Seção Educacional -->
-    <section class="area-educacional mt-5">
-      <h2 class="titulo-educacional texto-central mb-4">
-        <i class="fas fa-graduation-cap me-2"></i>Área Educacional
-      </h2>
-
-      <div class="row g-4">
-        <!-- Coluna de vídeos -->
-        <div class="col-lg-6">
-          <div class="cartao-educacional sombra h-100">
-            <div class="cabecalho-cartao cabecalho-video">
-              <i class="fas fa-video me-2"></i>Vídeos sobre Finanças
-            </div>
-            <div class="corpo-cartao">
-              <p class="texto-descricao mb-3">
-                Assista conteúdos para aprender a gerenciar melhor seu dinheiro.
-              </p>
-
-              <div class="ratio ratio-16x9 mb-3">
-                <iframe src="https://www.youtube.com/embed/N2vARzvWxwY" title="Dicas de educação financeira"
-                  allowfullscreen></iframe>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Coluna de notícias -->
-        <div class="col-lg-6">
-          <div class="cartao-educacional sombra h-100">
-            <div class="cabecalho-cartao cabecalho-noticia">
-              <i class="fas fa-newspaper me-2"></i>Notícias e Atualizações
-            </div>
-            <div class="corpo-cartao">
-              <p class="texto-descricao mb-3">
-                Fique por dentro das principais novidades do mercado financeiro.
-              </p>
-
-              <ul class="lista-noticias list-group list-group-flush">
-                <li class="list-group-item">
-                  <a href="https://www.infomoney.com.br/" target="_blank">
-                    📈 Infomoney – Últimas notícias sobre economia
-                  </a>
-                </li>
-                <li class="list-group-item">
-                  <a href="https://g1.globo.com/economia/" target="_blank">
-                    💰 G1 Economia – Dicas e atualizações financeiras
-                  </a>
-                </li>
-                <li class="list-group-item">
-                  <a href="https://valor.globo.com/" target="_blank">
-                    🏦 Valor Econômico – Mercado e investimentos
-                  </a>
-                </li>
-                <li class="list-group-item">
-                  <a href="https://www.seudinheiro.com/" target="_blank">
-                    💡 Seu Dinheiro – Guias e análises de finanças pessoais
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-{% endblock %}
-
-{% block extra_js %}
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
 {% endblock %}

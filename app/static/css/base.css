@@ -9,32 +9,84 @@ body {
   text-align: center;
 }
 
-/* ======== NAVBAR ======== */
-.barra-navegacao {
-  background-color: #3C90C0 !important;
-  transition: background-color 0.3s ease;
+/* ======== NAVBAR Rework - Implementação Final ======== */
+
+/* Fundo da Navbar: Cinza escuro com sombra */
+.custom-navbar {
+    background-color: #232832; /* Um cinza escuro para melhor contraste */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra sutil para profundidade */
+    padding: 0.75rem 0;
 }
 
-.barra-navegacao .nav-link {
-  color: #ffffff !important;
-  font-weight: 500;
-  transition: transform 0.2s ease, color 0.2s ease;
+/* Marca/Logo */
+.custom-navbar .navbar-brand {
+    color: #ffffff !important;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
 }
 
-.barra-navegacao .nav-link:hover {
-  color: #e8f4ff !important;
-  transform: scale(1.05);
+.custom-navbar .navbar-brand:hover {
+    color: #3C90C0 !important; /* Destaque azul no hover */
 }
 
-.barra-navegacao .navbar-brand {
-  color: #ffffff !important;
-  font-size: 1.4rem;
-  letter-spacing: 1px;
+.custom-navbar .logo-icon {
+    color: #3C90C0; /* Icone da logo em azul */
+}
+
+/* Links de Navegação (Menu Links) */
+.custom-navbar .menu-link {
+    color: #cccccc !important;
+    font-weight: 500;
+    padding: 8px 12px !important; /* Padding menor */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+/* Hover nos links */
+.custom-navbar .menu-link:hover {
+    color: #ffffff !important;
+    background-color: #3c434d; /* Fundo sutil no hover */
+}
+
+/* Link Ativo */
+.custom-navbar .active-link {
+    color: #ffffff !important;
+    background-color: #3C90C0; /* Fundo azul principal para o link ativo */
+    font-weight: 600;
+}
+
+.custom-navbar .active-link:hover {
+    background-color: #317da7; /* Azul ligeiramente mais escuro no hover */
+}
+
+/* Botão Sair (Logout) - Destaque em Vermelho */
+.custom-navbar .btn-logout {
+    color: #FF5252 !important; /* Vermelho claro para o texto */
+    font-weight: 600;
+}
+
+.custom-navbar .btn-logout:hover {
+    color: #ffffff !important;
+    background-color: #C62828; /* Fundo vermelho no hover */
+}
+
+/* Responsividade (Mobile) */
+@media (max-width: 991px) {
+    .custom-navbar .navbar-nav {
+        margin-top: 10px;
+        padding-bottom: 10px;
+        border-top: 1px solid #3c434d;
+    }
+    .custom-navbar .nav-item {
+        margin: 5px 0;
+    }
 }
 
 /* ======== CONTEÚDO PRINCIPAL ======== */
 main {
-  padding-top: 20px;
+  padding-top: 40px;
   padding-bottom: 40px;
 }
 
