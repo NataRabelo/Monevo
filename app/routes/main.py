@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app
 from flask_login import current_user, login_user, logout_user
-from app.models import Usuarios, KeyValidation
+from app.models import Transacoes, Usuarios, KeyValidation
 from app.extensions import mail, db, bcrypt
 from flask.cli import load_dotenv
 from flask_mail import Message
@@ -22,9 +22,24 @@ def index():
 def menu():
     if request.method == 'GET':
         usuario = current_user
+
+        total_receita = db.session.query(
+            db.func.sum(Transacoes.valor)
+        ).filter(
+            Transacoes.tipo == "Receita",
+            Transacoes.usuario_id == current_user.id
+        ).scalar() or 0
+
+        total_despesa = db.session.query(
+            db.func.sum(Transacoes.valor)
+        ).filter(
+            Transacoes.tipo == "Despesa",
+            Transacoes.usuario_id == current_user.id
+        ).scalar() or 0
+        
         return render_template('dashboard/menu.html', 
                                usuario          =usuario, 
-                               total_receitas   =3500, 
-                               total_despesas   =1500, 
-                               diferenca        =2000
+                               total_despesa    =total_despesa,
+                               total_receita    =total_receita,
+                               resultado        = total_receita - total_despesa
                                )

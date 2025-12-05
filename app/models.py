@@ -66,7 +66,7 @@ class Categorias(db.Model):
     id              = db.Column(db.Integer, primary_key=True)
     usuario_id      = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     nome            = db.Column(db.String, nullable=False)
-    tipo            = db.Column(db.String, nullable=False)  # 'Receita' ou 'Despesa'
+    tipo            = db.Column(db.String, nullable=True)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
     # Relações
@@ -91,7 +91,6 @@ class Cartoes(db.Model):
     dia_fechamento_fatura   = db.Column(db.Integer, nullable=False)
     dia_vencimento_fatura   = db.Column(db.Integer, nullable=False)
 
-    # referência à conta (opcional dependendo do seu modelo)
     conta_id                = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="CASCADE"), nullable=False)
     criado_em               = db.Column(db.DateTime, default=func.current_timestamp())
 

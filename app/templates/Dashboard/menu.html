@@ -18,10 +18,10 @@
                 <div class="card-stat card-receitas h-100 p-4">
                     <div class="d-flex align-items-center mb-2">
                         <i class="fas fa-arrow-circle-up fa-2x me-3 icon-receita"></i>
-                        <h5 class="card-title mb-0 text-uppercase text-muted">Receitas totais</h5>
+                        <h5 class="card-title mb-0 text-uppercase">Receitas totais</h5>
                     </div>
-                    <p class="card-value fs-3 fw-bold text-success-light">R$ {{ '%.2f' | format(total_receitas) }}</p>
-                    <p class="card-description mb-0 text-muted">Tudo o que entrou no mês.</p>
+                    <p class="card-value fs-3 fw-bold text-success-light">{{ total_receita | currency }}</p>
+                    <p class="card-description mb-0">Tudo o que entrou no mês.</p>
                 </div>
             </div>
 
@@ -29,10 +29,10 @@
                 <div class="card-stat card-despesas h-100 p-4">
                     <div class="d-flex align-items-center mb-2">
                         <i class="fas fa-arrow-circle-down fa-2x me-3 icon-despesa"></i>
-                        <h5 class="card-title mb-0 text-uppercase text-muted">Despesas totais</h5>
+                        <h5 class="card-title mb-0 text-uppercase">Despesas totais</h5>
                     </div>
-                    <p class="card-value fs-3 fw-bold text-danger-light">R$ {{ '%.2f' | format(total_despesas) }}</p>
-                    <p class="card-description mb-0 text-muted">Tudo o que saiu no mês.</p>
+                    <p class="card-value fs-3 fw-bold text-danger-light">{{ total_despesa | currency }}</p>
+                    <p class="card-description mb-0">Tudo o que saiu no mês.</p>
                 </div>
             </div>
 
@@ -40,10 +40,10 @@
                 <div class="card-stat card-diferenca h-100 p-4">
                     <div class="d-flex align-items-center mb-2">
                         <i class="fas fa-balance-scale fa-2x me-3 icon-diferenca"></i>
-                        <h5 class="card-title mb-0 text-uppercase text-muted">Balanço</h5>
+                        <h5 class="card-title mb-0 text-uppercase">Balanço</h5>
                     </div>
-                    <p class="card-value fs-3 fw-bold text-primary-light">R$ {{ '%.2f' | format(diferenca) }}</p>
-                    <p class="card-description mb-0 text-muted">Diferença (Receitas - Despesas).</p>
+                    <p class="card-value fs-3 fw-bold text-primary-light">{{ resultado | currency }}</p>
+                    <p class="card-description mb-0">Diferença (Receitas - Despesas).</p>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                 </a>
             </div>
             <div class="col">
-                <a href="{{ url_for('transacao.acessarTransacao') }}" class="menu-tile tile-vermelho h-100">
+                <a href="{{ url_for('projecao.acessarProjecao') }}" class="menu-tile tile-vermelho h-100">
                     <i class="fas fa-chart-line fa-3x mb-3"></i>
                     <h4 class="mb-1">Central de Projeção</h4>
                     <p class="text-white-50">Visualize e projete seu futuro financeiro.</p>
@@ -90,7 +90,7 @@
                             </p>
 
                             <div class="ratio ratio-16x9 mb-3">
-                                <iframe src="https://www.youtube.com/embed/N2vARzvWxwY" title="Dicas de educação financeira"
+                                <iframe src="https://www.youtube.com/embed/zzWCbbnFPq4?si=1MpSUvfJW_9Lc8RK" title="Dicas de educação financeira"
                                     allowfullscreen class="rounded-3"></iframe>
                             </div>
                         </div>

@@ -1,83 +1,136 @@
-/* ===== FUNDO GERAL ===== */
-body {
-    background-color: #1D2128;
-    color: #ffffff;
-}
+/* projecao.css */
 
+/*
+* NOTE: O body é apenas um fallback se não estiver usando o template base.html.
+* Se base.html for usado (que é o padrão do sistema), o background será definido lá.
+* Manter o CSS focado em componentes.
+*/
 
-/* ===== NAVBAR ===== */
-.barra-navegacao {
-    background-color: #3C90C0 !important;
-}
-
-.barra-navegacao .link-navegacao,
-.barra-navegacao .link-navegacao i {
-    color: white !important;
-}
-
-.barra-navegacao .link-navegacao:hover {
-    color: #dddddd !important;
-}
-
-
-/* ===== CONTEÚDO CENTRAL ===== */
-.tela-central {
-    padding: 20px;
-}
-
+/* ===== CARTÕES DE INFORMAÇÃO LATERAL (Seguindo o padrão .card-stat do Menu) ===== */
 .card-info {
-    background-color: #3C90C0;
-    border: none;
-    color: white;
-    border-radius: 0.75rem;
+    /* Cor de fundo padrão (Dark Grey) */
+    background-color: #232832;
+    border: 1px solid #3c434d; /* Borda sutil */
+    border-radius: 12px; /* Arredondamento do Menu */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    color: white; /* Texto branco */
     margin-bottom: 1rem;
     text-align: center;
-    padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    padding: 1.5rem 1rem; /* Padding ajustado para dar mais ar */
 }
 
+.card-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-info h6 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #bdbdbd; /* Cinza claro para descrição */
+}
+
+.card-info h5 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Cores específicas para os valores dos cards */
+.text-saldo,
+.text-resultado-pos {
+    color: #3C90C0; /* Azul Principal */
+}
+.text-receita {
+    color: #4CAF50; /* Verde Vibrante */
+}
+.text-despesa {
+    color: #FF5252; /* Vermelho Vibrante */
+}
+.text-resultado-neg {
+    color: #FF5252; /* Vermelho para negativo */
+}
+
+/* ===== CONTÊINERES DE GRÁFICO (Seguindo o padrão .card-educacional) ===== */
 .chart-container {
-    background-color: #2B2F38;
-    border-radius: 0.75rem;
-    padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #2b2f36; /* Cinza ligeiramente mais claro que o fundo */
+    border: 1px solid #3c434d;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    /* Removido o hover para containers de gráfico */
 }
 
+.chart-container h6 {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #e0e0e0;
+}
+
+/* ===== ELEMENTOS DE FORMULÁRIO (Inputs, Selects) ===== */
 .form-control,
 .form-select {
-    background-color: #2B2F38;
+    background-color: #2b2f36; /* Cor escura do card/container */
     color: white;
-    border: none;
+    border: 1px solid #3c434d; /* Borda sutil */
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
 }
 
 .form-control:focus,
 .form-select:focus {
     box-shadow: 0 0 0 0.2rem rgba(60, 144, 192, 0.4);
-    border: none;
+    border-color: #3C90C0; /* Borda azul no focus */
     color: white;
-    background-color: #2B2F38;
-}
-
-/* ===== BOTÕES ===== */
-.btn-custom {
-    background-color: #3C90C0;
-    color: white;
-    font-weight: 500;
-}
-
-.btn-custom:hover {
-    background-color: #3582AD;
-    color: white;
+    background-color: #2b2f36;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
+    filter: invert(1); /* Ícone de calendário branco */
 }
 
-.tipo-projecao {
-    width: 150px;
+/* ===== BOTÃO PRINCIPAL (Seguindo o padrão de cor Azul) ===== */
+.btn-custom {
+    background-color: #3C90C0; /* Azul principal */
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.campo-data {
-    width: 180px;
+.btn-custom:hover {
+    background-color: #2a698a; /* Azul um pouco mais escuro (do gradiente do menu) */
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Título da Página */
+.titulo-pagina {
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    padding-bottom: 6px;
+    position: relative;
+    /* Adicionando o sublinhado azul do Menu */
+}
+
+.titulo-pagina::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px; /* Largura ajustada */
+    height: 3px;
+    background-color: #3C90C0;
+    border-radius: 2px;
 }
