@@ -119,6 +119,10 @@ def create_app(config_class=None):
 
     from app.routes.projecoes import projecao_bp
     app.register_blueprint(projecao_bp)
+    
+    from app.routes.ofx import ofx_bp
+    app.register_blueprint(ofx_bp)
+
 
     # Registro de filtros 
     app.jinja_env.filters["currency"] = formatar_currency

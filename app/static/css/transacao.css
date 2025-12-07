@@ -86,6 +86,27 @@ body {
   border-color: #3c434d;
 }
 
+/* Limita o texto da descrição a 2 linhas e adiciona reticências (ellipsis) */
+.coluna-descricao {
+    /* Define largura máxima para a coluna para que o limite de texto funcione melhor */
+    max-width: 350px; 
+    /* Adiciona padding horizontal para melhor visualização */
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.limitar-texto {
+    /* Essenciais para limitar e mostrar reticências */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Propriedade WebKit (Chrome/Safari) */
+    line-clamp: 2; /* Propriedade padrão W3C (adicionada para compatibilidade) */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Garante que o texto dentro da célula não force a largura */
+    word-break: break-word;
+}
+
 /* ======== BOTÕES ======== */
 
 .btn-adicionar {

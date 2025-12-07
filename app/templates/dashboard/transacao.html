@@ -22,8 +22,7 @@
       <i class="fas fa-file-import fs-4 text-info"></i> <span class="fw-semibold">Importação OFX</span>
     </div>
 
-    <form action="{{ url_for('transacao.importarOfx') }}" method="POST" enctype="multipart/form-data"
-      class="d-flex gap-2 mt-3 mt-md-0">
+    <form action="{{ url_for('ofx.importar_ofx') }}" method="POST" enctype="multipart/form-data">
       <button type="button" class="btn btn-outline-light" id="btnSelecionar">Selecionar (.OFX)</button>
       <input type="file" id="inputArquivo" name="arquivo_ofx" accept=".ofx" style="display:none;" required>
       <button type="submit" class="btn btn-dark">Importar</button>
@@ -74,7 +73,7 @@
                   {% if transacao.tipo == 'Receita' %}
                     <tr class="table-row-receita">
                       <td>{{ transacao.categoria.nome }}</td>
-                      <td>{{ transacao.descricao }}</td>
+                      <td class="coluna-descricao"><div title="{{ transacao.descricao }}" class="limitar-texto">{{ transacao.descricao }}</div></td>
                       <td>{{ transacao.conta.nome_conta }}</td>
                       <td class="fw-bold text-success">{{ transacao.valor | currency }}</td>
                       <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
@@ -102,7 +101,7 @@
                 {% endfor %}
               {% else %}
                 <tr>
-                  <td colspan="6" class="text-muted py-3">Nenhuma receita cadastrada.</td>
+                  <td colspan="6" class="py-3">Nenhuma receita cadastrada.</td>
                 </tr>
               {% endif %}
             </tbody>
@@ -139,7 +138,7 @@
                   {% if transacao.tipo == 'Despesa' %}
                     <tr class="table-row-receita">
                       <td>{{ transacao.categoria.nome }}</td>
-                      <td>{{ transacao.descricao }}</td>
+                      <td class="coluna-descricao"><div title="{{ transacao.descricao }}" class="limitar-texto">{{ transacao.descricao }}</div></td> 
                       <td>{{ transacao.conta.nome_conta }}</td>
                       <td class="fw-bold text-danger">{{ transacao.valor | currency }}</td>
                       <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
@@ -166,7 +165,7 @@
                 {% endfor %}
               {% else %}
                 <tr>
-                  <td colspan="6" class="text-muted py-3">Nenhuma receita cadastrada.</td>
+                  <td colspan="6" class=" py-3">Nenhuma receita cadastrada.</td>
                 </tr>
               {% endif %}
             </tbody>
