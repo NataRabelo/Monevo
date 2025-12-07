@@ -1,13 +1,14 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for
-from app.services.registrar_requisicao import registrar_requisicao
-from flask_login import current_user, logout_user
+from flask_login import current_user, logout_user, login_required
 from app.models import Usuarios
 from app import bcrypt, db
 from app.utils import limpar_espacos
 
 user_bp = Blueprint('user', __name__, url_prefix='/usuario')
 
-
+# -------------------------------------
+# Cadastro de Usuário
+# -------------------------------------
 @user_bp.route('/cadastrar', methods=["POST", "GET"])
 def cadastroUsuario():
     if request.method == "GET":
@@ -58,7 +59,13 @@ def cadastroUsuario():
             current_app.logger.warning(f'Erro ao cadastrar usuário: {e}')
             return redirect(url_for('main.menu'))
 
+
+# -------------------------------------
+# Edição de Usuário
+# -------------------------------------
+
 @user_bp.route('/editar/', methods=['GET', 'POST'])
+@login_required
 def editarUsuario():
     try:
         user_id = current_user.id
@@ -92,7 +99,13 @@ def editarUsuario():
         current_app.logger.warning(f'Erro ao editar usuário: {e}')
         return redirect(url_for('main.menu'))
 
+
+# -------------------------------------
+# Deleção de Usuário
+# -------------------------------------
+
 @user_bp.route('/deletar/', methods=['GET', 'POST'])
+@login_required
 def deletarUsuario():
     try:
         
@@ -119,7 +132,13 @@ def deletarUsuario():
         current_app.logger.warning(f'Erro ao deletar usuario: {e}')
         return redirect(url_for('main.menu'))
 
+
+# -------------------------------------
+# Listagem de Usuários
+# -------------------------------------
+
 @user_bp.route('/listar', methods=['GET', 'POST'])
+@login_required
 def listarUsuario():
     try:
         usuarios = Usuarios.query.all()

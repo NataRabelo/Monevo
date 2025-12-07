@@ -1,45 +1,59 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app
-from flask_login import current_user, login_user, logout_user
-from app.models import Transacoes, Usuarios, KeyValidation
-from app.extensions import mail, db, bcrypt
+from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
+from app.models import Transacoes
 from flask.cli import load_dotenv
-from flask_mail import Message
-import random
+from app.extensions import db
+from datetime import datetime
 
 
 load_dotenv()
 
 main_bp = Blueprint('main', __name__)
 
-# Rota index do sistema ( redireciona para o login )
+# -------------------------------------
+# Rota inicial redirecionando para login
+# -------------------------------------
 @main_bp.route('/')
 def index():
     return redirect(url_for('auth.login'))
 
         
-# Chamada de menu do sistema
+# -------------------------------------
+# Rota do menu principal
+# -------------------------------------
 @main_bp.route('/menu', methods=['POST', 'GET'])
+@login_required
 def menu():
     if request.method == 'GET':
         usuario = current_user
+        
+        hoje = datetime.now()
+        mes_atual = hoje.month
+        ano_atual = hoje.year
 
-        total_receita = db.session.query(
+        total_receita_mes = db.session.query(
             db.func.sum(Transacoes.valor)
         ).filter(
             Transacoes.tipo == "Receita",
-            Transacoes.usuario_id == current_user.id
+            Transacoes.usuario_id == current_user.id,
+            db.func.extract('month', Transacoes.data_transacao) == mes_atual,
+            db.func.extract('year', Transacoes.data_transacao) == ano_atual
         ).scalar() or 0
 
-        total_despesa = db.session.query(
+        total_despesa_mes = db.session.query(
             db.func.sum(Transacoes.valor)
         ).filter(
             Transacoes.tipo == "Despesa",
-            Transacoes.usuario_id == current_user.id
+            Transacoes.usuario_id == current_user.id,
+            db.func.extract('month', Transacoes.data_transacao) == mes_atual,
+            db.func.extract('year', Transacoes.data_transacao) == ano_atual
         ).scalar() or 0
         
+        resultado_mes = total_receita_mes - total_despesa_mes
+        
         return render_template('dashboard/menu.html', 
-                               usuario          =usuario, 
-                               total_despesa    =total_despesa,
-                               total_receita    =total_receita,
-                               resultado        = total_receita - total_despesa
+                               usuario = usuario, 
+                               total_despesa_mes = total_despesa_mes,
+                               total_receita_mes = total_receita_mes,
+                               resultado_mes = resultado_mes
                                )

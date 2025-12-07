@@ -119,6 +119,8 @@ class Transacoes(db.Model):
     valor           = db.Column(db.Float, nullable=False)
     data_transacao  = db.Column(db.Date, nullable=False)
     recorrencia     = db.Column(db.String)
+    id_original     = db.Column(db.Integer, db.ForeignKey("transacoes.id", ondelete="SET NULL"), nullable=True)
+    recorrente      = db.Column(db.Boolean, default=False)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
     # Relações
@@ -126,6 +128,7 @@ class Transacoes(db.Model):
     conta           = db.relationship('Contas', back_populates='transacoes', lazy=True)
     categoria       = db.relationship('Categorias', back_populates='transacoes', lazy=True)
     cartao          = db.relationship('Cartoes', back_populates='transacoes', lazy=True)
+    ocorrencias_geradas = db.relationship('Transacoes', backref=db.backref('mestra', remote_side=[id]), foreign_keys=[id_original], lazy='dynamic')
 
     def __repr__(self):
         return f"<Transacao {self.id} {self.tipo} {self.valor}>"

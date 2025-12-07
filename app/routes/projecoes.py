@@ -7,7 +7,11 @@ from datetime import datetime
 
 projecao_bp = Blueprint('projecao', __name__, url_prefix='/projecao')
 
+# -------------------------------------
+# Acessar página de projeção
+# -------------------------------------
 @projecao_bp.route('/', methods=['GET', 'POST'])
+@login_required
 def acessarProjecao():
     if request.method == "GET":
         return render_template('dashboard/projecao.html')
@@ -23,7 +27,6 @@ def obter_dados_projecao():
     # -----------------------
     data_inicio = request.args.get("inicio")
     data_fim = request.args.get("fim")
-    tipo = request.args.get("tipo")  # mensal, semanal, anual
 
     # Conversão
     data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d").date()

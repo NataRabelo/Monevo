@@ -8,7 +8,11 @@ import random
 
 auth_bp = Blueprint('auth', __name__)
 
-# Rota para logar o usuário 
+
+
+# -------------------------------------
+# Rota para logar o usuário
+# -------------------------------------
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
 
@@ -42,7 +46,9 @@ def login():
             return redirect(url_for('auth.login'))
 
  
-# Rota para deslogar o usuário 
+# -------------------------------------
+# Rota para deslogar o usuário
+# -------------------------------------
 @auth_bp.route('/logout', methods=['POST', 'GET'])
 def logout():
     if request.method == 'GET':
@@ -51,7 +57,9 @@ def logout():
         return redirect(url_for('auth.login'))
 
 
-# Rota para enviar o email de recuperação de senha
+# -------------------------------------
+# Rota para recuperar a senha
+# -------------------------------------
 @auth_bp.route('/recuperar_senha', methods=['GET', 'POST'])
 def recuperar_senha():
     if request.method == 'GET':
@@ -104,7 +112,9 @@ def recuperar_senha():
             return render_template('recuperar.html')
 
 
-# Rota para cadastrar uma nova senha 
+# -------------------------------------
+# Rota para editar a senha do usuário
+# -------------------------------------
 @auth_bp.route('/editar/<int:user_id>/<int:keyValidation>', methods=['GET', 'POST'])
 def editar(user_id, keyValidation):
     
@@ -138,5 +148,4 @@ def editar(user_id, keyValidation):
         else:
             flash('Os códigos de validação não são iguais')
 
-        # se não atualizar senha, volta para o form
         return render_template('senhaNova.html', user_id=user_id, keyValidation=keyValidation)

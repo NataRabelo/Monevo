@@ -65,3 +65,37 @@ h2 {
     box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
 }
 
+#flash-container {
+    position: fixed;
+    top: 20px; /* distância do topo da tela */
+    left: 50%; /* centraliza horizontalmente */
+    transform: translateX(-50%); /* centraliza de verdade */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center; /* garante alinhamento das mensagens */
+}
+
+/* Estilo das mensagens */
+.flash-message {
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Efeito de saída */
+.flash-message.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* Cores por categoria (opcional) */
+.flash-message.success { background: #4BB543; }
+.flash-message.error   { background: #FF4C4C; }
+.flash-message.warning { background: #FFB700; }

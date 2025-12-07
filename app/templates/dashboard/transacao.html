@@ -15,7 +15,7 @@
       <i class="bi bi-list-task me-1"></i> Gerenciar Categorias
     </button>
   </div>
-  
+
   <div
     class="import-banner d-flex flex-column flex-md-row align-items-md-center justify-content-between shadow-sm p-3 mb-4 rounded">
     <div class="d-flex align-items-center gap-2">
@@ -28,16 +28,17 @@
       <button type="submit" class="btn btn-dark">Importar</button>
     </form>
   </div>
+
   <div class="row mb-4">
     <div class="col-md-6 mb-3">
-      <div class="card valor-card receita-card shadow-lg p-3 border-0"> <span class="label-card">Receitas</span>
+      <div class="card valor-card receita-card shadow-lg p-3 border-0"> <span class="label-card">Receitas Totais</span>
         <h2 class="valor-numero" id="total-receitas">
           {{ total_receita | currency }}
         </h2>
       </div>
     </div>
     <div class="col-md-6 mb-3">
-      <div class="card valor-card despesa-card shadow-lg p-3 border-0"> <span class="label-card">Despesas</span>
+      <div class="card valor-card despesa-card shadow-lg p-3 border-0"> <span class="label-card">Despesas Totais</span>
         <h2 class="valor-numero" id="total-despesas">
           {{ total_despesa | currency }}
         </h2>
@@ -46,566 +47,591 @@
   </div>
 
   <div class="row g-4">
-    <div class="col-lg-6">
-      <div class="caixa-table shadow-sm p-3 rounded h-100">
-        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-          <h4 class="mb-0 text-success">Receitas</h4>
-          <button class="btn btn-success btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalCadastroReceita">
-            <i class="bi bi-plus-lg me-1"></i> Adicionar
+    <div class="col-12">
+      <div class="table-color card shadow-lg p-3 border-0">
+        {% if not transacoes_agrupadas %}
+        <div class="d-flex justify-content-center gap-3 mb-4">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCadastroReceita">
+            <i class="bi bi-plus-lg me-1"></i> Cadastrar Receita
+          </button>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalCadastroDespesa">
+            <i class="bi bi-plus-lg me-1"></i> Cadastrar Despesa
           </button>
         </div>
+        {% endif %}
 
-        <div class="table-responsive">
-          <table class="table table-hover align-middle text-center" id="tabela-receitas">
-            <thead class="thead-receita">
-              <tr>
-                <th>Categoria</th>
-                <th>Descrição</th>
-                <th>Conta</th>
-                <th>Valor</th>
-                <th>Data</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% if transacoes %}
-                {% for transacao in transacoes %}
-                  {% if transacao.tipo == 'Receita' %}
-                    <tr class="table-row-receita">
-                      <td>{{ transacao.categoria.nome }}</td>
-                      <td class="coluna-descricao"><div title="{{ transacao.descricao }}" class="limitar-texto">{{ transacao.descricao }}</div></td>
-                      <td>{{ transacao.conta.nome_conta }}</td>
-                      <td class="fw-bold text-success">{{ transacao.valor | currency }}</td>
-                      <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
-                      <td>
-                        <div class="d-flex align-items-center gap-1">
-                          <button class="btn btn-sm btn-outline-secondary" title="Editar Receita" data-bs-toggle="modal"
-                            data-bs-target="#modalEditarReceita" data-receita-id="{{ transacao.id }}"
-                            data-conta-id="{{ transacao.conta_id }}" data-categoria-id="{{ transacao.categoria_id }}"
-                            data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
-                            data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
-                            data-recorrencia="{{ transacao.recorrencia }}">
-                            <i class="bi bi-pencil"></i>
-                          </button>
 
-                          <form method="POST" action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Receita">
-                              <i class="bi bi-trash"></i>
-                            </button>
-                          </form>
+        <ul class="nav nav-tabs mb-3 custom-tabs" id="transacaoTabs" role="tablist">
+          {% for chave_mes_ano, grupo in transacoes_agrupadas.items() %}
+          <li class="nav-item" role="presentation">
+            <button class="nav-link {% if loop.index0 == 0 %}active{% endif %} text-light" id="tab-{{ loop.index0 }}"
+              data-bs-toggle="tab" data-bs-target="#pane-{{ loop.index0 }}" type="button" role="tab"
+              aria-controls="pane-{{ loop.index0 }}"
+              aria-selected="{% if loop.index0 == 0 %}true{% else %}false{% endif %}">
+              <i class="bi bi-calendar-check me-1"></i> {{ grupo.nome_mes }}
+            </button>
+          </li>
+          {% endfor %}
+        </ul>
 
-                        </div>
-                      </td>
-                    </tr>
-                  {% endif %}
-                {% endfor %}
-              {% else %}
-                <tr>
-                  <td colspan="6" class="py-3">Nenhuma receita cadastrada.</td>
-                </tr>
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
+        <div class="tab-content" id="transacaoTabContent">
+          {% for chave_mes_ano, grupo in transacoes_agrupadas.items() %}
+          <div class="tab-pane fade {% if loop.index0 == 0 %}show active{% endif %}" id="pane-{{ loop.index0 }}"
+            role="tabpanel" aria-labelledby="tab-{{ loop.index0 }}" tabindex="0">
 
-      </div>
-    </div>
-    <div class="col-lg-6">
-      <div class="caixa-table shadow-sm p-3 rounded h-100">
-        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-          <h4 class="mb-0 text-danger">Despesas</h4>
-          <button class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalCadastroDespesa">
-            <i class="bi bi-plus-lg me-1"></i> Adicionar
-          </button>
-        </div>
-
-        <div class="table-responsive">
-          <!-- ID ajustado para evitar duplicação -->
-          <table class="table table-hover align-middle text-center" id="tabela-despesas">
-            <thead class="thead-receita">
-              <tr>
-                <th>Categoria</th>
-                <th>Descrição</th>
-                <th>Conta</th>
-                <th>Valor</th>
-                <th>Data</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% if transacoes %}
-                {% for transacao in transacoes %}
-                  {% if transacao.tipo == 'Despesa' %}
-                    <tr class="table-row-receita">
-                      <td>{{ transacao.categoria.nome }}</td>
-                      <td class="coluna-descricao"><div title="{{ transacao.descricao }}" class="limitar-texto">{{ transacao.descricao }}</div></td> 
-                      <td>{{ transacao.conta.nome_conta }}</td>
-                      <td class="fw-bold text-danger">{{ transacao.valor | currency }}</td>
-                      <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
-                      <td>
-                        <div class="d-flex align-items-center gap-1">
-                          <button class="btn btn-sm btn-outline-secondary" title="Editar" data-bs-toggle="modal"
-                            data-bs-target="#modalEditarDespesa" data-receita-id="{{ transacao.id }}"
-                            data-conta-id="{{ transacao.conta_id }}" data-categoria-id="{{ transacao.categoria_id }}"
-                            data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
-                            data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
-                            data-recorrencia="{{ transacao.recorrencia }}">
-                            <i class="bi bi-pencil"></i>
-                          </button>
-
-                          <form method="POST" action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir">
-                              <i class="bi bi-trash"></i>
-                            </button>
-                          </form>
-                        </div>
-                      </td>
-                    </tr>
-                  {% endif %}
-                {% endfor %}
-              {% else %}
-                <tr>
-                  <td colspan="6" class=" py-3">Nenhuma receita cadastrada.</td>
-                </tr>
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Modal Cadastro Receita -->
-    <div class="modal fade" id="modalCadastroReceita" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h5 class="modal-title">Cadastrar Receita</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-
-          <div class="modal-body">
-            <form action="{{ url_for('transacao.cadastrarTransacao') }}" method="POST">
-
-              <input type="hidden" name="tipo_transacao" value="Receita">
-
-              <div class="mb-3">
-                <label class="form-label">Descrição</label>
-                <input type="text" class="form-control" name="descricao" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Valor</label>
-                <input type="text" class="form-control currency" name="valor_transacao" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Categoria</label>
-                <select class="form-select" name="categoria_transacao" required>
-                  <option value="" disabled selected>Selecione</option>
-                  {% for categoria in categorias %}
-                    {% if categoria.tipo == 'Receita' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="mb-3 d-flex gap-3">
-                <div class="flex-fill">
-                  <label class="form-label">Conta</label>
-                  <select class="form-select" name="conta_transacao" required>
-                    <option value="" disabled selected>Selecione</option>
-                    {% for conta in contas %}
-                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="flex-fill">
-                  <label class="form-label">Data</label>
-                  <input type="date" class="form-control" name="data_transacao" required>
+            <div class="row mb-4">
+              <div class="col-md-6 mb-3">
+                <div class="card valor-card receita-card shadow-lg p-3 border-0">
+                  <span class="label-card">{{ grupo.nome_mes }} - Receitas</span>
+                  <h2 class="valor-numero text-success" id="total-receitas-{{ chave_mes_ano }}">
+                    {{ grupo.total_receita_mes | currency }}
+                  </h2>
                 </div>
               </div>
-
-              <div class="mb-3">
-                <label class="form-label">Recorrência</label>
-                <select class="form-select" name="recorrencia">
-                  <option value="Sem recorrencia" selected>Sem recorrencia</option>
-                  <option value="Diária">Diária</option>
-                  <option value="Semanal">Semanal</option>
-                  <option value="Mensal">Mensal</option>
-                  <option value="Anual">Anual</option>
-                </select>
-              </div>
-
-              <div class="text-end">
-                <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
-              </div>
-
-            </form>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Cadastro Despesa -->
-    <div class="modal fade" id="modalCadastroDespesa" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h5 class="modal-title">Cadastrar Despesa</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-
-          <div class="modal-body">
-            <form action="{{ url_for('transacao.cadastrarTransacao') }}" method="POST">
-
-              <input type="hidden" name="tipo_transacao" value="Despesa">
-
-              <div class="mb-3">
-                <label class="form-label">Descrição</label>
-                <input type="text" class="form-control" name="descricao" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Valor</label>
-                <input type="text" class="form-control currency" name="valor_transacao" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Categoria</label>
-                <select class="form-select" name="categoria_transacao" required>
-                  <option value="" disabled selected>Selecione</option>
-                  {% for categoria in categorias %}
-                    {% if categoria.tipo == 'Despesa' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="mb-3 d-flex gap-3">
-                <div class="flex-fill">
-                  <label class="form-label">Conta</label>
-                  <select class="form-select" name="conta_transacao" required>
-                    <option value="" disabled selected>Selecione</option>
-                    {% for conta in contas %}
-                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="flex-fill">
-                  <label class="form-label">Data</label>
-                  <input type="date" class="form-control" name="data_transacao" required>
+              <div class="col-md-6 mb-3">
+                <div class="card valor-card despesa-card shadow-lg p-3 border-0">
+                  <span class="label-card">{{ grupo.nome_mes }} - Despesas</span>
+                  <h2 class="valor-numero text-danger" id="total-despesas-{{ chave_mes_ano }}">
+                    {{ grupo.total_despesa_mes | currency }}
+                  </h2>
                 </div>
               </div>
-
-              <div class="mb-3">
-                <label class="form-label">Recorrência</label>
-                <select class="form-select" name="recorrencia">
-                  <option value="Sem recorrencia" selected>Sem recorrencia</option>
-                  <option value="Diária">Diária</option>
-                  <option value="Semanal">Semanal</option>
-                  <option value="Mensal">Mensal</option>
-                  <option value="Anual">Anual</option>
-                </select>
-              </div>
-
-              <div class="text-end">
-                <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
-              </div>
-
-            </form>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Editar Receita -->
-    <div class="modal fade" id="modalEditarReceita" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Receita</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-
-          <div class="modal-body">
-            <form id="formEditarReceitaA" action="{{ url_for('transacao.editarTransacao') }}" method="POST">
-
-              <input type="hidden" id="receita-id" name="receita_id">
-              <input type="hidden" id="edit-tipo-transacao" name="tipo_transacao" value="Receita">
-
-              <div class="mb-3">
-                <label class="form-label">Descrição</label>
-                <input type="text" class="form-control" id="edit-descricao-receita" name="descricao" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Valor</label>
-                <input type="text" class="form-control currency" id="edit-valor-transacao-receita" name="valor_transacao"
-                  required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Categoria</label>
-                <select class="form-select" id="edit-categoria-receita" name="categoria_transacao" required>
-                  <option value="" disabled selected>Selecione</option>
-                  {% for categoria in categorias %}
-                    {% if categoria.tipo == 'Receita' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="mb-3 d-flex gap-3">
-                <div class="flex-fill">
-                  <label class="form-label">Conta</label>
-                  <select class="form-select" id="edit-conta-transacao-receita" name="conta_transacao" required>
-                    <option value="" disabled selected>Selecione</option>
-                    {% for conta in contas %}
-                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="flex-fill">
-                  <label class="form-label">Data</label>
-                  <input type="date" class="form-control" id="edit-data-transacao-receita" name="data_transacao" required>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Recorrência</label>
-                <select class="form-select" id="edit-recorrencia-receita" name="recorrencia">
-                  <option value="Sem recorrencia" selected>Sem recorrencia</option>
-                  <option value="Diária">Diária</option>
-                  <option value="Semanal">Semanal</option>
-                  <option value="Mensal">Mensal</option>
-                  <option value="Anual">Anual</option>
-                </select>
-              </div>
-
-              <div class="text-end">
-                <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
-              </div>
-
-            </form>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Editar Despesa -->
-    <div class="modal fade" id="modalEditarDespesa" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Despesa</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-
-          <div class="modal-body">
-            <form action="{{ url_for('transacao.editarTransacao') }}" method="POST">
-
-              <input type="hidden" id="despesa_id" name="despesa_id">
-              <input type="hidden" id="edit-tipo-transacao-despesa" name="tipo_transacao" value="Despesa">
-
-              <div class="mb-3">
-                <label class="form-label">Descrição</label>
-                <input type="text" class="form-control" id="edit-descricao-despesa" name="descricao" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Valor</label>
-                <input type="text" class="form-control currency" id="edit-valor-transacao-despesa" name="valor_transacao"
-                  required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Categoria</label>
-                <select class="form-select" id="edit-categoria-despesa" name="categoria_transacao" required>
-                  <option value="" disabled selected>Selecione</option>
-                  {% for categoria in categorias %}
-                    {% if categoria.tipo == 'Despesa' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="mb-3 d-flex gap-3">
-                <div class="flex-fill">
-                  <label class="form-label">Conta</label>
-                  <select class="form-select" id="edit-conta-transacao-despesa" name="conta_transacao" required>
-                    <option value="" disabled selected>Selecione</option>
-                    {% for conta in contas %}
-                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="flex-fill">
-                  <label class="form-label">Data</label>
-                  <input type="date" class="form-control" id="edit-data-transacao-despesa" name="data_transacao" required>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Recorrência</label>
-                <select class="form-select" id="edit-recorrencia-despesa" name="recorrencia">
-                  <option value="Sem recorrencia" selected>Sem recorrencia</option>
-                  <option value="Diária">Diária</option>
-                  <option value="Semanal">Semanal</option>
-                  <option value="Mensal">Mensal</option>
-                  <option value="Anual">Anual</option>
-                </select>
-              </div>
-
-              <div class="text-end">
-                <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
-              </div>
-
-            </form>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Gerenciar Categorias -->
-    <div class="modal fade" id="modalGerenciarCategorias" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Gerenciar Categorias</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="d-flex justify-content-end mb-3">
-              <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal"
-                data-bs-target="#modalNovaCategoria">
-                <i class="bi bi-plus-lg me-1"></i> Nova Categoria
-              </button>
             </div>
+            <div class="row g-4">
 
-            <div class="table-responsive">
-              <table class="table table-dark table-striped table-hover align-middle text-center">
-                <thead>
-                  <tr>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if categorias %}
-                    {% for categoria in categorias %}
-                      <tr>
-                        <td>{{ categoria.nome }}</td>
-                        <td><span class="badge bg-{{ 'success' if categoria.tipo == 'Receita' else 'danger' }}">{{ categoria.tipo }}</span></td>
-                        <td>
-                          <div class="d-flex align-items-center justify-content-center gap-1">
-                            <button class="btn btn-sm btn-outline-secondary" title="Editar Categoria" data-bs-toggle="modal"
-                              data-bs-target="#modalEditarCategoria" data-categoria-id="{{ categoria.id }}"
-                              data-nome="{{ categoria.nome }}" data-tipo="{{ categoria.tipo }}">
-                              <i class="bi bi-pencil"></i>
-                            </button>
-                            <form method="POST" action="{{ url_for('categoria.deletarCategoria', categoria_id=categoria.id) }}">
-                              <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Categoria"
-                                onclick="return confirm('Tem certeza que deseja excluir a categoria {{ categoria.nome }}? Esta ação não pode ser desfeita e pode afetar transações existentes.')">
-                                <i class="bi bi-trash"></i>
+              <div class="col-lg-6">
+                <div class="caixa-table shadow-sm p-3 rounded h-100 p-0">
+                  <div class="d-flex justify-content-between align-items-center mb-0 px-3 pt-3 pb-2 border-bottom">
+                    <h4 class="mb-0 text-success">Receitas</h4>
+                    <button class="btn btn-success btn-sm rounded-pill" data-bs-toggle="modal"
+                      data-bs-target="#modalCadastroReceita">
+                      <i class="bi bi-plus-lg me-1"></i> Adicionar
+                    </button>
+                  </div>
+
+                  <div class="table-responsive">
+                    <table class="table table-dark table-striped table-hover align-middle text-center mb-0"
+                      id="tabela-receitas-{{ loop.index0 }}">
+                      <thead class="thead-dark-custom thead-receita">
+                        <tr>
+                          <th>Categoria</th>
+                          <th>Descrição</th>
+                          <th>Conta</th>
+                          <th>Valor</th>
+                          <th>Data</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% set receitas = grupo.itens | selectattr('tipo', 'equalto', 'Receita') | list %}
+
+                        {% if receitas %}
+                        {% for transacao in receitas %}
+                        <tr class="table-row-receita">
+                          <td>{{ transacao.categoria.nome }}</td>
+                          <td class="coluna-descricao">
+                            <div class="limitar-texto" title="{{ transacao.descricao }}">{{ transacao.descricao }}</div>
+                          </td>
+                          <td>{{ transacao.conta.nome_conta }}</td>
+                          <td class="fw-bold text-success">{{ transacao.valor | currency }}</td>
+                          <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
+                          <td>
+                            <div class="d-flex align-items-center gap-1">
+                              <button class="btn btn-sm btn-outline-secondary" title="Editar Receita"
+                                data-bs-toggle="modal" data-bs-target="#modalEditarReceita"
+                                data-receita-id="{{ transacao.id }}" data-conta-id="{{ transacao.conta_id }}"
+                                data-categoria-id="{{ transacao.categoria_id }}"
+                                data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
+                                data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
+                                data-recorrencia="{{ transacao.recorrencia }}">
+                                <i class="bi bi-pencil"></i>
                               </button>
-                            </form>
-                          </div>
-                        </td>
-                      </tr>
+                              <form method="POST"
+                                action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Receita">
+                                  <i class="bi bi-trash"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                          <td colspan="6" class="py-3">Nenhuma receita neste mês.</td>
+                        </tr>
+                        {% endif %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="caixa-table shadow-sm p-3 rounded h-100 p-0">
+                  <div class="d-flex justify-content-between align-items-center mb-0 px-3 pt-3 pb-2 border-bottom">
+                    <h4 class="mb-0 text-danger">Despesas</h4>
+                    <button class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
+                      data-bs-target="#modalCadastroDespesa">
+                      <i class="bi bi-plus-lg me-1"></i> Adicionar
+                    </button>
+                  </div>
+
+                  <div class="table-responsive">
+                    <table class="table table-dark table-striped table-hover align-middle text-center mb-0"
+                      id="tabela-despesas-{{ loop.index0 }}">
+                      <thead class="thead-dark-custom thead-despesa">
+                        <tr>
+                          <th>Categoria</th>
+                          <th>Descrição</th>
+                          <th>Conta</th>
+                          <th>Valor</th>
+                          <th>Data</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% set despesas = grupo.itens | selectattr('tipo', 'equalto', 'Despesa') | list %}
+
+                        {% if despesas %}
+                        {% for transacao in despesas %}
+                        <tr class="table-row-despesa">
+                          <td>{{ transacao.categoria.nome }}</td>
+                          <td class="coluna-descricao">
+                            <div class="limitar-texto" title="{{ transacao.descricao }}">{{ transacao.descricao }}</div>
+                          </td>
+                          <td>{{ transacao.conta.nome_conta }}</td>
+                          <td class="fw-bold text-danger">{{ transacao.valor | currency }}</td>
+                          <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
+                          <td>
+                            <div class="d-flex align-items-center gap-1">
+                              <button class="btn btn-sm btn-outline-secondary" title="Editar" data-bs-toggle="modal"
+                                data-bs-target="#modalEditarDespesa" data-despesa-id="{{ transacao.id }}"
+                                data-conta-id="{{ transacao.conta_id }}"
+                                data-categoria-id="{{ transacao.categoria_id }}"
+                                data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
+                                data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
+                                data-recorrencia="{{ transacao.recorrencia }}">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+
+                              <form method="POST"
+                                action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir">
+                                  <i class="bi bi-trash"></i>
+                                </button>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                          <td colspan="6" class="py-3">Nenhuma despesa neste mês.</td>
+                        </tr>
+                        {% endif %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-lg-12">
+      <div class="modal fade" id="modalCadastroReceita" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Cadastrar Receita</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('transacao.cadastrarTransacao') }}" method="POST">
+                <input type="hidden" name="tipo_transacao" value="Receita">
+                <div class="mb-3">
+                  <label class="form-label">Descrição</label>
+                  <input type="text" class="form-control" name="descricao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Valor</label>
+                  <input type="text" class="form-control currency" name="valor_transacao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Categoria</label>
+                  <select class="form-select" name="categoria_transacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    {% for categoria in categorias %}
+                    {% if categoria.tipo == 'Receita' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
                     {% endfor %}
-                  {% else %}
+                  </select>
+                </div>
+                <div class="mb-3 d-flex gap-3">
+                  <div class="flex-fill">
+                    <label class="form-label">Conta</label>
+                    <select class="form-select" name="conta_transacao" required>
+                      <option value="" disabled selected>Selecione</option>
+                      {% for conta in contas %}
+                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="flex-fill">
+                    <label class="form-label">Data</label>
+                    <input type="date" class="form-control" name="data_transacao" required>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Recorrência</label>
+                  <select class="form-select" name="recorrencia">
+                    <option value="Sem recorrencia" selected>Sem recorrencia</option>
+                    <option value="Diária">Diária</option>
+                    <option value="Semanal">Semanal</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Anual">Anual</option>
+                  </select>
+                </div>
+                <div class="text-end">
+                  <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="modal fade" id="modalCadastroDespesa" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Cadastrar Despesa</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('transacao.cadastrarTransacao') }}" method="POST">
+                <input type="hidden" name="tipo_transacao" value="Despesa">
+                <div class="mb-3">
+                  <label class="form-label">Descrição</label>
+                  <input type="text" class="form-control" name="descricao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Valor</label>
+                  <input type="text" class="form-control currency" name="valor_transacao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Categoria</label>
+                  <select class="form-select" name="categoria_transacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    {% for categoria in categorias %}
+                    {% if categoria.tipo == 'Despesa' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3 d-flex gap-3">
+                  <div class="flex-fill">
+                    <label class="form-label">Conta</label>
+                    <select class="form-select" name="conta_transacao" required>
+                      <option value="" disabled selected>Selecione</option>
+                      {% for conta in contas %}
+                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="flex-fill">
+                    <label class="form-label">Data</label>
+                    <input type="date" class="form-control" name="data_transacao" required>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Recorrência</label>
+                  <select class="form-select" name="recorrencia">
+                    <option value="Sem recorrencia" selected>Sem recorrencia</option>
+                    <option value="Diária">Diária</option>
+                    <option value="Semanal">Semanal</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Anual">Anual</option>
+                  </select>
+                </div>
+                <div class="text-end">
+                  <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="modal fade" id="modalEditarReceita" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Editar Receita</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <form id="formEditarReceitaA" action="{{ url_for('transacao.editarTransacao') }}" method="POST">
+                <input type="hidden" id="receita-id" name="receita_id">
+                <input type="hidden" id="edit-tipo-transacao" name="tipo_transacao" value="Receita">
+                <div class="mb-3">
+                  <label class="form-label">Descrição</label>
+                  <input type="text" class="form-control" id="edit-descricao-receita" name="descricao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Valor</label>
+                  <input type="text" class="form-control currency" id="edit-valor-transacao-receita"
+                    name="valor_transacao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Categoria</label>
+                  <select class="form-select" id="edit-categoria-receita" name="categoria_transacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    {% for categoria in categorias %}
+                    {% if categoria.tipo == 'Receita' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3 d-flex gap-3">
+                  <div class="flex-fill">
+                    <label class="form-label">Conta</label>
+                    <select class="form-select" id="edit-conta-transacao-receita" name="conta_transacao" required>
+                      <option value="" disabled selected>Selecione</option>
+                      {% for conta in contas %}
+                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="flex-fill">
+                    <label class="form-label">Data</label>
+                    <input type="date" class="form-control" id="edit-data-transacao-receita" name="data_transacao"
+                      required>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Recorrência</label>
+                  <select class="form-select" id="edit-recorrencia-receita" name="recorrencia">
+                    <option value="Sem recorrencia" selected>Sem recorrencia</option>
+                    <option value="Diária">Diária</option>
+                    <option value="Semanal">Semanal</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Anual">Anual</option>
+                  </select>
+                </div>
+                <div class="text-end">
+                  <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="modal fade" id="modalEditarDespesa" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Editar Despesa</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('transacao.editarTransacao') }}" method="POST">
+                <input type="hidden" id="despesa_id" name="despesa_id">
+                <input type="hidden" id="edit-tipo-transacao-despesa" name="tipo_transacao" value="Despesa">
+                <div class="mb-3">
+                  <label class="form-label">Descrição</label>
+                  <input type="text" class="form-control" id="edit-descricao-despesa" name="descricao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Valor</label>
+                  <input type="text" class="form-control currency" id="edit-valor-transacao-despesa"
+                    name="valor_transacao" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Categoria</label>
+                  <select class="form-select" id="edit-categoria-despesa" name="categoria_transacao" required>
+                    <option value="" disabled selected>Selecione</option>
+                    {% for categoria in categorias %}
+                    {% if categoria.tipo == 'Despesa' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3 d-flex gap-3">
+                  <div class="flex-fill">
+                    <label class="form-label">Conta</label>
+                    <select class="form-select" id="edit-conta-transacao-despesa" name="conta_transacao" required>
+                      <option value="" disabled selected>Selecione</option>
+                      {% for conta in contas %}
+                      <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="flex-fill">
+                    <label class="form-label">Data</label>
+                    <input type="date" class="form-control" id="edit-data-transacao-despesa" name="data_transacao"
+                      required>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Recorrência</label>
+                  <select class="form-select" id="edit-recorrencia-despesa" name="recorrencia">
+                    <option value="Sem recorrencia" selected>Sem recorrencia</option>
+                    <option value="Diária">Diária</option>
+                    <option value="Semanal">Semanal</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Anual">Anual</option>
+                  </select>
+                </div>
+                <div class="text-end">
+                  <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="modal fade" id="modalGerenciarCategorias" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Gerenciar Categorias</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal"
+                  data-bs-target="#modalNovaCategoria">
+                  <i class="bi bi-plus-lg me-1"></i> Nova Categoria
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover align-middle text-center">
+                  <thead>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if categorias %}
+                    {% for categoria in categorias %}
+                    <tr>
+                      <td>{{ categoria.nome }}</td>
+                      <td><span class="badge bg-{{ 'success' if categoria.tipo == 'Receita' else 'danger' }}">{{
+                          categoria.tipo }}</span></td>
+                      <td>
+                        <div class="d-flex align-items-center justify-content-center gap-1">
+                          <button class="btn btn-sm btn-outline-secondary" title="Editar Categoria"
+                            data-bs-toggle="modal" data-bs-target="#modalEditarCategoria"
+                            data-categoria-id="{{ categoria.id }}" data-nome="{{ categoria.nome }}"
+                            data-tipo="{{ categoria.tipo }}">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <form method="POST"
+                            action="{{ url_for('categoria.deletarCategoria', categoria_id=categoria.id) }}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Categoria"
+                              onclick="return confirm('Tem certeza que deseja excluir a categoria {{ categoria.nome }}? Esta ação não pode ser desfeita e pode afetar transações existentes.')">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
                     <tr>
                       <td colspan="3" class="py-3">Nenhuma categoria cadastrada.</td>
                     </tr>
-                  {% endif %}
-                </tbody>
-              </table>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Modal Nova Categoria -->
-    <div class="modal fade" id="modalNovaCategoria" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Nova Categoria</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form action="{{ url_for('categoria.cadastrarCategoria') }}" method="POST">
-              <div class="mb-3">
-                <label class="form-label">Nome</label>
-                <input type="text" class="form-control" name="nome" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Tipo</label>
-                <select class="form-select" name="tipo" required>
-                  <option value="" disabled selected>Selecione o tipo</option>
-                  <option value="Receita">Receita</option>
-                  <option value="Despesa">Despesa</option>
-                </select>
-              </div>
-              <div class="text-end">
-                <button type="submit" class="btn-modal btn-modal-dark">Salvar Categoria</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Editar Categoria -->
-    <div class="modal fade" id="modalEditarCategoria" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Categoria</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form id="formEditarCategoria" method="POST">
-              <input type="hidden" id="edit-categoria-id" name="categoria_id">
-              <div class="mb-3">
-                <label class="form-label">Nome</label>
-                <input type="text" class="form-control" id="edit-categoria-nome" name="nome" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Tipo</label>
-                <select class="form-select" id="edit-categoria-tipo" name="tipo" required>
-                  <option value="Receita">Receita</option>
-                  <option value="Despesa">Despesa</option>
-                </select>
-              </div>
-              <div class="text-end">
-                <button type="submit" class="btn-modal btn-modal-dark">Salvar Alterações</button>
-              </div>
-            </form>
+    <div class="col-lg-12">
+      <div class="modal fade" id="modalNovaCategoria" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Nova Categoria</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('categoria.cadastrarCategoria') }}" method="POST">
+                <div class="mb-3">
+                  <label class="form-label">Nome</label>
+                  <input type="text" class="form-control" name="nome" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Tipo</label>
+                  <select class="form-select" name="tipo" required>
+                    <option value="" disabled selected>Selecione o tipo</option>
+                    <option value="Receita">Receita</option>
+                    <option value="Despesa">Despesa</option>
+                  </select>
+                </div>
+                <div class="text-end">
+                  <button type="submit" class="btn-modal btn-modal-dark">Salvar Categoria</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
+    <div class="col-lg-12">
+      <div class="modal fade" id="modalEditarCategoria" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Editar Categoria</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="formEditarCategoria" method="POST">
+                <input type="hidden" id="edit-categoria-id" name="categoria_id">
+                <div class="mb-3">
+                  <label class="form-label">Nome</label>
+                  <input type="text" class="form-control" id="edit-categoria-nome" name="nome" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Tipo</label>
+                  <select class="form-select" id="edit-categoria-tipo" name="tipo" required>
+                    <option value="Receita">Receita</option>
+                    <option value="Despesa">Despesa</option>
+                  </select>
+                </div>
+                <div class="text-end">
+                  <button type="submit" class="btn-modal btn-modal-dark">Salvar Alterações</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

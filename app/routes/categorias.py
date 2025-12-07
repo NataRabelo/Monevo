@@ -1,11 +1,15 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
 from app.models import Categorias
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app import db
 
 categoria_bp = Blueprint('categoria', __name__, url_prefix='/categoria')
 
+# -------------------------------------
+# Cadastro de Categoria
+# -------------------------------------
 @categoria_bp.route('/cadastrar', methods=['POST'])
+@login_required
 def cadastrarCategoria():
     try:
         if request.method == "POST":
@@ -33,7 +37,12 @@ def cadastrarCategoria():
         current_app.logger.warning(f'Erro ao cadastrar a categoria: {e}')
         return redirect(url_for('transacao.acessarTransacao'))
 
+
+# -------------------------------------
+# Edição de Categoria
+# -------------------------------------
 @categoria_bp.route('/editar/<int:categoria_id>', methods=['POST'])
+@login_required
 def editarCategoria(categoria_id):
     try:
         categoria = Categorias.query.get(categoria_id)
@@ -54,7 +63,12 @@ def editarCategoria(categoria_id):
         flash('Ocorreu algum erro inesperado')
         return redirect(url_for('transacao.acessarTransacao'))
 
+
+# -------------------------------------
+# Deleção de Categoria
+# -------------------------------------
 @categoria_bp.route('/deletar/<int:categoria_id>', methods=["POST"])
+@login_required
 def deletarCategoria(categoria_id):
     try:
         categoria = Categorias.query.get(categoria_id)
@@ -73,7 +87,12 @@ def deletarCategoria(categoria_id):
         flash('Erro ao deletar categoria')
         return redirect(url_for('transacao.acessarTransacao'))
 
+
+# -------------------------------------
+# Listagem de Categoria
+# -------------------------------------
 @categoria_bp.route('/listar', methods=['GET'])
+@login_required
 def listarCategoria():
     try:
         categorias = Categorias.query.all()

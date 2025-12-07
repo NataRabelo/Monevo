@@ -1,19 +1,28 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
 from app.models import Contas, Cartoes
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app import db
 from app.utils import limpar_currency
 
 conta_bp = Blueprint('conta', __name__, url_prefix='/conta')
 
+# -------------------------------------
+# Acesso à Página de Contas/Cartões
+# -------------------------------------
 @conta_bp.route('/', methods=['GET', 'POST'])
+@login_required
 def acessarConta():
     if request.method == "GET":
         contas = Contas.query.all()
         cartoes = Cartoes.query.all()
         return render_template('dashboard/contas.html', contas=contas, cartoes=cartoes)
 
+
+# -------------------------------------
+# Cadastro de Conta
+# -------------------------------------
 @conta_bp.route('/cadastrar', methods=['GET', 'POST'])
+@login_required
 def cadastrarConta():
     try:
         usuario = current_user
@@ -52,7 +61,12 @@ def cadastrarConta():
         current_app.logger.warning(f'Erro ao cadastrar conta: {e}')
         return redirect(url_for('conta.acessarConta'))
 
+
+# -------------------------------------
+# Edição de Conta
+# -------------------------------------
 @conta_bp.route('/editar', methods=['GET', 'POST'])
+@login_required
 def editarConta():
     try:
         # Validar a existencia da conta 
@@ -83,8 +97,13 @@ def editarConta():
         flash('Ocorreu algum erro inesperado')
         current_app.logger.warning(f'Erro ao editar conta: {e}')
         return redirect(url_for('conta.acessarConta'))
-    
+
+
+# -------------------------------------
+# Deleção de Conta
+# -------------------------------------
 @conta_bp.route('/deletar/<int:conta_id>', methods=['GET', 'POST'])
+@login_required
 def deletarConta(conta_id):
     try:
         # Valida a existencia
@@ -106,8 +125,13 @@ def deletarConta(conta_id):
         flash('Ocorreu algum erro inesperado')
         current_app.logger.warning(f'Erro ao deletar conta: {e}')
         return redirect(url_for('conta.acessarConta'))
-    
+
+
+# -------------------------------------
+# Listagem de Conta
+# -------------------------------------
 @conta_bp.route('/listar', methods=['GET', 'POST'])
+@login_required
 def listarConta():
     try:
         # Busca todos os objetos

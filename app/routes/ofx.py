@@ -8,14 +8,11 @@ import io
 import re
 
 
-# -------------------------------------
-# Blueprint para importação de OFX
-# -------------------------------------
 ofx_bp = Blueprint("ofx", __name__, url_prefix="/ofx")
 
 
 # -------------------------
-# Função para limpar e padronizar descrições APENAS DE PIX
+# Função para limpar e padronizar descrições - PIX
 # -------------------------
 def normalize_descricao(desc: str) -> str:
     if not desc:
@@ -23,7 +20,6 @@ def normalize_descricao(desc: str) -> str:
 
     original = desc.lower()
 
-    # Remove SOMENTE descrições padrão que realmente são PIX
     patterns_remove = [
         r"transfer[eê]ncia recebida pelo pix",
         r"transfer[eê]ncia enviada pelo pix",
@@ -42,7 +38,6 @@ def normalize_descricao(desc: str) -> str:
             original = f"Pix {original}".strip()
             return original.title()
 
-    # ❗ Se não for PIX → mantém totalmente original
     return desc.strip().title()
 
 
@@ -64,31 +59,34 @@ def parse_ofx(file):
 
 
 # -------------------------
-# Rota: IMPORTAR OFX
+# Rota para importar OFX
 # -------------------------
 @ofx_bp.route("/importar", methods=["POST"])
 @login_required
 def importar_ofx():
     arquivo = request.files.get("arquivo_ofx")
 
+    # -------------------------------------
+    # Verificações iniciais
+    # -------------------------------------
     if not arquivo:
         flash("Nenhum arquivo selecionado!", "warning")
         return redirect(url_for("transacao.acessarTransacao"))
 
-    # Parse do OFX
     transacoes_ofx = parse_ofx(arquivo)
 
     if not transacoes_ofx:
         flash("Arquivo OFX inválido ou corrompido!", "danger")
         return redirect(url_for("transacao.acessarTransacao"))
 
-    # Conta padrão
     conta = Contas.query.filter_by(usuario_id=current_user.id).first()
     if not conta:
         flash("Cadastre uma conta antes de importar OFX!", "warning")
         return redirect(url_for("transacao.acessarTransacao"))
 
-    # Categoria padrão: "Importado OFX"
+    # -------------------------------------
+    # Processamento das transações
+    # -------------------------------------
     categoria_padrao = Categorias.query.filter_by(
         usuario_id=current_user.id, nome="Importado OFX"
     ).first()
@@ -102,19 +100,16 @@ def importar_ofx():
         db.session.add(categoria_padrao)
         db.session.commit()
 
-    count = 0  # contador de transações importadas
+    count = 0
 
-    # Loop nas transações do arquivo OFX
     for t in transacoes_ofx:
         valor = float(t.amount)
         tipo = "Receita" if valor > 0 else "Despesa"
 
-        # Normalização da descrição (apenas PIX é alterado)
         descricao = normalize_descricao(t.memo or "")
 
         data_transacao = t.date.date()
 
-        # Evitar duplicação
         existe = Transacoes.query.filter_by(
             usuario_id=current_user.id,
             conta_id=conta.id,
@@ -126,7 +121,6 @@ def importar_ofx():
         if existe:
             continue
 
-        # Criando a transação
         nova_transacao = Transacoes(
             usuario_id=current_user.id,
             conta_id=conta.id,

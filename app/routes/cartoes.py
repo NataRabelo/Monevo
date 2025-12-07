@@ -1,18 +1,22 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
 from app.utils import limpar_currency
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app.models import Cartoes
 from app import db
 
 
 cartao_bp = Blueprint('cartao', __name__, url_prefix='/cartao')
 
+
+# -------------------------------------
+# Cadastro de Cartão
+# -------------------------------------
 @cartao_bp.route('/cadastrar', methods=['GET', 'POST'])
+@login_required
 def cadastrarCartao():
     try: 
         usuario = current_user.id
 
-        # Capturar dados do formulário
         nome_cartao             = request.form.get('nome_cartao')
         bandeira                = request.form.get('bandeira')
         limite                  = limpar_currency(request.form.get('limite'))
@@ -20,9 +24,6 @@ def cadastrarCartao():
         dia_vencimento_fatura   = request.form.get('dia_vencimento_fatura')
         conta_id                = request.form.get('conta_cartao')
 
-        # Verificacões
-
-        # Criando o objeto Cartão
         new_cartao = Cartoes(
             usuario_id              = usuario,
             nome_cartao             = nome_cartao,
@@ -33,7 +34,6 @@ def cadastrarCartao():
             conta_id                = int(conta_id)
         )
 
-        # Adiciona ao banco
         db.session.add(new_cartao)
         db.session.commit()
 
@@ -48,11 +48,14 @@ def cadastrarCartao():
         current_app.logger.warning(f'Erro ao cadastrar cartão: {e}')
         return redirect(url_for('conta.acessarConta'))
 
-    
+
+# -------------------------------------
+# Edição de Cartão
+# -------------------------------------
 @cartao_bp.route('/editar', methods=['GET', 'POST'])
+@login_required
 def editarCartao():
     try:
-        # Validar a existencia do cartão
         cartao_id    = request.form.get('cartao_id')
         cartao = Cartoes.query.filter(Cartoes.id == cartao_id).first()
 
@@ -64,14 +67,12 @@ def editarCartao():
             return render_template('cartao/editar')
         
         if request.method == 'POST':
-            # Passando os dados alterados ( or not )
             cartao.nome_cartao              = request.form.get('nome_cartao') or cartao.nome_cartao
             cartao.bandeira                 = request.form.get('bandeira') or cartao.bandeira
             cartao.limite                   = limpar_currency(request.form.get('limite') or cartao.limite)
             cartao.dia_fechamento_fatura    = request.form.get('dia_fechamento_fatura') or cartao.dia_fechamento_cartao
             cartao.dia_vencimento_fatura    = request.form.get('dia_vencimento_fatura') or cartao.dia_vencimento_cartao
 
-            # Passando para o banco
             db.session.commit()
             flash('Cartão atualizado com sucesso')
             return redirect(url_for('conta.acessarConta'))
@@ -81,11 +82,15 @@ def editarCartao():
         flash('Ocorreu algum erro inesperado')
         current_app.logger.warning(f'Erro ao editar o cartao: {e}')
         return redirect(url_for('main.menu'))
-    
+
+
+# -------------------------------------
+# Deleção de Cartão
+# -------------------------------------
 @cartao_bp.route('/deletar/<int:cartao_id>', methods=['GET', 'POST'])
+@login_required
 def deletarCartao(cartao_id):
     try:
-        # Valida a existencia
         cartao = Cartoes.query.filter(Cartoes.id == cartao_id).first()
 
         if not cartao:
@@ -93,7 +98,6 @@ def deletarCartao(cartao_id):
             return redirect(url_for('conta.acessarConta'))
         
         if request.method == 'POST':
-            # Deleta do banco
             db.session.delete(cartao)
             db.session.commit()
             flash('Cartão excluido com sucesso.')
@@ -104,11 +108,15 @@ def deletarCartao(cartao_id):
         flash('Ocorreu algum erro inesperado')
         current_app.logger.warning(f'Erro ao deletar cartao: {e}')
         return redirect(url_for('conta.acessarConta'))
-    
+
+
+# -------------------------------------
+# Listagem de Cartões
+# -------------------------------------
 @cartao_bp.route('/listar', methods=['GET', 'POST'])
+@login_required
 def listarCartao(): 
     try:
-        # Buscar todos os objetos
         cartoes = Cartoes.query.all()
 
         if not cartoes:
@@ -116,7 +124,6 @@ def listarCartao():
             return redirect(url_for('conta.acessarConta'))
         
         if request.method == 'GET':
-            # Retorna a lista
             return render_template('cartao/listar.html', cartoes=cartoes)
 
     except Exception as e:

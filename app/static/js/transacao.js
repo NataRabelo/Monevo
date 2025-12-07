@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       const button = event.relatedTarget;
 
-      const despesa_id   = button.getAttribute("data-receita-id");
+      const despesa_id   = button.getAttribute("data-despesa-id"); // Corrigido de "data-receita-id"
       const conta        = button.getAttribute("data-conta-id");
       const categoria    = button.getAttribute("data-categoria-id");
       const descricao    = button.getAttribute("data-descricao");
@@ -134,7 +134,10 @@ document.addEventListener("DOMContentLoaded", function() {
       const categoriaSelect = document.getElementById("edit-categoria-despesa");
       if (categoriaSelect) categoriaSelect.value = categoria;
 
-      document.getElementById("edit-tipo-transacao-despesa").value = "Despesa";
+      // Note: O campo 'edit-tipo-transacao-despesa' não foi preenchido pelo modal, 
+      // mas mantive a linha abaixo caso seja necessário para outros formulários:
+      // document.getElementById("edit-tipo-transacao-despesa").value = "Despesa"; 
+      
       document.getElementById("edit-data-transacao-despesa").value = data;
       document.getElementById("edit-recorrencia-despesa").value = recorrencia;
 
@@ -160,5 +163,50 @@ document.addEventListener("DOMContentLoaded", function() {
         this.value = value;
     });
   });
+
+  
+  // =================== PERSISTÊNCIA DE ABA (SIMPLIFICADA) ===================
+    const tabs = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    const allActionForms = document.querySelectorAll(
+        'form[action*="/deletar"], form[action*="/editarTransacao"], form[action*="/cadastrarTransacao"]'
+    );
+    const abaAtivaSalva = localStorage.getItem("abaAtiva");
+
+
+    // 1. SALVAR A ABA ATIVA AO CLICAR
+    tabs.forEach(tab => {
+        tab.addEventListener("shown.bs.tab", function (event) {
+            const target = event.target.getAttribute("data-bs-target");
+            localStorage.setItem("abaAtiva", target);
+        });
+    });
+
+    // 2. SALVAR A ABA ATIVA ANTES DE SUBMETER QUALQUER FORMULÁRIO DE AÇÃO
+    //    (Isso garante que o estado correto seja salvo logo antes do redirecionamento)
+    allActionForms.forEach(form => {
+        form.addEventListener('submit', function() {
+            const activeTabButton = document.querySelector('.nav-link.active');
+            if (activeTabButton) {
+                const target = activeTabButton.getAttribute("data-bs-target");
+                localStorage.setItem("abaAtiva", target);
+            }
+        });
+    });
+
+
+    // 3. CARREGAR A ABA SALVA AO INICIAR A PÁGINA
+    if (abaAtivaSalva) {
+        // Seleciona o botão da aba usando o ID do painel salvo (e.g., '#pane-1')
+        const targetTabButton = document.querySelector(`[data-bs-target="${abaAtivaSalva}"]`);
+
+        if (targetTabButton) {
+            // Reabre a aba
+            new bootstrap.Tab(targetTabButton).show();
+        }
+        
+        // 4. LIMPAR O LOCALSTORAGE APÓS A REABERTURA
+        // Isso garante que a próxima visita sem ação comece no padrão (a primeira aba/aba mais recente)
+        localStorage.removeItem("abaAtiva");
+    }
 
 });

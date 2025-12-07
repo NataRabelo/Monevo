@@ -1,141 +1,175 @@
 body {
-  background: #1D2128;
-  color: #FFF;
+ background: #1D2128;
+ color: #FFF;
 }
 
 /* Importação */
 .import-banner {
-  background: #3C90C0;
-  border-left: 4px solid #3C90C0;
+ background: #3C90C0;
+ border-left: 4px solid #3C90C0;
 }
 
 /* ======== CARDS ======== */
 
 .valor-card {
-  border-radius: 14px;
-  text-align: center;
-  padding: 22px;
-  transition: 0.3s ease;
-  border-left: 5px solid;
-  background-color: #2b2f36;
+ border-radius: 14px;
+ text-align: center;
+ transition: 0.3s ease;
+ border-left: 5px solid;
+ background-color: #2b2f36;
 }
 
 .valor-card:hover {
-  transform: scale(1.03);
+ transform: scale(1.03);
 }
 
 .receita-card {
-  background: #7ac99321;
-  border: 1px solid #6DC98B;
-  border-color: #28a745; /* versão mantida */
+ background: #7ac99321;
+ border: 1px solid #6DC98B;
+ border-color: #28a745; /* versão mantida */
 }
 
 .despesa-card {
-  background: #ff757521;
-  border: 1px solid #FF8686;
-  border-color: #dc3545; /* versão mantida */
+ background: #ff757521;
+ border: 1px solid #FF8686;
+ border-color: #dc3545; /* versão mantida */
 }
 
 .label-card {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  color: white;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  color: #ccc; /* versão atual */
+ font-size: 0.9rem;
+ opacity: 0.8;
+ color: white;
+ text-transform: uppercase;
+ color: #ccc; /* versão atual */
 }
 
 .valor-numero {
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  font-size: 2.2rem; /* versão atual */
-  font-weight: 700;
+ font-size: 2rem;
+ font-weight: bold;
+ color: white;
+ font-size: 2rem; /* versão atual */
+ font-weight: 700;
 }
 
 /* ======== TABELAS ======== */
 
 .caixa-table {
-  background-color: #2b2f36;
-  border: 1px solid #3c434d;
-  border-radius: 14px;
+ background-color: #2b2f36;
+ border: 1px solid #3c434d;
+ border-radius: 14px;
 }
 
-/* Cabeçalho Receita */
+/* A borda da tabela e a cor de fundo das células precisam ser redefinidas com !important
+   para evitar a borda branca do Bootstrap. */
+.table-dark {
+    /* Fundo da tabela base (para evitar o fundo branco padrão) */
+  --bs-table-bg: #1D2128; 
+    /* Cor das bordas (agora cinza escuro, como você tinha definido antes) */
+  --bs-table-border-color: #3c434d; 
+    /* Cor de fundo das linhas alternadas (listras) */
+  --bs-table-striped-bg: #212529; 
+}
+
+/* Garante que o conteúdo das células tenha a cor branca */
+.table-dark > :not(caption) > * > * {
+  color: #fff; 
+  background-color: transparent; /* Permite que o fundo da linha (stripe ou hover) apareça */
+}
+
+/* Cabeçalho Receita - Mantido do seu código */
 .thead-receita th {
-  background-color: #1a4f27 !important;
-  color: #fff !important;
-  border-bottom: 2px solid #28a745;
+ background-color: #1a4f27 !important;
+ color: #fff !important;
+ border-bottom: 2px solid #28a745;
 }
 
-/* Cabeçalho Despesa */
+/* Cabeçalho Despesa - Mantido do seu código */
 .thead-despesa th {
-  background-color: #4f1d23 !important;
-  color: #fff !important;
-  border-bottom: 2px solid #dc3545;
+ background-color: #4f1d23 !important;
+ color: #fff !important;
+ border-bottom: 2px solid #dc3545;
 }
 
-/* Hover tabela */
+/* Hover tabela - Mantido do seu código */
 .table-hover > tbody > tr:hover {
-  --bs-table-hover-bg: #3c434d;
-}
-
-.table > :not(caption) > * > * {
-  background-color: #1D2128;
-  color: #fff;
-  border-color: #3c434d;
+ --bs-table-hover-bg: #3c434d;
 }
 
 /* Limita o texto da descrição a 2 linhas e adiciona reticências (ellipsis) */
 .coluna-descricao {
-    /* Define largura máxima para a coluna para que o limite de texto funcione melhor */
-    max-width: 350px; 
-    /* Adiciona padding horizontal para melhor visualização */
-    padding-left: 10px;
-    padding-right: 10px;
+  max-width: 350px; 
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* O código abaixo é referente ao agrupamento antigo, não mais necessário, mas mantido se for útil em outros lugares */
+.caixa-table .table > tbody.table-group-divider > tr > td {
+  background-color: #384251 !important; 
+  border-top: 2px solid #1D2128 !important; 
 }
 
 .limitar-texto {
-    /* Essenciais para limitar e mostrar reticências */
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Propriedade WebKit (Chrome/Safari) */
-    line-clamp: 2; /* Propriedade padrão W3C (adicionada para compatibilidade) */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* Garante que o texto dentro da célula não force a largura */
-    word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
-/* ======== BOTÕES ======== */
+/* ======== ABAS (CUSTOM-TABS) ======== */
+
+.table-color{
+  background-color: #3c434d;
+}
+
+.custom-tabs .nav-link {
+  color: #ffffff;
+  background-color: #2b2f36;
+  border-color: #3c434d;
+}
+
+.custom-tabs .nav-link.active {
+  color: #fff;
+  background-color: #1D2128;
+  border-color: #3c434d;
+  border-bottom-color: #1D2128;
+}
+
+.table-dark thead.thead-dark-custom {
+  color: #fff; 
+}
+
+/* ======== BOTÕES E MODAIS ======== */
 
 .btn-adicionar {
-  background-color: #3C90C0;
-  color: #ffffff;
+ background-color: #3C90C0;
+ color: #ffffff;
 }
 
 .btn-adicionar:hover {
-  background-color: #3C90C0;
+ background-color: #3C90C0;
 }
 
 /* Botão Receita */
 .btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
+ background-color: #28a745;
+ border-color: #28a745;
 }
 
 .btn-success:hover {
-  background-color: #1e7e34;
-  border-color: #1e7e34;
+ background-color: #1e7e34;
+ border-color: #1e7e34;
 }
 
 /* Botão Despesa */
 .btn-danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
+ background-color: #dc3545;
+ border-color: #dc3545;
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
-  border-color: #c82333;
+ background-color: #c82333;
+ border-color: #c82333;
 }

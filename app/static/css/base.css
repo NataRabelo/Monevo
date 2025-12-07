@@ -139,23 +139,52 @@ main {
 }
 
 /* ======== FLASH MESSAGES (se quiser usar depois) ======== */
+#flash-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Mensagens padrão */
+#flash-container {
+    position: fixed;
+    top: 20px; /* distância do topo da tela */
+    left: 50%; /* centraliza horizontalmente */
+    transform: translateX(-50%); /* centraliza de verdade */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center; /* garante alinhamento das mensagens */
+}
+
+/* Estilo das mensagens */
 .flash-message {
-  margin: 1rem 0;
-  padding: 1rem;
-  border-radius: 8px;
-  font-weight: 500;
-  text-align: center;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.flash-success {
-  background-color: #2E7D32;
-  color: #fff;
+/* Efeito de saída */
+.flash-message.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
 }
 
-.flash-error {
-  background-color: #C62828;
-  color: #fff;
-}
+/* Cores por categoria (opcional) */
+.flash-message.success { background: #4BB543; }
+.flash-message.error   { background: #FF4C4C; }
+.flash-message.warning { background: #FFB700; }
+
 
 /* ======== RESPONSIVIDADE ======== */
 @media (max-width: 768px) {
