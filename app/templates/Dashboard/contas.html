@@ -82,7 +82,7 @@
               </div>
 
               <div class="cartao-body">
-                <p class="limite">Limite: {{ cartao.limite | currency }}</p>
+                <p class="limite">Limite atual: {{ cartao.limite_disponivel | currency }}</p>
                 <p>Fechamento: dia {{ cartao.dia_fechamento_fatura }}</p>
                 <p>Vencimento: dia {{ cartao.dia_vencimento_fatura }}</p>
               </div>
@@ -181,7 +181,7 @@
               <option value="Hipercard">Hipercard</option>
             </select>
           <div class="mb-3">
-            <label class="form-label">Limite</label>
+            <label class="form-label">Limite total</label>
             <input type="text" class="form-control currency" id="limite" name="limite">
           </div>
           <div class="mb-3 d-flex gap-3">
@@ -236,7 +236,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Saldo Atual</label>
-            <input type="text" class="form-control currency" id="edit-saldo-inicial" name="saldo_inicial">
+            <input type="text" class="form-control currency" id="edit-saldo-inicial" name="saldo_inicial" readonly>
           </div>
           <div class="mb-3">
             <label class="form-label">Tipo</label>
@@ -283,7 +283,7 @@
               <option value="Hipercard">Hipercard</option>
             </select>
           <div class="mb-3">
-            <label class="form-label">Limite</label>
+            <label class="form-label">Limite Total</label>
             <input type="text" class="form-control currency" id="edit-limite" name="limite">
           </div>
           <div class="mb-3 d-flex gap-3">

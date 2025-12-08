@@ -1,171 +1,244 @@
-document.addEventListener("DOMContentLoaded", function() {
 
-  // ===================== MODAIS ENCADEADOS  =====================
-
-  const modalGerenciar = document.getElementById("modalGerenciarCategorias")
-    ? new bootstrap.Modal("#modalGerenciarCategorias")
-    : null;
-
-  const modalNova = document.getElementById("modalNovaCategoria")
-    ? new bootstrap.Modal("#modalNovaCategoria")
-    : null;
-
-  const modalEditar = document.getElementById("modalEditarCategoria")
-    ? new bootstrap.Modal("#modalEditarCategoria")
-    : null;
-
-  const btnNova = document.querySelector("[data-bs-target='#modalNovaCategoria']");
-  if (btnNova && modalGerenciar && modalNova) {
-    btnNova.addEventListener("click", (e) => {
-      e.preventDefault();
-      modalGerenciar.hide();
-
-      setTimeout(() => modalNova.show(), 300);
-    });
-
-    document.getElementById("modalNovaCategoria")
-      .addEventListener("hidden.bs.modal", () => {
-        modalGerenciar.show();
-      });
-  }
-
-  const btnsEditar = document.querySelectorAll("[data-bs-target='#modalEditarCategoria']");
-  if (btnsEditar.length > 0 && modalGerenciar && modalEditar) {
-    btnsEditar.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        modalGerenciar.hide();
-
-        setTimeout(() => modalEditar.show(), 300);
-      });
-    });
-
-    document.getElementById("modalEditarCategoria")
-      .addEventListener("hidden.bs.modal", () => {
-        modalGerenciar.show();
-      });
-  }
-
-
-  // ===================== Função auxiliar para BRL =====================
-  function formatarParaBRL(valor) {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL"
-    }).format(Number(valor));
-  }
-
-
-
-  // ===================== EDIÇÃO DE CATEGORIA =====================
-  const modalEditarCategoria = document.getElementById("modalEditarCategoria");
-
-  if (modalEditarCategoria) {
-    modalEditarCategoria.addEventListener("show.bs.modal", function(event) {
-      const button = event.relatedTarget;
-      const categoria_id = button.getAttribute("data-categoria-id");
-      const nome = button.getAttribute("data-nome");
-      const tipo = button.getAttribute("data-tipo");
-
-      const form = document.getElementById("formEditarCategoria");
-
-      form.action = `/categoria/editar/${categoria_id}`;
-
-      document.getElementById("edit-categoria-id").value = categoria_id;
-      document.getElementById("edit-categoria-nome").value = nome;
-      document.getElementById("edit-categoria-tipo").value = tipo;
-    });
-  }
-
-
-
-  // ===================== EDIÇÃO DE RECEITA =====================
-  const modalEditarReceita = document.getElementById("modalEditarReceita");
-
-  if (modalEditarReceita) {
-    modalEditarReceita.addEventListener("show.bs.modal", function(event){
-
-      const button = event.relatedTarget;
-
-      const receita_id   = button.getAttribute("data-receita-id");
-      const conta        = button.getAttribute("data-conta-id");
-      const categoria    = button.getAttribute("data-categoria-id");
-      const descricao    = button.getAttribute("data-descricao");
-      const valor        = button.getAttribute("data-valor");
-      const data         = button.getAttribute("data-data-transacao");
-      const recorrencia  = button.getAttribute("data-recorrencia");
-
-      document.getElementById("receita-id").value = receita_id;
-      document.getElementById("edit-descricao-receita").value = descricao;
-      document.getElementById("edit-conta-transacao-receita").value = conta;
-
-      const categoriaSelect = document.getElementById("edit-categoria-receita");
-      if (categoriaSelect) categoriaSelect.value = categoria;
-
-      document.getElementById("edit-data-transacao-receita").value = data;
-      document.getElementById("edit-recorrencia-receita").value = recorrencia;
-
-      document.getElementById("edit-valor-transacao-receita").value = formatarParaBRL(valor);
-    });
-  }
-
-
-
-  // ===================== EDIÇÃO DE DESPESA =====================
-  const modalEditarDespesa = document.getElementById("modalEditarDespesa");
-
-  if (modalEditarDespesa) {
-    modalEditarDespesa.addEventListener("show.bs.modal", function(event){
-
-      const button = event.relatedTarget;
-
-      const despesa_id   = button.getAttribute("data-despesa-id"); // Corrigido de "data-receita-id"
-      const conta        = button.getAttribute("data-conta-id");
-      const categoria    = button.getAttribute("data-categoria-id");
-      const descricao    = button.getAttribute("data-descricao");
-      const valor        = button.getAttribute("data-valor");
-      const data         = button.getAttribute("data-data-transacao");
-      const recorrencia  = button.getAttribute("data-recorrencia");
-
-      document.getElementById("despesa_id").value = despesa_id;
-      document.getElementById("edit-descricao-despesa").value = descricao;
-      document.getElementById("edit-conta-transacao-despesa").value = conta;
-
-      const categoriaSelect = document.getElementById("edit-categoria-despesa");
-      if (categoriaSelect) categoriaSelect.value = categoria;
-
-      // Note: O campo 'edit-tipo-transacao-despesa' não foi preenchido pelo modal, 
-      // mas mantive a linha abaixo caso seja necessário para outros formulários:
-      // document.getElementById("edit-tipo-transacao-despesa").value = "Despesa"; 
-      
-      document.getElementById("edit-data-transacao-despesa").value = data;
-      document.getElementById("edit-recorrencia-despesa").value = recorrencia;
-
-      document.getElementById("edit-valor-transacao-despesa").value = formatarParaBRL(valor);
-    });
-  }
-
-
-
-  // ===================== INPUT DE MOEDA =====================
-  document.querySelectorAll(".currency").forEach(input => {
-    input.addEventListener("input", function() {
-        let value = this.value.replace(/\D/g, "");
-
-        if (value.length > 0) {
-            value = (parseInt(value) / 100).toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL"
-            });
-        } else {
-            value = "";
-        }
-        this.value = value;
-    });
+  // FUNÇÃO PARA ABRIR O OFX 
+  document.getElementById("btnSelecionar").addEventListener("click", () => {
+    document.getElementById("inputArquivo").click();
   });
 
+  // ----------------------------------------------------
+  // Lógica de Recorrência vs. Parcelas (EXISTENTE NO ARQUIVO)
+  // Garante que o usuário não selecione os dois ao mesmo tempo
+  // ----------------------------------------------------
   
-  // =================== PERSISTÊNCIA DE ABA (SIMPLIFICADA) ===================
+  document.addEventListener('DOMContentLoaded', function() {
+      const modalReceita = document.getElementById('modalCadastroReceita');
+      const modalDespesa = document.getElementById('modalCadastroDespesa');
+
+      if (modalReceita) {
+          const parcelasReceita = document.getElementById('parcelas-receita');
+          const recorrenciaReceita = document.getElementById('recorrencia-receita');
+
+          parcelasReceita.addEventListener('change', function() {
+              if (parseInt(this.value) > 1) {
+                  // Se definir parcelas > 1, forçar recorrência para 'Sem recorrencia'
+                  recorrenciaReceita.value = 'Sem recorrencia';
+                  recorrenciaReceita.disabled = true;
+              } else {
+                  recorrenciaReceita.disabled = false;
+              }
+          });
+
+          recorrenciaReceita.addEventListener('change', function() {
+              if (this.value !== 'Sem recorrencia') {
+                  // Se definir recorrência contínua, forçar parcelas para 1
+                  parcelasReceita.value = 1;
+                  parcelasReceita.disabled = true;
+              } else {
+                  parcelasReceita.disabled = false;
+              }
+          });
+      }
+
+      if (modalDespesa) {
+          const parcelasDespesa = document.getElementById('parcelas-despesa');
+          const recorrenciaDespesa = document.getElementById('recorrencia-despesa');
+
+          parcelasDespesa.addEventListener('change', function() {
+              if (parseInt(this.value) > 1) {
+                  // Se definir parcelas > 1, forçar recorrência para 'Sem recorrencia'
+                  recorrenciaDespesa.value = 'Sem recorrencia';
+                  recorrenciaDespesa.disabled = true;
+              } else {
+                  recorrenciaDespesa.disabled = false;
+              }
+          });
+
+          recorrenciaDespesa.addEventListener('change', function() {
+              if (this.value !== 'Sem recorrencia') {
+                  // Se definir recorrência contínua, forçar parcelas para 1
+                  parcelasDespesa.value = 1;
+                  parcelasDespesa.readonly = true;
+              } else {
+                  parcelasDespesa.readonly = false;
+              }
+          });
+      }
+      
+  });
+
+
+  // ----------------------------------------------------
+  // LÓGICA DO JS SOLICITADO (Modais, Edição, Tabs e Moeda)
+  // ----------------------------------------------------
+  document.addEventListener("DOMContentLoaded", function() {
+
+    // ===================== MODAIS ENCADEADOS  =====================
+
+    const modalGerenciar = document.getElementById("modalGerenciarCategorias")
+        ? new bootstrap.Modal("#modalGerenciarCategorias")
+        : null;
+
+    const modalNova = document.getElementById("modalNovaCategoria")
+        ? new bootstrap.Modal("#modalNovaCategoria")
+        : null;
+
+    const modalEditar = document.getElementById("modalEditarCategoria")
+        ? new bootstrap.Modal("#modalEditarCategoria")
+        : null;
+
+    const btnNova = document.querySelector("[data-bs-target='#modalNovaCategoria']");
+    if (btnNova && modalGerenciar && modalNova) {
+        btnNova.addEventListener("click", (e) => {
+            e.preventDefault();
+            modalGerenciar.hide();
+
+            setTimeout(() => modalNova.show(), 300);
+        });
+
+        document.getElementById("modalNovaCategoria")
+            .addEventListener("hidden.bs.modal", () => {
+                modalGerenciar.show();
+            });
+    }
+
+    const btnsEditar = document.querySelectorAll("[data-bs-target='#modalEditarCategoria']");
+    if (btnsEditar.length > 0 && modalGerenciar && modalEditar) {
+        btnsEditar.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                modalGerenciar.hide();
+
+                setTimeout(() => modalEditar.show(), 300);
+            });
+        });
+
+        document.getElementById("modalEditarCategoria")
+            .addEventListener("hidden.bs.modal", () => {
+                modalGerenciar.show();
+            });
+    }
+
+
+    // ===================== Função auxiliar para BRL =====================
+    function formatarParaBRL(valor) {
+        return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        }).format(Number(valor));
+    }
+
+
+
+    // ===================== EDIÇÃO DE CATEGORIA =====================
+    const modalEditarCategoria = document.getElementById("modalEditarCategoria");
+
+    if (modalEditarCategoria) {
+        modalEditarCategoria.addEventListener("show.bs.modal", function(event) {
+            const button = event.relatedTarget;
+            const categoria_id = button.getAttribute("data-categoria-id");
+            const nome = button.getAttribute("data-nome");
+            const tipo = button.getAttribute("data-tipo");
+
+            const form = document.getElementById("formEditarCategoria");
+
+            form.action = `/categoria/editar/${categoria_id}`;
+
+            document.getElementById("edit-categoria-id").value = categoria_id;
+            document.getElementById("edit-categoria-nome").value = nome;
+            document.getElementById("edit-categoria-tipo").value = tipo;
+        });
+    }
+
+
+
+    // ===================== EDIÇÃO DE RECEITA =====================
+    const modalEditarReceita = document.getElementById("modalEditarReceita");
+
+    if (modalEditarReceita) {
+        modalEditarReceita.addEventListener("show.bs.modal", function(event) {
+
+            const button = event.relatedTarget;
+
+            const receita_id = button.getAttribute("data-receita-id");
+            const conta = button.getAttribute("data-conta-id");
+            const categoria = button.getAttribute("data-categoria-id");
+            const descricao = button.getAttribute("data-descricao");
+            const valor = button.getAttribute("data-valor");
+            const data = button.getAttribute("data-data-transacao");
+            const recorrencia = button.getAttribute("data-recorrencia");
+
+            document.getElementById("receita-id").value = receita_id;
+            document.getElementById("edit-descricao-receita").value = descricao;
+            document.getElementById("edit-conta-transacao-receita").value = conta;
+
+            const categoriaSelect = document.getElementById("edit-categoria-receita");
+            if (categoriaSelect) categoriaSelect.value = categoria;
+
+            document.getElementById("edit-data-transacao-receita").value = data;
+            document.getElementById("edit-recorrencia-receita").value = recorrencia;
+
+            document.getElementById("edit-valor-transacao-receita").value = formatarParaBRL(valor);
+        });
+    }
+
+    // ===================== EDIÇÃO DE DESPESA =====================
+    const modalEditarDespesa = document.getElementById("modalEditarDespesa");
+
+    if (modalEditarDespesa) {
+        modalEditarDespesa.addEventListener("show.bs.modal", function(event) {
+
+            const button = event.relatedTarget;
+
+            const despesa_id = button.getAttribute("data-despesa-id");
+            const conta = button.getAttribute("data-conta-id");
+            const categoria = button.getAttribute("data-categoria-id");
+            const cartao = button.getAttribute("data-cartao-id");
+            const descricao = button.getAttribute("data-descricao");
+            const valor = button.getAttribute("data-valor");
+            const data = button.getAttribute("data-data-transacao");
+            const recorrencia = button.getAttribute("data-recorrencia");
+
+            document.getElementById("despesa_id").value = despesa_id;
+            document.getElementById("edit-descricao-despesa").value = descricao;
+            document.getElementById("edit-conta-transacao-despesa").value = conta;
+
+            const categoriaSelect = document.getElementById("edit-categoria-despesa");
+            if (categoriaSelect) categoriaSelect.value = categoria;
+
+            // === NOVO: Selecionar o Cartão de Crédito ===
+            const cartaoSelect = document.getElementById("edit-cartao-despesa");
+            // Se 'cartao' for 'None' (string do Python/Jinja), define como '' para selecionar a opção "Não usar cartão".
+            if (cartaoSelect) {
+                cartaoSelect.value = cartao === 'None' ? '' : cartao;
+            }
+            // ===========================================
+
+            document.getElementById("edit-data-transacao-despesa").value = data;
+            document.getElementById("edit-recorrencia-despesa").value = recorrencia;
+
+            document.getElementById("edit-valor-transacao-despesa").value = formatarParaBRL(valor);
+        });
+    }
+
+
+    // ===================== INPUT DE MOEDA =====================
+    document.querySelectorAll(".currency").forEach(input => {
+        input.addEventListener("input", function() {
+            let value = this.value.replace(/\D/g, "");
+
+            if (value.length > 0) {
+                value = (parseInt(value) / 100).toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
+                });
+            } else {
+                value = "";
+            }
+            this.value = value;
+        });
+    });
+
+
+    // =================== PERSISTÊNCIA DE ABA (SIMPLIFICADA) ===================
     const tabs = document.querySelectorAll('button[data-bs-toggle="tab"]');
     const allActionForms = document.querySelectorAll(
         'form[action*="/deletar"], form[action*="/editarTransacao"], form[action*="/cadastrarTransacao"]'
@@ -175,14 +248,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 1. SALVAR A ABA ATIVA AO CLICAR
     tabs.forEach(tab => {
-        tab.addEventListener("shown.bs.tab", function (event) {
+        tab.addEventListener("shown.bs.tab", function(event) {
             const target = event.target.getAttribute("data-bs-target");
             localStorage.setItem("abaAtiva", target);
         });
     });
 
     // 2. SALVAR A ABA ATIVA ANTES DE SUBMETER QUALQUER FORMULÁRIO DE AÇÃO
-    //    (Isso garante que o estado correto seja salvo logo antes do redirecionamento)
     allActionForms.forEach(form => {
         form.addEventListener('submit', function() {
             const activeTabButton = document.querySelector('.nav-link.active');
@@ -203,10 +275,9 @@ document.addEventListener("DOMContentLoaded", function() {
             // Reabre a aba
             new bootstrap.Tab(targetTabButton).show();
         }
-        
+
         // 4. LIMPAR O LOCALSTORAGE APÓS A REABERTURA
-        // Isso garante que a próxima visita sem ação comece no padrão (a primeira aba/aba mais recente)
         localStorage.removeItem("abaAtiva");
     }
 
-});
+  });

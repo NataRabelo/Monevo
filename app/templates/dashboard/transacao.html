@@ -209,7 +209,9 @@
                                 data-bs-target="#modalEditarDespesa" data-despesa-id="{{ transacao.id }}"
                                 data-conta-id="{{ transacao.conta_id }}"
                                 data-categoria-id="{{ transacao.categoria_id }}"
-                                data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
+                                data-cartao-id="{{ transacao.cartao_id if transacao.cartao_id else 'None' }}"
+                                data-descricao="{{ transacao.descricao }}"
+                                data-valor="{{ transacao.valor }}"
                                 data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
                                 data-recorrencia="{{ transacao.recorrencia }}">
                                 <i class="bi bi-pencil"></i>
@@ -290,9 +292,15 @@
                     <input type="date" class="form-control" name="data_transacao" required>
                   </div>
                 </div>
+                
                 <div class="mb-3">
-                  <label class="form-label">Recorrência</label>
-                  <select class="form-select" name="recorrencia">
+                  <label class="form-label">Número de Parcelas (Se parcelado)</label>
+                  <input type="number" class="form-control" id="parcelas-receita" name="num_parcelas" min="1" value="1" required>
+                  <small>Defina 1 para transação única ou recorrente contínua.</small>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Recorrência (Contínua)</label>
+                  <select class="form-select" id="recorrencia-receita" name="recorrencia">
                     <option value="Sem recorrencia" selected>Sem recorrencia</option>
                     <option value="Diária">Diária</option>
                     <option value="Semanal">Semanal</option>
@@ -339,6 +347,17 @@
                     {% endfor %}
                   </select>
                 </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Cartão de Crédito (Opcional)</label>
+                  <select class="form-select" name="cartao">
+                    <option value="" selected>Não usar cartão (Usar conta)</option>
+                    {% for cartao in cartoes %}
+                    <option value="{{ cartao.id }}">{{ cartao.nome_cartao }} (Disp: {{ cartao.limite_disponivel |
+                      currency }})</option>
+                    {% endfor %}
+                  </select>
+                </div>
                 <div class="mb-3 d-flex gap-3">
                   <div class="flex-fill">
                     <label class="form-label">Conta</label>
@@ -354,9 +373,15 @@
                     <input type="date" class="form-control" name="data_transacao" required>
                   </div>
                 </div>
+                
                 <div class="mb-3">
-                  <label class="form-label">Recorrência</label>
-                  <select class="form-select" name="recorrencia">
+                  <label class="form-label">Número de Parcelas (Se parcelado)</label>
+                  <input type="number" class="form-control" id="parcelas-despesa" name="num_parcelas" min="1" value="1" required>
+                  <small>Defina 1 para transação única ou recorrente contínua.</small>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Recorrência (Contínua)</label>
+                  <select class="form-select" id="recorrencia-despesa" name="recorrencia">
                     <option value="Sem recorrencia" selected>Sem recorrencia</option>
                     <option value="Diária">Diária</option>
                     <option value="Semanal">Semanal</option>
@@ -469,6 +494,17 @@
                     {% if categoria.tipo == 'Despesa' %}
                     <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
                     {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Cartão de Crédito (Opcional)</label>
+                  <select class="form-select" id="edit-cartao-despesa" name="cartao">
+                    <option value="" selected>Não usar cartão (Usar conta)</option>
+                    {% for cartao in cartoes %}
+                    <option value="{{ cartao.id }}">{{ cartao.nome_cartao }} (Disp: {{ cartao.limite_disponivel |
+                      currency }})</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -638,11 +674,4 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // FUNÇÃO PARA ABRIR O OFX 
-  document.getElementById("btnSelecionar").addEventListener("click", () => {
-    document.getElementById("inputArquivo").click();
-  });
-</script>
-<script src="{{ url_for('static', filename='js/transacao.js') }}"></script>
 {% endblock %}

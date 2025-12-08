@@ -58,6 +58,28 @@ class Contas(db.Model):
 
 
 # -----------------------
+# Tabela de Saldo Inicial
+# -----------------------
+class SaldoInicial(db.Model):
+    __tablename__ = 'saldo_inicial'
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    conta_id = db.Column(db.Integer, db.ForeignKey('contas.id'), nullable=False)
+    saldo_inicial = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
+    mes_ano = db.Column(db.Date, nullable=False)
+
+    conta = db.relationship('Contas', backref='saldos_iniciais')
+
+    __table_args__ = (
+        db.UniqueConstraint('conta_id', 'mes_ano', name='_conta_mes_uc'),
+    )
+    
+    def __repr__(self):
+        return f"<SaldoInicial Conta {self.conta_id} - {self.mes_ano}: R${self.saldo_inicial}>"
+
+
+# -----------------------
 # Tabela de Categorias
 # -----------------------
 class Categorias(db.Model):
@@ -69,7 +91,6 @@ class Categorias(db.Model):
     tipo            = db.Column(db.String, nullable=True)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
-    # Relações
     usuario         = db.relationship('Usuarios', back_populates='categorias', lazy=True)
     transacoes      = db.relationship('Transacoes', back_populates='categoria', lazy=True)
 
@@ -88,13 +109,12 @@ class Cartoes(db.Model):
     nome_cartao             = db.Column(db.String(100), nullable=False)
     bandeira                = db.Column(db.String(50))
     limite                  = db.Column(db.Float, nullable=False, default=0.0)
+    limite_disponivel       = db.Column(db.Float, nullable=False, default=0.0)
     dia_fechamento_fatura   = db.Column(db.Integer, nullable=False)
     dia_vencimento_fatura   = db.Column(db.Integer, nullable=False)
-
     conta_id                = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="CASCADE"), nullable=False)
     criado_em               = db.Column(db.DateTime, default=func.current_timestamp())
 
-    # Relações
     usuario                 = db.relationship('Usuarios', back_populates='cartoes', lazy=True)
     conta                   = db.relationship('Contas', back_populates='cartoes', lazy=True)
     transacoes              = db.relationship('Transacoes', back_populates='cartao', lazy=True)
@@ -104,31 +124,49 @@ class Cartoes(db.Model):
 
 
 # -----------------------
-# Tabela de Transações
+# Tabela de Transações (CORRIGIDA)
 # -----------------------
 class Transacoes(db.Model):
     __tablename__ = "transacoes"
 
     id              = db.Column(db.Integer, primary_key=True)
     usuario_id      = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
-    conta_id        = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="SET NULL"), nullable=True)
-    cartao_id       = db.Column(db.Integer, db.ForeignKey("cartoes.id", ondelete="SET NULL"), nullable=True)
+    conta_id        = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="CASCADE"), nullable=True)
+    cartao_id       = db.Column(db.Integer, db.ForeignKey("cartoes.id", ondelete="CASCADE"), nullable=True)
     categoria_id    = db.Column(db.Integer, db.ForeignKey("categorias.id", ondelete="SET NULL"), nullable=True)
-    tipo            = db.Column(db.String, nullable=False)   # 'Receita' ou 'Despesa'
+    tipo            = db.Column(db.String, nullable=False)
     descricao       = db.Column(db.Text)
     valor           = db.Column(db.Float, nullable=False)
     data_transacao  = db.Column(db.Date, nullable=False)
     recorrencia     = db.Column(db.String)
+    parcelas_total  = db.Column(db.Integer, default=1)
+    parcela_atual   = db.Column(db.Integer, default=1)
+    parcelado       = db.Column(db.Boolean, default=False)
     id_original     = db.Column(db.Integer, db.ForeignKey("transacoes.id", ondelete="SET NULL"), nullable=True)
     recorrente      = db.Column(db.Boolean, default=False)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
-    # Relações
-    usuario         = db.relationship('Usuarios', back_populates='transacoes', lazy=True)
-    conta           = db.relationship('Contas', back_populates='transacoes', lazy=True)
-    categoria       = db.relationship('Categorias', back_populates='transacoes', lazy=True)
-    cartao          = db.relationship('Cartoes', back_populates='transacoes', lazy=True)
-    ocorrencias_geradas = db.relationship('Transacoes', backref=db.backref('mestra', remote_side=[id]), foreign_keys=[id_original], lazy='dynamic')
+    # Relações normais
+    usuario  = db.relationship('Usuarios', back_populates='transacoes', lazy=True)
+    conta    = db.relationship('Contas', back_populates='transacoes', lazy=True)
+    categoria = db.relationship('Categorias', back_populates='transacoes', lazy=True)
+    cartao   = db.relationship('Cartoes', back_populates='transacoes', lazy=True)
+
+    # Relação pai-filho (CORREÇÃO)
+    mestra = db.relationship(
+        'Transacoes',
+        remote_side=[id],
+        foreign_keys=[id_original],
+        passive_deletes=True
+    )
+
+    ocorrencias_geradas = db.relationship(
+        'Transacoes',
+        foreign_keys=[id_original],
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+        lazy='dynamic'
+    )
 
     def __repr__(self):
         return f"<Transacao {self.id} {self.tipo} {self.valor}>"

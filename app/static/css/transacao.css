@@ -3,10 +3,24 @@ body {
  color: #FFF;
 }
 
-/* Importação */
+/* ======== BANNERS DE INFORMAÇÃO ======== */
 .import-banner {
  background: #3C90C0;
  border-left: 4px solid #3C90C0;
+}
+
+input[disabled] {
+    background-color: #2b2f36 !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    cursor: not-allowed;
+}
+
+select[disabled] {
+    background-color: #2b2f36 !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    cursor: not-allowed;
 }
 
 /* ======== CARDS ======== */
@@ -26,13 +40,13 @@ body {
 .receita-card {
  background: #7ac99321;
  border: 1px solid #6DC98B;
- border-color: #28a745; /* versão mantida */
+ border-color: #28a745;
 }
 
 .despesa-card {
  background: #ff757521;
  border: 1px solid #FF8686;
- border-color: #dc3545; /* versão mantida */
+ border-color: #dc3545;
 }
 
 .label-card {
@@ -40,14 +54,14 @@ body {
  opacity: 0.8;
  color: white;
  text-transform: uppercase;
- color: #ccc; /* versão atual */
+ color: #ccc;
 }
 
 .valor-numero {
  font-size: 2rem;
  font-weight: bold;
  color: white;
- font-size: 2rem; /* versão atual */
+ font-size: 2rem;
  font-weight: 700;
 }
 
@@ -59,50 +73,39 @@ body {
  border-radius: 14px;
 }
 
-/* A borda da tabela e a cor de fundo das células precisam ser redefinidas com !important
-   para evitar a borda branca do Bootstrap. */
 .table-dark {
-    /* Fundo da tabela base (para evitar o fundo branco padrão) */
   --bs-table-bg: #1D2128; 
-    /* Cor das bordas (agora cinza escuro, como você tinha definido antes) */
   --bs-table-border-color: #3c434d; 
-    /* Cor de fundo das linhas alternadas (listras) */
   --bs-table-striped-bg: #212529; 
 }
 
-/* Garante que o conteúdo das células tenha a cor branca */
 .table-dark > :not(caption) > * > * {
   color: #fff; 
-  background-color: transparent; /* Permite que o fundo da linha (stripe ou hover) apareça */
+  background-color: transparent;
 }
 
-/* Cabeçalho Receita - Mantido do seu código */
 .thead-receita th {
  background-color: #1a4f27 !important;
  color: #fff !important;
  border-bottom: 2px solid #28a745;
 }
 
-/* Cabeçalho Despesa - Mantido do seu código */
 .thead-despesa th {
  background-color: #4f1d23 !important;
  color: #fff !important;
  border-bottom: 2px solid #dc3545;
 }
 
-/* Hover tabela - Mantido do seu código */
 .table-hover > tbody > tr:hover {
  --bs-table-hover-bg: #3c434d;
 }
 
-/* Limita o texto da descrição a 2 linhas e adiciona reticências (ellipsis) */
 .coluna-descricao {
   max-width: 350px; 
   padding-left: 10px;
   padding-right: 10px;
 }
 
-/* O código abaixo é referente ao agrupamento antigo, não mais necessário, mas mantido se for útil em outros lugares */
 .caixa-table .table > tbody.table-group-divider > tr > td {
   background-color: #384251 !important; 
   border-top: 2px solid #1D2128 !important; 
@@ -152,7 +155,6 @@ body {
  background-color: #3C90C0;
 }
 
-/* Botão Receita */
 .btn-success {
  background-color: #28a745;
  border-color: #28a745;
@@ -163,7 +165,6 @@ body {
  border-color: #1e7e34;
 }
 
-/* Botão Despesa */
 .btn-danger {
  background-color: #dc3545;
  border-color: #dc3545;

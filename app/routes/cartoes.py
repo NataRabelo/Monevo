@@ -20,6 +20,7 @@ def cadastrarCartao():
         nome_cartao             = request.form.get('nome_cartao')
         bandeira                = request.form.get('bandeira')
         limite                  = limpar_currency(request.form.get('limite'))
+        limite_disponivel       = limite
         dia_fechamento_fatura   = request.form.get('dia_fechamento_fatura')
         dia_vencimento_fatura   = request.form.get('dia_vencimento_fatura')
         conta_id                = request.form.get('conta_cartao')
@@ -29,6 +30,7 @@ def cadastrarCartao():
             nome_cartao             = nome_cartao,
             bandeira                = bandeira,
             limite                  = limite,
+            limite_disponivel       = limite_disponivel,
             dia_fechamento_fatura   = dia_fechamento_fatura,
             dia_vencimento_fatura   = dia_vencimento_fatura,
             conta_id                = int(conta_id)
@@ -70,6 +72,7 @@ def editarCartao():
             cartao.nome_cartao              = request.form.get('nome_cartao') or cartao.nome_cartao
             cartao.bandeira                 = request.form.get('bandeira') or cartao.bandeira
             cartao.limite                   = limpar_currency(request.form.get('limite') or cartao.limite)
+            cartao.limite_disponivel        = cartao.limite
             cartao.dia_fechamento_fatura    = request.form.get('dia_fechamento_fatura') or cartao.dia_fechamento_cartao
             cartao.dia_vencimento_fatura    = request.form.get('dia_vencimento_fatura') or cartao.dia_vencimento_cartao
 
