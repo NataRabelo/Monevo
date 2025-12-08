@@ -1,17 +1,44 @@
+/* =========================================
+   Variáveis de Cores
+========================================= */
+:root {
+    --color-dark: #1D2128; /* Fundo Principal */
+    --color-accent: #3C90C0; /* Fundo do Formulário e Destaques */
+    --color-light: #ffffff; /* Texto */
+}
+
+/* =========================================
+   BASE (Tela Cheia)
+========================================= */
 body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: var(--color-dark); /* Fundo Escuro */
+    min-height: 100vh; /* Usa min-height para acomodar formulários maiores */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #1D2128;
 }
 
+.main-wrapper-cadastro {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0; /* Padding vertical para formulários grandes */
+}
+
+/* =========================================
+   FORMULÁRIO (Flutuante e Colorido)
+========================================= */
 .formulario-cadastro {
-    background-color: #3C90C0;
-    color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Usando a cor de destaque no fundo do formulário */
+    background-color: var(--color-accent);
+    color: var(--color-light);
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     max-width: 650px;
     width: 90%;
     margin: auto;
@@ -19,63 +46,80 @@ body {
 
 .titulo-formulario {
     text-align: center;
-    margin-bottom: 1.5rem;
-    color: rgb(255, 255, 255);
+    margin-bottom: 2rem;
+    color: var(--color-light);
+    font-weight: 700;
 }
 
+/* -----------------------------------------
+   Inputs e Labels (Estilo Consistente)
+----------------------------------------- */
+.form-label {
+    font-weight: 500;
+    color: var(--color-light);
+}
+
+.input-group-text {
+    /* Fundo escuro para contraste com o formulário azul claro */
+    background-color: var(--color-dark);
+    border: 1px solid var(--color-dark);
+    color: var(--color-light);
+}
+
+.form-control {
+    border: 1px solid var(--color-dark);
+    /* Fundo branco ou muito claro para usabilidade nos campos */
+    background-color: var(--color-light); 
+    color: var(--color-dark);
+}
+
+/* =========================================
+   BOTÕES (Ação Principal)
+========================================= */
 .botao-enviar {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: none;
-    border-radius: 5px;
-    background-color: #1D2128;
-    color: white;
-    font-size: 16px;
+    border-radius: 6px;
+    /* Fundo Escuro para contraste e destaque */
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    margin-bottom: 10px;
     transition: all 0.3s ease;
+    margin-top: 15px;
 }
 
 .botao-enviar:hover {
-    background-color: #2C313A;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
+    background-color: #2C313A; /* Tom mais claro do escuro */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(29, 33, 40, 0.4);
 }
 
-.botao-voltar {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #1D2128;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.botao-voltar:hover {
-    background-color: #1D2128;
-}
-
+/* =========================================
+   LINKS (Voltar)
+========================================= */
 .texto-central {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     text-align: center;
 }
 
 .texto-central a {
-    color: #ffffff;
+    color: var(--color-light);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
 }
 
 .texto-central a:hover {
+    color: #000; /* Cor escura ou um tom de cinza para destaque no fundo azul claro */
     text-decoration: underline;
 }
 
+/* =========================================
+   TÍTULO DO SITE (Removido da versão flutuante)
+========================================= */
 #titulo-site {
-    color: white;
-    text-align: center;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 2rem;
+    display: none;
 }

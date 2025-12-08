@@ -10,7 +10,6 @@ Banco Suportado: PostgreSQL / MySQL
 ==================================================
 """
 
-
 -- ========================================
 -- Tabela de Usuários
 -- ========================================
@@ -37,7 +36,24 @@ CREATE TABLE contas (
     tipo_conta VARCHAR(100) NOT NULL,
     saldo_inicial DECIMAL(15,2) DEFAULT 0,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+-- ========================================
+-- Tabela de Saldo Inicial
+-- ========================================
+CREATE TABLE saldo_inicial (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    conta_id INT NOT NULL,
+    saldo_inicial DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    mes_ano DATE NOT NULL,
+
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (conta_id) REFERENCES contas(id) ON DELETE CASCADE,
+
+    CONSTRAINT conta_mes_un UNIQUE (conta_id, mes_ano)
 );
 
 -- ========================================
@@ -49,6 +65,7 @@ CREATE TABLE categorias (
     nome VARCHAR(255) NOT NULL,
     tipo VARCHAR(100),
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
@@ -61,6 +78,7 @@ CREATE TABLE cartoes (
     nome_cartao VARCHAR(100) NOT NULL,
     bandeira VARCHAR(50),
     limite DECIMAL(15,2) DEFAULT 0,
+    limite_disponivel DECIMAL(15,2) DEFAULT 0,
     dia_fechamento_fatura INT NOT NULL,
     dia_vencimento_fatura INT NOT NULL,
     conta_id INT NOT NULL,
@@ -76,22 +94,30 @@ CREATE TABLE cartoes (
 CREATE TABLE transacoes (
     id SERIAL PRIMARY KEY,
     usuario_id INT NOT NULL,
-
     conta_id INT,
     cartao_id INT,
     categoria_id INT,
 
-    tipo VARCHAR(50) NOT NULL, -- Receita | Despesa
+    tipo VARCHAR(50) NOT NULL,
     descricao TEXT,
     valor DECIMAL(15,2) NOT NULL,
     data_transacao DATE NOT NULL,
     recorrencia VARCHAR(100),
+
+    parcelas_total INT DEFAULT 1,
+    parcela_atual INT DEFAULT 1,
+    parcelado BOOLEAN DEFAULT FALSE,
+
+    id_original INT,
+    recorrente BOOLEAN DEFAULT FALSE,
+
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    FOREIGN KEY (conta_id) REFERENCES contas(id) ON DELETE SET NULL,
-    FOREIGN KEY (cartao_id) REFERENCES cartoes(id) ON DELETE SET NULL,
-    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE SET NULL
+    FOREIGN KEY (conta_id) REFERENCES contas(id) ON DELETE CASCADE,
+    FOREIGN KEY (cartao_id) REFERENCES cartoes(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_original) REFERENCES transacoes(id) ON DELETE SET NULL
 );
 
 -- ========================================

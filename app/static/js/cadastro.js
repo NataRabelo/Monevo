@@ -1,6 +1,13 @@
-// static/js/cadastro.js
+// -------------------------------------------------------------
+// Responsável por: validação e formatação automática do CPF no
+// formulário de cadastro, incluindo feedback visual, máscara
+// dinâmica e bloqueio de envio se inválido.
+// -------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function () {
-  // Seletores (ajustados para serem específicos)
+
+  // -----------------------------------------------------------
+  // Seleção de elementos essenciais (formulário e campo CPF)
+  // -----------------------------------------------------------
   const form = document.querySelector('form.formulario-cadastro') || document.querySelector('form');
   const campoCpf = document.getElementById('campo-cpf');
 
@@ -9,23 +16,27 @@ document.addEventListener('DOMContentLoaded', function () {
     return;
   }
 
-  // Função de validação do CPF (aceita com ou sem máscara)
+  // -----------------------------------------------------------
+  // Validação de CPF (aceita com ou sem máscara)
+  // Verifica tamanho, repetições e dígitos verificadores
+  // -----------------------------------------------------------
   function validarCPF(cpf) {
     if (!cpf) return false;
+
     const cpfLimpo = cpf.replace(/\D/g, '');
     if (cpfLimpo.length !== 11) return false;
     if (/^(\d)\1{10}$/.test(cpfLimpo)) return false;
 
     const nums = cpfLimpo.split('').map(d => parseInt(d, 10));
 
-    // Primeiro dígito
+    // Primeiro dígito verificador
     let soma = 0;
     for (let i = 0; i < 9; i++) soma += nums[i] * (10 - i);
     let resto = soma % 11;
     let dig1 = resto < 2 ? 0 : 11 - resto;
     if (nums[9] !== dig1) return false;
 
-    // Segundo dígito
+    // Segundo dígito verificador
     soma = 0;
     for (let i = 0; i < 10; i++) soma += nums[i] * (11 - i);
     resto = soma % 11;
@@ -35,7 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
     return true;
   }
 
-  // Cria/obtém elemento de erro
+  // -----------------------------------------------------------
+  // Cria ou obtém o elemento que exibirá mensagens de erro
+  // (posicionado logo abaixo do campo CPF)
+  // -----------------------------------------------------------
   function getErroElem() {
     let aviso = campoCpf.parentElement.querySelector('#erro-cpf');
     if (!aviso) {
@@ -45,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
       aviso.style.fontSize = '0.9rem';
       aviso.style.marginTop = '4px';
       aviso.style.fontWeight = '500';
-      // adiciona depois do input-group (mantém layout do bootstrap)
       campoCpf.parentElement.appendChild(aviso);
     }
     return aviso;
@@ -56,37 +69,51 @@ document.addEventListener('DOMContentLoaded', function () {
     aviso.textContent = mensagem || '';
   }
 
-  // Formatação automática do CPF enquanto digita (opcional, melhora UX)
-  campoCpf.addEventListener('input', function (e) {
-    const apenasDigitos = this.value.replace(/\D/g, '').slice(0, 11); // limita a 11 dígitos
+  // -----------------------------------------------------------
+  // Máscara dinâmica de CPF conforme o usuário digita
+  // Inclui limpeza, limite de caracteres e formatação
+  // -----------------------------------------------------------
+  campoCpf.addEventListener('input', function () {
+    const apenasDigitos = this.value.replace(/\D/g, '').slice(0, 11);
     let formatted = apenasDigitos;
+
     if (apenasDigitos.length > 9) {
       formatted = apenasDigitos.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-    } else if (apenasDigitos.length > 6) {
+    } 
+    else if (apenasDigitos.length > 6) {
       formatted = apenasDigitos.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-    } else if (apenasDigitos.length > 3) {
+    } 
+    else if (apenasDigitos.length > 3) {
       formatted = apenasDigitos.replace(/(\d{3})(\d{1,3})/, '$1.$2');
     }
-    // preserva cursor simples: substitui valor formatado
+
     this.value = formatted;
-    // limpa mensagem enquanto digita
-    if (formatted.length < 14) mostrarErro(''); // 14 quando com máscara completa
+
+    if (formatted.length < 14) mostrarErro('');
   });
 
-  // Valida ao perder o foco (blur)
+  // -----------------------------------------------------------
+  // Validação ao perder o foco (blur)
+  // Mostra mensagem apenas quando o CPF está completo e inválido
+  // -----------------------------------------------------------
   campoCpf.addEventListener('blur', function () {
     const value = this.value.trim();
+
     if (value === '') {
       mostrarErro('');
       return;
     }
+
     if (!validarCPF(value)) mostrarErro('CPF inválido ❌');
     else mostrarErro('');
   });
 
-  // Impede envio do form se CPF inválido
+  // -----------------------------------------------------------
+  // Impede envio caso o CPF seja inválido
+  // -----------------------------------------------------------
   form.addEventListener('submit', function (e) {
     const cpf = campoCpf.value.trim();
+
     if (!validarCPF(cpf)) {
       e.preventDefault();
       mostrarErro('CPF inválido. Corrija antes de enviar ❌');
@@ -95,8 +122,4 @@ document.addEventListener('DOMContentLoaded', function () {
       mostrarErro('');
     }
   });
-
-  // === Ajuste sugerido no HTML ===
-  // Garanta que no seu HTML o campo CPF tenha maxlength="14" (máscara) ou remova o maxlength:
-  // <input ... id="campo-cpf" maxlength="14" placeholder="000.000.000-00" ...>
 });

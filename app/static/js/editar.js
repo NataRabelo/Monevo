@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   /* =============================
-     1. Flash Messages (fade out)
+     1. Flash Messages
   ============================= */
   let flashMessages = document.querySelectorAll('.flash-message');
   if (flashMessages.length > 0) {

@@ -1,6 +1,8 @@
-/* ===== CARTÕES DE ESTATÍSTICAS (Dashboard Style) ===== */
+/* ==========================================
+   Cartões de Estatísticas (Dashboard)
+========================================== */
 .card-stat {
-    background-color: #232832; /* Fundo cinza escuro para destaque */
+    background-color: #232832;
     border: 1px solid #3c434d;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -22,20 +24,15 @@
     font-size: 0.85rem;
 }
 
-/* Ícones coloridos para os cards */
-.icon-receita {
-    color: #4CAF50; /* Verde vibrante */
-}
+/* Ícones coloridos */
+.icon-receita { color: #4CAF50; }
+.icon-despesa { color: #FF5252; }
+.icon-diferenca { color: #3C90C0; }
 
-.icon-despesa {
-    color: #FF5252; /* Vermelho vibrante */
-}
 
-.icon-diferenca {
-    color: #3C90C0; /* Azul principal */
-}
-
-/* ===== BOTÕES PRINCIPAIS (Menu Tiles) ===== */
+/* ==========================================
+   Botões Principais (Menu Tiles)
+========================================== */
 .menu-tile {
     display: flex;
     flex-direction: column;
@@ -53,33 +50,35 @@
 .menu-tile:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    color: white; /* Garante que a cor do texto permaneça branca no hover */
+    color: white;
 }
 
 .menu-tile h4 {
     font-weight: 600;
 }
 
-/* Cores dos Tiles */
+/* Cores dos tiles */
 .tile-azul {
-    background: linear-gradient(45deg, #3C90C0, #2a698a); /* Gradiente no Azul */
+    background: linear-gradient(45deg, #3C90C0, #2a698a);
 }
 
 .tile-vermelho {
-    background: linear-gradient(45deg, #C62828, #9a2020); /* Gradiente no Vermelho */
+    background: linear-gradient(45deg, #C62828, #9a2020);
 }
 
 .tile-verde {
-    background: linear-gradient(45deg, #306733, #244d27); /* Gradiente no Verde */
+    background: linear-gradient(45deg, #306733, #244d27);
 }
 
-/* Ajustes de cores dos ícones para contraste */
+/* Ícones */
 .menu-tile i {
-    color: white; /* Ícones brancos */
+    color: white;
 }
 
 
-/* ======= ÁREA EDUCACIONAL (Ajustes de Limpeza) ======= */
+/* ==========================================
+   Área Educacional
+========================================== */
 .titulo-educacional {
     font-weight: 700;
     letter-spacing: 1px;
@@ -87,7 +86,6 @@
     color: #ffffff;
     padding-bottom: 6px;
     position: relative;
-    /* Sublinhado mais moderno */
 }
 
 .titulo-educacional::after {
@@ -96,9 +94,9 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px; /* Largura menor para um visual mais limpo */
+    width: 80px;
     height: 3px;
-    background-color: #3C90C0; /* Azul principal */
+    background-color: #3C90C0;
     border-radius: 2px;
 }
 
@@ -107,17 +105,16 @@
     border: 1px solid #3c434d;
     border-radius: 12px;
     overflow: hidden;
-    background-color: #2b2f36; /* Cinza ligeiramente mais claro que o fundo */
+    background-color: #2b2f36;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Cabeçalhos dos cartões */
+/* Cabeçalhos */
 .card-header-custom {
     font-weight: 600;
     font-size: 1.1rem;
     padding: 12px 16px;
     color: white;
-    /* Adicionando um pequeno gradiente sutil para profundidade */
 }
 
 .header-video {
@@ -137,7 +134,7 @@
 /* Lista de notícias */
 .lista-noticias .list-group-item {
     background-color: transparent;
-    border-top: 1px solid #3c434d; /* Separadores mais visíveis */
+    border-top: 1px solid #3c434d;
     padding: 12px 0;
     font-size: 0.95rem;
 }
@@ -148,7 +145,7 @@
 
 .lista-noticias a {
     text-decoration: none;
-    color: #4FC3F7; /* Usando o azul mais claro */
+    color: #4FC3F7;
     transition: color 0.2s ease;
 }
 

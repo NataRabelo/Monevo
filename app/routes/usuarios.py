@@ -28,11 +28,11 @@ def cadastroUsuario():
             validar_cpf     = Usuarios.query.filter_by(cpf=cpf).first()
             
             if validar_email:
-                flash('Email já associado a uma conta', 'warning')
+                flash('Email já associado a uma conta', 'error')
                 current_app.logger.info(f'Email já associado a uma conta: {email}')
                 return redirect(url_for('auth.login'))
             if validar_cpf :
-                flash('CPF já associado a uma conta', 'warning')
+                flash('CPF já associado a uma conta', 'error')
                 current_app.logger.info('CPF já associado a uma conta')
                 return redirect(url_for('auth.login'))
             else:
@@ -55,7 +55,7 @@ def cadastroUsuario():
 
         except Exception as e:
             db.session.rollback()
-            flash('Ocorreu algum erro inesperado')
+            flash('Ocorreu algum erro inesperado', 'error')
             current_app.logger.warning(f'Erro ao cadastrar usuário: {e}')
             return redirect(url_for('main.menu'))
 
@@ -72,7 +72,7 @@ def editarUsuario():
         usuario = Usuarios.query.filter(Usuarios.id == user_id).first()
 
         if not usuario:
-            flash('Usuário não encontrado.')
+            flash('Usuário não encontrado.', 'error')
             return redirect(url_for('main.menu'))
 
         if request.method == "GET":
@@ -90,12 +90,12 @@ def editarUsuario():
                 usuario.senha   = bcrypt.generate_password_hash(senha).decode('utf-8')
 
             db.session.commit()
-            flash('Usuário editado com sucesso!')
+            flash('Usuário editado com sucesso!', 'success')
             return redirect(url_for('main.menu'))
 
     except Exception as e:
         db.session.rollback()
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao editar usuário: {e}')
         return redirect(url_for('main.menu'))
 
@@ -113,7 +113,7 @@ def deletarUsuario():
         usuario = Usuarios.query.filter(Usuarios.id == user_id).first()
 
         if not usuario:
-            flash('Usuário não encontrado')
+            flash('Usuário não encontrado', 'error')
             return redirect(url_for('main.menu'))
         
         if request.method == "GET":
@@ -123,12 +123,12 @@ def deletarUsuario():
             logout_user()
             db.session.delete(usuario)
             db.session.commit()
-            flash('Sua conta foi excluída com sucesso.')
+            flash('Sua conta foi excluída com sucesso.', 'success')
             return redirect(url_for('auth.login'))
 
     except Exception as e:
         db.session.rollback()
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao deletar usuario: {e}')
         return redirect(url_for('main.menu'))
 
@@ -144,13 +144,13 @@ def listarUsuario():
         usuarios = Usuarios.query.all()
 
         if not usuarios:
-            flash('Nenhum usuário cadastrado no sistema')
+            flash('Nenhum usuário cadastrado no sistema', 'error')
             return redirect(url_for('usuario.cadastrar'))
         
         if request.method == "GET":
             render_template('usuario/listar.html', usuarios = usuarios)
         
     except Exception as e:
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'erro ao listar usuários: {e}')
         return redirect(url_for('main.menu'))

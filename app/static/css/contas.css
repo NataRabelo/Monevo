@@ -1,11 +1,14 @@
+/* -------------------------
+   Base
+------------------------- */
 body {
   background-color: #1D2128;
   color: #ffffff;
 }
 
 h3 {
-    color: white;
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+  color: white;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
 }
 
 .card {
@@ -15,6 +18,9 @@ h3 {
   padding: 24px;
 }
 
+/* -------------------------
+   Abas (Tabs)
+------------------------- */
 .nav-tabs {
   border-bottom: 1px solid #3c434d;
 }
@@ -31,7 +37,9 @@ h3 {
   border-radius: 8px 8px 0 0;
 }
 
-/* ==== CARDS DE CONTA ==== */
+/* -------------------------
+   Cards de Conta
+------------------------- */
 .conta-card {
   background-color: #1f232a;
   border-radius: 12px;
@@ -80,7 +88,9 @@ h3 {
   opacity: 0.8;
 }
 
-/* ==== CARDS DE CARTÃO ==== */
+/* -------------------------
+   Cards de Cartão
+------------------------- */
 .cartao-card {
   background: linear-gradient(145deg, #2b2f36, #24282f);
   border-radius: 16px;
@@ -102,7 +112,7 @@ h3 {
   margin-bottom: 8px;
 }
 
-.nome-cartao{
+.nome-cartao {
   color: white;
   font-weight: 600;
 }
@@ -151,5 +161,3 @@ h3 {
   text-align: center;
   opacity: 0.8;
 }
-
-

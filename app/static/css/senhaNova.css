@@ -1,74 +1,130 @@
+/* =========================================
+   Variáveis de Cores
+========================================= */
+:root {
+    --color-dark: #1D2128; /* Fundo do Formulário e Botão Principal */
+    --color-accent: #3C90C0; /* Fundo da Tela */
+    --color-light: #ffffff; /* Texto */
+}
+
+/* -------------------------
+   Layout da Página (Tela Cheia)
+------------------------- */
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #1D2128;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: var(--color-accent); /* Azul Claro como fundo principal */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: var(--color-light);
 }
 
+.main-wrapper-senha {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* -------------------------
+   Container do Formulário
+------------------------- */
 .container-senha {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 30px;
-  background: #3C90C0;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  color: #ffffff;
+    max-width: 420px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 3rem;
+    /* Fundo Escuro para contraste */
+    background-color: var(--color-dark);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    color: var(--color-light);
+    text-align: center;
 }
 
-.container-senha h4,
-.container-senha label {
-  color: #ffffff;
+.titulo-formulario {
+    font-size: 1.8rem;
+    color: var(--color-accent); /* Azul Claro para o título */
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.instrucao-texto {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+}
+
+/* -------------------------
+   Campos do Formulário
+------------------------- */
+.form-label {
+    color: var(--color-light);
+    text-align: left;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.input-group-text {
+    background-color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    color: var(--color-light);
 }
 
 .form-control {
-  border-radius: 8px;
+    border: 1px solid var(--color-accent);
+    background-color: #2C313A; /* Levemente mais claro que o fundo do formulário */
+    color: var(--color-light);
 }
 
+/* -------------------------
+   Botões (Ação Principal)
+------------------------- */
 .botao {
-  border-radius: 8px;
-  padding: 10px;
-  font-weight: 500;
-  background-color: #1D2128;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-weight: normal;
-  transition: all 0.3s ease;
+    border-radius: 6px;
+    padding: 12px;
+    font-weight: 600;
+    /* Fundo Azul Claro para destaque no fundo escuro */
+    background-color: var(--color-accent);
+    color: var(--color-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: none;
 }
 
-button:hover {
-  background-color: #2C313A;
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
+.botao:hover {
+    background-color: #5AA1D1; /* Um tom ligeiramente mais claro do azul */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(60, 144, 192, 0.4);
 }
 
+/* -------------------------
+   Links e Textos Secundários
+------------------------- */
 .texto-central a {
-  display: block;
-  margin-top: 15px;
-  color: #ffffff;
-  text-decoration: underline;
-  text-align: center;
-
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
 }
 
+.texto-central a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+/* -------------------------
+   Título Superior (Removido para tela cheia)
+------------------------- */
 #titulo-principal {
-  color: white;
-  text-align: center;
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-}
-
-.botao:hover,
-.botao:focus,
-.botao:active {
-  background-color: #1D2128 !important;
-  border-color: #1D2128 !important;
-  color: #ffffff !important;
+    display: none;
 }

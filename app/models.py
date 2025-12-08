@@ -1,6 +1,8 @@
-from flask_login import UserMixin
-from app.extensions import db
+
 from sqlalchemy import func
+from app.extensions import db
+from flask_login import UserMixin
+
 
 # -----------------------
 # Tabela de Usuários
@@ -18,7 +20,7 @@ class Usuarios(UserMixin, db.Model):
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
     atualizado_em   = db.Column(db.DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    # Relações
+    # Relacionamentos
     contas          = db.relationship('Contas', back_populates='usuario', cascade="all, delete-orphan", lazy=True)
     cartoes         = db.relationship('Cartoes', back_populates='usuario', cascade="all, delete-orphan", lazy=True)
     categorias      = db.relationship('Categorias', back_populates='usuario', cascade="all, delete-orphan", lazy=True)
@@ -48,10 +50,11 @@ class Contas(db.Model):
     saldo_inicial   = db.Column(db.Float, default=0)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
-    # Relações
+    # Relacionamentos
     usuario         = db.relationship('Usuarios', back_populates='contas', lazy=True)
     cartoes         = db.relationship('Cartoes', back_populates='conta', cascade="all, delete-orphan", lazy=True)
     transacoes      = db.relationship('Transacoes', back_populates='conta', lazy=True)
+    saldos_iniciais = db.relationship('SaldoInicial', back_populates='conta', cascade="all, delete-orphan", passive_deletes=True, lazy=True )
 
     def __repr__(self):
         return f"<Conta {self.id} {self.nome_conta}>"
@@ -64,19 +67,20 @@ class SaldoInicial(db.Model):
     __tablename__ = 'saldo_inicial'
 
     id = db.Column(db.Integer, primary_key=True)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
-    conta_id = db.Column(db.Integer, db.ForeignKey('contas.id'), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id', ondelete="CASCADE"), nullable=False)
+    conta_id = db.Column(db.Integer, db.ForeignKey('contas.id', ondelete="CASCADE"), nullable=False)
     saldo_inicial = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
     mes_ano = db.Column(db.Date, nullable=False)
 
-    conta = db.relationship('Contas', backref='saldos_iniciais')
+    conta = db.relationship(
+        'Contas',
+        back_populates='saldos_iniciais',
+        passive_deletes=True
+    )
 
     __table_args__ = (
         db.UniqueConstraint('conta_id', 'mes_ano', name='_conta_mes_uc'),
     )
-    
-    def __repr__(self):
-        return f"<SaldoInicial Conta {self.conta_id} - {self.mes_ano}: R${self.saldo_inicial}>"
 
 
 # -----------------------
@@ -91,6 +95,7 @@ class Categorias(db.Model):
     tipo            = db.Column(db.String, nullable=True)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
+    # Relacionamentos
     usuario         = db.relationship('Usuarios', back_populates='categorias', lazy=True)
     transacoes      = db.relationship('Transacoes', back_populates='categoria', lazy=True)
 
@@ -115,6 +120,7 @@ class Cartoes(db.Model):
     conta_id                = db.Column(db.Integer, db.ForeignKey("contas.id", ondelete="CASCADE"), nullable=False)
     criado_em               = db.Column(db.DateTime, default=func.current_timestamp())
 
+    # Relacionamentos
     usuario                 = db.relationship('Usuarios', back_populates='cartoes', lazy=True)
     conta                   = db.relationship('Contas', back_populates='cartoes', lazy=True)
     transacoes              = db.relationship('Transacoes', back_populates='cartao', lazy=True)
@@ -146,13 +152,13 @@ class Transacoes(db.Model):
     recorrente      = db.Column(db.Boolean, default=False)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
-    # Relações normais
+    # Relacionamentos
     usuario  = db.relationship('Usuarios', back_populates='transacoes', lazy=True)
     conta    = db.relationship('Contas', back_populates='transacoes', lazy=True)
     categoria = db.relationship('Categorias', back_populates='transacoes', lazy=True)
     cartao   = db.relationship('Cartoes', back_populates='transacoes', lazy=True)
 
-    # Relação pai-filho (CORREÇÃO)
+    # Relação pai-filho
     mestra = db.relationship(
         'Transacoes',
         remote_side=[id],
@@ -184,6 +190,7 @@ class Extratos(db.Model):
     importado_em    = db.Column(db.DateTime, default=func.current_timestamp())
     status          = db.Column(db.String)
 
+    # Relacionamentos
     usuario         = db.relationship('Usuarios', back_populates='extratos', lazy=True)
 
     def __repr__(self):
@@ -202,6 +209,7 @@ class Projecoes(db.Model):
     data_final      = db.Column(db.DateTime, nullable=False)
     criado_em       = db.Column(db.DateTime, default=func.current_timestamp())
 
+    # Relacionamentos
     usuario         = db.relationship('Usuarios', back_populates='projecoes', lazy=True)
 
     def __repr__(self):
@@ -218,6 +226,7 @@ class KeyValidation(db.Model):
     usuario_id      = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     key_value       = db.Column(db.String(100), nullable=False)
 
+    # Relacionamentos
     usuario         = db.relationship('Usuarios', back_populates='key_validations', lazy=True)
 
     def __repr__(self):

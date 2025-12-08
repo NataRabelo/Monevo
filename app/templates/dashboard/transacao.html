@@ -62,12 +62,12 @@
 
 
         <ul class="nav nav-tabs mb-3 custom-tabs" id="transacaoTabs" role="tablist">
-          {% for chave_mes_ano, grupo in transacoes_agrupadas.items() %}
+          {% for chave_mes_ano, grupo in transacoes_agrupadas.items() | reverse %}
           <li class="nav-item" role="presentation">
-            <button class="nav-link {% if loop.index0 == 0 %}active{% endif %} text-light" id="tab-{{ loop.index0 }}"
-              data-bs-toggle="tab" data-bs-target="#pane-{{ loop.index0 }}" type="button" role="tab"
-              aria-controls="pane-{{ loop.index0 }}"
-              aria-selected="{% if loop.index0 == 0 %}true{% else %}false{% endif %}">
+            <button class="nav-link {% if loop.first %}active{% endif %} text-light" id="tab-{{ loop.revindex0 }}"
+              data-bs-toggle="tab" data-bs-target="#pane-{{ loop.revindex0 }}" type="button" role="tab"
+              aria-controls="pane-{{ loop.revindex0 }}"
+              aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
               <i class="bi bi-calendar-check me-1"></i> {{ grupo.nome_mes }}
             </button>
           </li>
@@ -75,9 +75,9 @@
         </ul>
 
         <div class="tab-content" id="transacaoTabContent">
-          {% for chave_mes_ano, grupo in transacoes_agrupadas.items() %}
-          <div class="tab-pane fade {% if loop.index0 == 0 %}show active{% endif %}" id="pane-{{ loop.index0 }}"
-            role="tabpanel" aria-labelledby="tab-{{ loop.index0 }}" tabindex="0">
+          {% for chave_mes_ano, grupo in transacoes_agrupadas.items() | reverse %}
+          <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="pane-{{ loop.revindex0 }}"
+            role="tabpanel" aria-labelledby="tab-{{ loop.revindex0 }}" tabindex="0">
 
             <div class="row mb-4">
               <div class="col-md-6 mb-3">
@@ -210,8 +210,7 @@
                                 data-conta-id="{{ transacao.conta_id }}"
                                 data-categoria-id="{{ transacao.categoria_id }}"
                                 data-cartao-id="{{ transacao.cartao_id if transacao.cartao_id else 'None' }}"
-                                data-descricao="{{ transacao.descricao }}"
-                                data-valor="{{ transacao.valor }}"
+                                data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
                                 data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
                                 data-recorrencia="{{ transacao.recorrencia }}">
                                 <i class="bi bi-pencil"></i>
@@ -292,10 +291,11 @@
                     <input type="date" class="form-control" name="data_transacao" required>
                   </div>
                 </div>
-                
+
                 <div class="mb-3">
                   <label class="form-label">Número de Parcelas (Se parcelado)</label>
-                  <input type="number" class="form-control" id="parcelas-receita" name="num_parcelas" min="1" value="1" required>
+                  <input type="number" class="form-control" id="parcelas-receita" name="num_parcelas" min="1" value="1"
+                    required>
                   <small>Defina 1 para transação única ou recorrente contínua.</small>
                 </div>
                 <div class="mb-3">
@@ -373,10 +373,11 @@
                     <input type="date" class="form-control" name="data_transacao" required>
                   </div>
                 </div>
-                
+
                 <div class="mb-3">
                   <label class="form-label">Número de Parcelas (Se parcelado)</label>
-                  <input type="number" class="form-control" id="parcelas-despesa" name="num_parcelas" min="1" value="1" required>
+                  <input type="number" class="form-control" id="parcelas-despesa" name="num_parcelas" min="1" value="1"
+                    required>
                   <small>Defina 1 para transação única ou recorrente contínua.</small>
                 </div>
                 <div class="mb-3">
@@ -584,8 +585,7 @@
                           </button>
                           <form method="POST"
                             action="{{ url_for('categoria.deletarCategoria', categoria_id=categoria.id) }}">
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Categoria"
-                              onclick="return confirm('Tem certeza que deseja excluir a categoria {{ categoria.nome }}? Esta ação não pode ser desfeita e pode afetar transações existentes.')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Categoria">
                               <i class="bi bi-trash"></i>
                             </button>
                           </form>
@@ -674,4 +674,73 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // FUNÇÃO PARA ABRIR O OFX 
+  document.getElementById("btnSelecionar").addEventListener("click", () => {
+    document.getElementById("inputArquivo").click();
+  });
+
+  // ----------------------------------------------------
+  // NOVO JAVASCRIPT: Lógica de Recorrência vs. Parcelas
+  // Garante que o usuário não selecione os dois ao mesmo tempo
+  // ----------------------------------------------------
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const modalReceita = document.getElementById('modalCadastroReceita');
+    const modalDespesa = document.getElementById('modalCadastroDespesa');
+
+    if (modalReceita) {
+      const parcelasReceita = document.getElementById('parcelas-receita');
+      const recorrenciaReceita = document.getElementById('recorrencia-receita');
+
+      parcelasReceita.addEventListener('change', function () {
+        if (parseInt(this.value) > 1) {
+          // Se definir parcelas > 1, forçar recorrência para 'Sem recorrencia'
+          recorrenciaReceita.value = 'Sem recorrencia';
+          recorrenciaReceita.disabled = true;
+        } else {
+          recorrenciaReceita.disabled = false;
+        }
+      });
+
+      recorrenciaReceita.addEventListener('change', function () {
+        if (this.value !== 'Sem recorrencia') {
+          // Se definir recorrência contínua, forçar parcelas para 1
+          parcelasReceita.value = 1;
+          parcelasReceita.disabled = true;
+        } else {
+          parcelasReceita.disabled = false;
+        }
+      });
+    }
+
+    if (modalDespesa) {
+      const parcelasDespesa = document.getElementById('parcelas-despesa');
+      const recorrenciaDespesa = document.getElementById('recorrencia-despesa');
+
+      parcelasDespesa.addEventListener('change', function () {
+        if (parseInt(this.value) > 1) {
+          // Se definir parcelas > 1, forçar recorrência para 'Sem recorrencia'
+          recorrenciaDespesa.value = 'Sem recorrencia';
+          recorrenciaDespesa.disabled = true;
+        } else {
+          recorrenciaDespesa.disabled = false;
+        }
+      });
+
+      recorrenciaDespesa.addEventListener('change', function () {
+        if (this.value !== 'Sem recorrencia') {
+          // Se definir recorrência contínua, forçar parcelas para 1
+          parcelasDespesa.value = 1;
+          parcelasDespesa.readonly = true;
+        } else {
+          parcelasDespesa.readonly = false;
+        }
+      });
+    }
+
+  });
+
+</script>
+<script src="{{ url_for('static', filename='js/transacao.js') }}"></script>
 {% endblock %}

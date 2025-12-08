@@ -1,24 +1,25 @@
-/* ======== BASE ======== */
+/* =========================================
+   BASE
+========================================= */
 body {
-  background-color: #1D2128;
-  color: #FFFFFF;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1D2128;
+    color: #FFFFFF;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .texto-central {
-  text-align: center;
+    text-align: center;
 }
 
-/* ======== NAVBAR Rework - Implementação Final ======== */
-
-/* Fundo da Navbar: Cinza escuro com sombra */
+/* =========================================
+   NAVBAR
+========================================= */
 .custom-navbar {
-    background-color: #232832; /* Um cinza escuro para melhor contraste */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra sutil para profundidade */
+    background-color: #232832;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     padding: 0.75rem 0;
 }
 
-/* Marca/Logo */
 .custom-navbar .navbar-brand {
     color: #ffffff !important;
     font-size: 1.5rem;
@@ -28,170 +29,172 @@ body {
 }
 
 .custom-navbar .navbar-brand:hover {
-    color: #3C90C0 !important; /* Destaque azul no hover */
+    color: #3C90C0 !important;
 }
 
 .custom-navbar .logo-icon {
-    color: #3C90C0; /* Icone da logo em azul */
+    color: #3C90C0;
 }
 
-/* Links de Navegação (Menu Links) */
 .custom-navbar .menu-link {
     color: #cccccc !important;
     font-weight: 500;
-    padding: 8px 12px !important; /* Padding menor */
+    padding: 8px 12px !important;
     border-radius: 6px;
     transition: all 0.3s ease;
 }
 
-/* Hover nos links */
 .custom-navbar .menu-link:hover {
     color: #ffffff !important;
-    background-color: #3c434d; /* Fundo sutil no hover */
+    background-color: #3c434d;
 }
 
-/* Link Ativo */
 .custom-navbar .active-link {
     color: #ffffff !important;
-    background-color: #3C90C0; /* Fundo azul principal para o link ativo */
+    background-color: #3C90C0;
     font-weight: 600;
 }
 
 .custom-navbar .active-link:hover {
-    background-color: #317da7; /* Azul ligeiramente mais escuro no hover */
+    background-color: #317da7;
 }
 
-/* Botão Sair (Logout) - Destaque em Vermelho */
 .custom-navbar .btn-logout {
-    color: #FF5252 !important; /* Vermelho claro para o texto */
+    color: #FF5252 !important;
     font-weight: 600;
 }
 
 .custom-navbar .btn-logout:hover {
     color: #ffffff !important;
-    background-color: #C62828; /* Fundo vermelho no hover */
+    background-color: #C62828;
 }
 
-/* Responsividade (Mobile) */
 @media (max-width: 991px) {
     .custom-navbar .navbar-nav {
         margin-top: 10px;
         padding-bottom: 10px;
         border-top: 1px solid #3c434d;
     }
+
     .custom-navbar .nav-item {
         margin: 5px 0;
     }
 }
 
-/* ======== CONTEÚDO PRINCIPAL ======== */
+/* =========================================
+   CONTEÚDO PRINCIPAL
+========================================= */
 main {
-  padding-top: 40px;
-  padding-bottom: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
-/* ======== BOTÕES ======== */
+/* =========================================
+   BOTÕES
+========================================= */
 .btn-modal {
-  font-size: 1rem;
-  border-radius: 8px;
-  transition: all 0.2s ease-in-out;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
 }
 
 .btn-modal-dark {
-  background-color: #3C90C0;
-  color: #fff;
-  border: none;
+    background-color: #3C90C0;
+    color: #fff;
+    border: none;
 }
 
 .btn-modal-dark:hover {
-  background-color: #317da7;
+    background-color: #317da7;
 }
 
-/* ======== MODAIS ======== */
+/* =========================================
+   MODAIS
+========================================= */
 .modal-content {
-  background-color: #2b2f36;
-  border-radius: 12px;
-  color: #ffffff;
-  border: 1px solid #3c434d;
+    background-color: #2b2f36;
+    border-radius: 12px;
+    color: #ffffff;
+    border: 1px solid #3c434d;
 }
 
 .modal-header {
-  border-bottom: 1px solid #3c434d;
+    border-bottom: 1px solid #3c434d;
 }
 
 .modal-body label {
-  color: #ccc;
+    color: #ccc;
 }
 
-.form-control, .form-select {
-  background-color: #1D2128;
-  color: #fff;
-  border: 1px solid #3c434d;
+.form-control,
+.form-select {
+    background-color: #1D2128;
+    color: #fff;
+    border: 1px solid #3c434d;
 }
 
-.form-control:focus, .form-select:focus {
-  border-color: #3C90C0;
-  box-shadow: none;
+.form-control:focus,
+.form-select:focus {
+    border-color: #3C90C0;
+    box-shadow: none;
 }
 
 .btn-close {
     filter: invert(1);
 }
 
-/* ======== FLASH MESSAGES (se quiser usar depois) ======== */
+/* =========================================
+   FLASH MESSAGES
+========================================= */
 #flash-container {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 9999;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: center;
 }
 
-/* Mensagens padrão */
-#flash-container {
-    position: fixed;
-    top: 20px; /* distância do topo da tela */
-    left: 50%; /* centraliza horizontalmente */
-    transform: translateX(-50%); /* centraliza de verdade */
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center; /* garante alinhamento das mensagens */
-}
-
-/* Estilo das mensagens */
 .flash-message {
     padding: 15px 25px;
     border-radius: 8px;
     font-weight: 500;
     color: #fff;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     opacity: 1;
     transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
 }
 
-/* Efeito de saída */
 .flash-message.fade-out {
     opacity: 0;
     transform: translateY(-20px);
 }
 
-/* Cores por categoria (opcional) */
-.flash-message.success { background: #4BB543; }
-.flash-message.error   { background: #FF4C4C; }
-.flash-message.warning { background: #FFB700; }
+.flash-message.success {
+    background: #4BB543;
+}
 
+.flash-message.error {
+    background: #FF4C4C;
+}
 
-/* ======== RESPONSIVIDADE ======== */
+.flash-message.warning {
+    background: #FFB700;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
 @media (max-width: 768px) {
-  .navbar-brand {
-    font-size: 1.2rem;
-  }
-  .nav-link i {
-    margin-right: 6px;
-  }
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .nav-link i {
+        margin-right: 6px;
+    }
 }

@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
 from app.utils import limpar_currency
 from flask_login import current_user, login_required
-from app.models import Cartoes
+from app.models import Cartoes, Transacoes
 from app import db
 
 
@@ -39,17 +39,14 @@ def cadastrarCartao():
         db.session.add(new_cartao)
         db.session.commit()
 
-        flash(f'Cartão do banco {nome_cartao} cadastrado com sucesso')
-        current_app.logger.info(f'Cartão cadastrado: {nome_cartao} - {bandeira}')
-
+        flash(f'Cartão do banco {nome_cartao} cadastrado com sucesso', 'success')
         return redirect(url_for('conta.acessarConta'))
 
     except Exception as e:
         db.session.rollback()
-        flash('Ocorreu algum erro inesperado', 'danger')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao cadastrar cartão: {e}')
         return redirect(url_for('conta.acessarConta'))
-
 
 # -------------------------------------
 # Edição de Cartão
@@ -62,7 +59,7 @@ def editarCartao():
         cartao = Cartoes.query.filter(Cartoes.id == cartao_id).first()
 
         if not cartao:
-            flash('Cartão não encontrado')
+            flash('Cartão não encontrado', 'error')
             return redirect(url_for('conta.acessarConta'))
         
         if request.method == 'GET':
@@ -77,15 +74,14 @@ def editarCartao():
             cartao.dia_vencimento_fatura    = request.form.get('dia_vencimento_fatura') or cartao.dia_vencimento_cartao
 
             db.session.commit()
-            flash('Cartão atualizado com sucesso')
+            flash('Cartão atualizado com sucesso', 'success')
             return redirect(url_for('conta.acessarConta'))
 
     except Exception as e:
         db.session.rollback()
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao editar o cartao: {e}')
         return redirect(url_for('main.menu'))
-
 
 # -------------------------------------
 # Deleção de Cartão
@@ -97,21 +93,25 @@ def deletarCartao(cartao_id):
         cartao = Cartoes.query.filter(Cartoes.id == cartao_id).first()
 
         if not cartao:
-            flash('Cartão não encontrado')
+            flash('Cartão não encontrado', 'error')
+            return redirect(url_for('conta.acessarConta'))
+        
+        transacao_vinculada = Transacoes.query.filter(Transacoes.cartao_id == cartao.id).first()
+        if transacao_vinculada:
+            flash('Não é possível excluir um cartão com transações vinculadas.', 'error')
             return redirect(url_for('conta.acessarConta'))
         
         if request.method == 'POST':
             db.session.delete(cartao)
             db.session.commit()
-            flash('Cartão excluido com sucesso.')
+            flash('Cartão excluido com sucesso.', 'success')
             return redirect(url_for('conta.acessarConta'))
     
     except Exception as e:
         db.session.rollback()
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao deletar cartao: {e}')
         return redirect(url_for('conta.acessarConta'))
-
 
 # -------------------------------------
 # Listagem de Cartões
@@ -123,13 +123,13 @@ def listarCartao():
         cartoes = Cartoes.query.all()
 
         if not cartoes:
-            flash('Nenhum cartão cadastrado')
+            flash('Nenhum cartão cadastrado', 'error')
             return redirect(url_for('conta.acessarConta'))
         
         if request.method == 'GET':
             return render_template('cartao/listar.html', cartoes=cartoes)
 
     except Exception as e:
-        flash('Ocorreu algum erru inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao listar os cartoes: {e}')
         return redirect(url_for('conta.acessarConta'))

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import logging
 from flask import Flask
@@ -147,7 +146,9 @@ def create_app(config_class=None):
     app.register_blueprint(ofx_bp)
 
 
-    # Registro de filtros 
+    # -------------------------------------
+    # Registro do Filtro Jinja2
+    # -------------------------------------
     app.jinja_env.filters["currency"] = formatar_currency
 
     return app

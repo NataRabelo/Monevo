@@ -47,8 +47,6 @@ def normalize_descricao(desc: str) -> str:
 def parse_ofx(file):
     try:
         file_bytes = file.read()
-
-        # Envia os bytes direto para o parser
         ofx_obj = ofxparse.OfxParser.parse(io.BytesIO(file_bytes))
 
         return ofx_obj.account.statement.transactions
@@ -70,18 +68,18 @@ def importar_ofx():
     # Verificações iniciais
     # -------------------------------------
     if not arquivo:
-        flash("Nenhum arquivo selecionado!", "warning")
+        flash("Nenhum arquivo selecionado!", "error")
         return redirect(url_for("transacao.acessarTransacao"))
 
     transacoes_ofx = parse_ofx(arquivo)
 
     if not transacoes_ofx:
-        flash("Arquivo OFX inválido ou corrompido!", "danger")
+        flash("Arquivo OFX inválido ou corrompido!", "error")
         return redirect(url_for("transacao.acessarTransacao"))
 
     conta = Contas.query.filter_by(usuario_id=current_user.id).first()
     if not conta:
-        flash("Cadastre uma conta antes de importar OFX!", "warning")
+        flash("Cadastre uma conta antes de importar OFX!", "error")
         return redirect(url_for("transacao.acessarTransacao"))
 
     # -------------------------------------

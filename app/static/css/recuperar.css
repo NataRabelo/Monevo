@@ -1,64 +1,138 @@
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #1D2128;
+/* ==========================================
+   Variáveis de Cores
+========================================== */
+:root {
+    --color-dark: #1D2128; /* Fundo do Formulário e Botão Principal */
+    --color-accent: #3C90C0; /* Fundo da Tela */
+    --color-light: #ffffff; /* Texto */
 }
 
-#titulo-site {
-    color: white;
-    text-align: center;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 2rem;
+/* -------------------------
+   Layout da Página (Tela Cheia)
+------------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: var(--color-accent); /* Azul Claro como fundo principal */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: var(--color-light);
+}
+
+.main-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Efeito de background sutil para quebrar a monotonia (opcional) */
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+/* -------------------------
+   Estrutura do Formulário (Container Flutuante)
+------------------------- */
+#recuperar-form {
+    padding: 3rem;
+    border-radius: 12px;
+    /* Fundo Escuro para contraste */
+    background-color: var(--color-dark);
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: center; /* Centraliza o título e o logo */
+}
+
+/* Título e Logo */
+.form-title {
+    font-size: 2.5rem;
+    color: var(--color-accent); /* Azul Claro para o logo */
+    margin-bottom: 5px;
+    font-weight: 700;
 }
 
 h2 {
-    text-align: center;
+    color: var(--color-light);
+    font-size: 1.5rem;
     margin-bottom: 20px;
-    color: #ffffff;
 }
 
-#recuperar-form {
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #3C90C0;
-    max-width: 400px;
-    width: 100%;
-    margin: auto;
+.instrucao-texto {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 25px;
+    font-size: 0.95rem;
 }
 
+/* -------------------------
+   Campos e Inputs
+------------------------- */
 label {
-    color: #ffffff;
+    color: var(--color-light);
+    text-align: left;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
 }
 
-button {
+.input-group-text {
+    background-color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    color: var(--color-light);
+}
+
+.form-control {
+    border: 1px solid var(--color-accent);
+    background-color: #2C313A; /* Levemente mais claro que o fundo do formulário */
+    color: var(--color-light);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* -------------------------
+   Botões
+------------------------- */
+.botao {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: none;
-    border-radius: 5px;
-    background-color: #1D2128;
-    color: #ffffff;
-    font-size: 16px;
+    border-radius: 6px;
+    background-color: var(--color-accent); /* Azul Claro para o botão de ação */
+    color: var(--color-light);
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-top: 15px;
 }
 
-button:hover {
-    background-color: #2C313A;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
+.botao:hover {
+    background-color: #5AA1D1;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(60, 144, 192, 0.4);
 }
 
-a {
-    color: #ffffff;
-}
-
+/* -------------------------
+   Links e Textos Secundários
+------------------------- */
 .texto-central {
     text-align: center;
+}
+
+.texto-central a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.texto-central a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
 }
