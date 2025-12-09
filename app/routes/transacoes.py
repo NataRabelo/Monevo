@@ -21,13 +21,20 @@ def acessarTransacao():
         usuario_id = current_user.id
         hoje = datetime.now().date()
 
+        # Define o período de busca (12 meses para trás e 12 meses para frente)
         data_inicio_busca = hoje + relativedelta(months=-12, day=1)
         data_fim_busca = hoje + relativedelta(months=+12, day=31)
         
+        # Busca todas as informações necessárias para a dashboard
         cartoes = Cartoes.query.filter_by(usuario_id=usuario_id).all()
         contas = Contas.query.filter_by(usuario_id=usuario_id).all()
         categorias = Categorias.query.filter_by(usuario_id=usuario_id).all()
 
+        contas_usuario = Contas.query.filter_by(usuario_id=current_user.id).all()
+        contas_correntes = Contas.query.filter_by(usuario_id=usuario_id).all()
+        cartoes_credito = Cartoes.query.filter_by(usuario_id=usuario_id).all()
+
+        # Filtra transações a serem exibidas: todas ativas (parcela_atual != 0) e dentro do período de busca
         transacoes_filtradas = Transacoes.query.filter(
             Transacoes.usuario_id == usuario_id,
             Transacoes.data_transacao >= data_inicio_busca,
@@ -35,8 +42,10 @@ def acessarTransacao():
             Transacoes.parcela_atual != 0
         ).order_by(Transacoes.data_transacao.desc()).all()
 
+        # Agrupa as transações para exibição (ex: por mês/ano)
         transacoes_agrupadas = agrupar_transacoes_por_mes(transacoes_filtradas)
         
+        # Calcula o total de receita no período
         total_receita = db.session.query(
             db.func.sum(Transacoes.valor)
         ).filter(
@@ -47,6 +56,7 @@ def acessarTransacao():
             Transacoes.parcela_atual != 0
         ).scalar() or 0
 
+        # Calcula o total de despesa no período
         total_despesa = db.session.query(
             db.func.sum(Transacoes.valor)
         ).filter(
@@ -63,7 +73,9 @@ def acessarTransacao():
                                 transacoes_agrupadas = transacoes_agrupadas,
                                 total_receita = total_receita,
                                 total_despesa = total_despesa,
-                                categorias = categorias)
+                                categorias = categorias,
+                                contas_correntes=contas_correntes, 
+                                cartoes_credito=cartoes_credito,)
 
 # -------------------------------------
 # Cadastro de Transação
@@ -75,6 +87,7 @@ def cadastrarTransacao():
         usuario = current_user.id
         hoje = datetime.now().date()
         
+        # 1. Captura e processamento dos dados do formulário
         conta_id          = request.form.get('conta_transacao')
         cartao_id         = request.form.get('cartao')
         categoria_id      = request.form.get('categoria_transacao')
@@ -87,24 +100,34 @@ def cadastrarTransacao():
         
         data_transacao = datetime.strptime(data_str, "%Y-%m-%d").date()
         
+        # Determina se a transação é parcelada e calcula valores
         num_parcelas = int(num_parcelas_str) if num_parcelas_str and num_parcelas_str.isdigit() and int(num_parcelas_str) > 1 else 1
         parcelado = num_parcelas > 1
         
         valor_total_cheio = valor_parcela * num_parcelas
         valor_registro = valor_parcela
         
+        # 2. Definição do valor imediato a ser compensado (para cartões ou transações simples)
         if parcelado:
-            valor_a_compensar_imediato = valor_total_cheio if tipo == 'Despesa' and cartao_id else valor_registro
+            # Se for DESPESA E CARTÃO, compensa o valor total no LIMITE
+            if tipo == 'Despesa' and cartao_id:
+                valor_a_compensar_imediato = valor_total_cheio
+            # Caso contrário, usa apenas o valor da primeira parcela (será usado no loop de compensação abaixo)
+            else:
+                valor_a_compensar_imediato = valor_registro 
         else:
+            # Para transação simples, o valor imediato é o valor da transação
             valor_a_compensar_imediato = valor_registro
-            valor_total_cheio = valor_registro
+            valor_total_cheio = valor_registro # Mantém consistência para transação simples
         
         transacoes_a_salvar = []
         nova_transacao = None
 
         
+        # 3. Criação da transação (mestra e parcelas/ocorrência única)
         if parcelado:
             
+            # Cria a transação MESTRA (parcela_atual=0, valor=valor_total)
             transacao_mestra = Transacoes(
                 usuario_id=usuario,
                 conta_id=conta_id,
@@ -120,8 +143,9 @@ def cadastrarTransacao():
                 recorrencia='Sem recorrencia' 
             )
             db.session.add(transacao_mestra)
-            db.session.commit() 
-            
+            db.session.commit() # Commit para obter o ID da mestra
+
+            # Cria as transações FILHAS (parcela_atual=1 a N, valor=valor_parcela)
             for i in range(1, num_parcelas + 1):
                 data_parcela = data_transacao + relativedelta(months=i-1)
                 
@@ -143,9 +167,11 @@ def cadastrarTransacao():
                 transacoes_a_salvar.append(nova_parcela)
             
             db.session.add_all(transacoes_a_salvar)
+            # Define a primeira transação salva como referência para a lógica de compensação
             nova_transacao = transacoes_a_salvar[0] 
 
         else:
+            # Cria transação simples (não parcelada)
             nova_transacao = Transacoes(
                 usuario_id=usuario,
                 conta_id=conta_id,
@@ -164,37 +190,50 @@ def cadastrarTransacao():
             db.session.add(nova_transacao)
 
         
-        #1. Despesa com Cartão
+        # 4. LÓGICA DE COMPENSAÇÃO DE SALDO CORRIGIDA
+        valor_total_a_compensar = 0.0
+
+        if parcelado:
+            # CORREÇÃO CRÍTICA: Calcula a soma de TODAS as parcelas que são passadas/atuais
+            # Isso garante que a conta seja compensada pelo valor correto (ex: 4.950,00)
+            transacoes_compensaveis = [t for t in transacoes_a_salvar if t.data_transacao <= hoje]
+            valor_total_a_compensar = sum(t.valor for t in transacoes_compensaveis)
+        elif nova_transacao.data_transacao <= hoje:
+            # Se for transação simples, usa apenas o valor dela se for passada/atual
+            valor_total_a_compensar = nova_transacao.valor
+        
+        # Aplica a compensação ao LIMITE do Cartão (usa o valor total do cartão, já definido em valor_a_compensar_imediato)
         if tipo == 'Despesa' and nova_transacao.cartao_id:
             cartao_associado = Cartoes.query.filter_by(id=nova_transacao.cartao_id, usuario_id=usuario).first()
             if cartao_associado:
                 cartao_associado.limite_disponivel -= valor_a_compensar_imediato
                 db.session.add(cartao_associado)
 
-        #2. Despesa com Conta
-        elif tipo == 'Despesa' and not nova_transacao.cartao_id:
+        # Aplica a compensação ao SALDO da Conta (Despesa ou Receita)
+        # Usa o valor_total_a_compensar, que agora é calculado corretamente para parcelamentos
+        elif nova_transacao.conta_id and valor_total_a_compensar > 0:
             conta_associada = Contas.query.filter_by(id=nova_transacao.conta_id, usuario_id=usuario).first()
-            # Compensa apenas se a transação for de hoje ou passada
-            if conta_associada and nova_transacao.data_transacao <= hoje: 
-                conta_associada.saldo_inicial -= valor_a_compensar_imediato
+            
+            if conta_associada: 
+                if tipo == 'Despesa':
+                    # Subtrai o valor total compensável (ex: -5.850,00)
+                    conta_associada.saldo_inicial -= valor_total_a_compensar
+                elif tipo == 'Receita':
+                    # Adiciona o valor total compensável (ex: +10.800,00)
+                    conta_associada.saldo_inicial += valor_total_a_compensar
                 db.session.add(conta_associada)
         
-        #3. Receita com Conta (DATAS RETROATIVAS)
-        elif tipo == 'Receita':
-            conta_associada = Contas.query.filter_by(id=nova_transacao.conta_id, usuario_id=usuario).first()
-
-            if conta_associada and nova_transacao.data_transacao <= hoje: 
-                conta_associada.saldo_inicial += valor_a_compensar_imediato
-                db.session.add(conta_associada)
-        
+        # 5. Lógica para transações recorrentes
         if not parcelado and nova_transacao.recorrente:
             db.session.flush() 
-            nova_transacao.id_original = nova_transacao.id 
+            nova_transacao.id_original = nova_transacao.id # Define a si mesma como original
             db.session.commit() 
             
+            # Gera as ocorrências futuras da transação recorrente
             ocorrencias_geradas = gerar_proximas_transacoes_recorrentes(nova_transacao, db, Transacoes)
             flash(f'Transação cadastrada com sucesso! ({ocorrencias_geradas} ocorrências recorrentes geradas.)', 'success')
         
+        # 6. Finalização e commit
         else:
             db.session.commit()
             
@@ -216,7 +255,7 @@ def cadastrarTransacao():
     
 
 # -------------------------------------
-# Edição de Transação
+# Edição de Transação (A lógica de edição não foi alterada)
 # -------------------------------------
 @transacao_bp.route('/editar', methods=['POST'])
 @login_required
@@ -246,10 +285,12 @@ def editarTransacao():
                 flash('Receita não encontrada', 'danger')
                 return redirect(url_for('transacao.acessarTransacao'))
 
+            # Guarda dados antigos para estorno
             valor_antigo = receita.valor
             conta_id_antiga = receita.conta_id
             data_antiga = receita.data_transacao 
             
+            # Atualiza novos dados
             data_str                = request.form.get('data_transacao')
             nova_data               = datetime.strptime(data_str, "%Y-%m-%d").date() if data_str else receita.data_transacao
             novo_valor              = limpar_currency(request.form.get('valor_transacao')) or receita.valor
@@ -267,16 +308,16 @@ def editarTransacao():
             transacao_editada = receita
 
             
-            # Compensação Antiga
+            # 1. Compensação Antiga (Estorno da Receita na conta antiga)
             conta_antiga = Contas.query.filter_by(id=conta_id_antiga, usuario_id=usuario_id).first()
             if conta_antiga and data_antiga <= hoje: 
-                conta_antiga.saldo_inicial -= valor_antigo 
+                conta_antiga.saldo_inicial -= valor_antigo # Estorna o valor antigo
                 db.session.add(conta_antiga)
 
-            # Aplicação Nova 
+            # 2. Aplicação Nova (Aplica a nova Receita na conta nova)
             conta_nova = Contas.query.filter_by(id=receita.conta_id, usuario_id=usuario_id).first()
             if conta_nova and receita.data_transacao <= hoje: 
-                conta_nova.saldo_inicial += receita.valor 
+                conta_nova.saldo_inicial += receita.valor # Aplica o novo valor
                 db.session.add(conta_nova)
 
         elif tipo == 'Despesa':
@@ -292,11 +333,13 @@ def editarTransacao():
                 flash('Despesa não encontrada', 'error')
                 return redirect(url_for('transacao.acessarTransacao'))
 
+            # Guarda dados antigos para estorno
             valor_antigo            = despesa.valor
             cartao_id_antigo        = despesa.cartao_id
             conta_id_antiga         = despesa.conta_id
             data_antiga             = despesa.data_transacao 
 
+            # Atualiza novos dados
             data_str                = request.form.get('data_transacao')
             nova_data               = datetime.strptime(data_str, "%Y-%m-%d").date() if data_str else despesa.data_transacao
             novo_valor              = limpar_currency(request.form.get('valor_transacao'))
@@ -306,7 +349,7 @@ def editarTransacao():
             novo_cartao_id          = novo_cartao_id if novo_cartao_id else None
             nova_recorrencia_str    = request.form.get('recorrencia') or despesa.recorrencia
 
-            # --- 2. ATUALIZA A MESTRA ---
+            # Atualiza a transação
             despesa.conta_id          = novo_conta_id or despesa.conta_id
             despesa.cartao_id         = novo_cartao_id 
             despesa.categoria_id      = request.form.get('categoria_transacao') or despesa.categoria_id
@@ -318,29 +361,31 @@ def editarTransacao():
             transacao_editada         = despesa
     
             
-            #Se o pagamento ANTIGO era CARTÃO: Devolve o limite
+            # 1. Estorno do pagamento antigo
+            # Se o pagamento ANTIGO era CARTÃO: Devolve o limite
             if cartao_id_antigo:
                 cartao_antigo = Cartoes.query.filter_by(id=cartao_id_antigo, usuario_id=usuario_id).first()
                 if cartao_antigo:
                     cartao_antigo.limite_disponivel += valor_antigo
                     db.session.add(cartao_antigo)
             
-            #Se o pagamento ANTIGO era CONTA: Restaura o saldo (usa a DATA ANTIGA)
+            # Se o pagamento ANTIGO era CONTA: Restaura o saldo (usa a DATA ANTIGA)
             elif conta_id_antiga: 
                 conta_antiga = Contas.query.filter_by(id=conta_id_antiga, usuario_id=usuario_id).first()
                 if conta_antiga and data_antiga <= hoje: 
-                    conta_antiga.saldo_inicial += valor_antigo 
+                    conta_antiga.saldo_inicial += valor_antigo # Restaura o saldo antigo
                     db.session.add(conta_antiga)
 
 
-            #Se o pagamento NOVO é CARTÃO: Subtrai o novo limite
+            # 2. Aplicação do novo pagamento
+            # Se o pagamento NOVO é CARTÃO: Subtrai o novo limite
             if despesa.cartao_id:
                 cartao_novo = Cartoes.query.filter_by(id=despesa.cartao_id, usuario_id=usuario_id).first()
                 if cartao_novo:
                     cartao_novo.limite_disponivel -= despesa.valor 
                     db.session.add(cartao_novo)
 
-            #Se o pagamento NOVO é CONTA: Subtrai o novo saldo
+            # Se o pagamento NOVO é CONTA: Subtrai o novo saldo
             elif despesa.cartao_id is None and despesa.conta_id:
                 conta_nova = Contas.query.filter_by(id=despesa.conta_id, usuario_id=usuario_id).first()
                 if conta_nova and despesa.data_transacao <= hoje: 
@@ -348,7 +393,7 @@ def editarTransacao():
                     db.session.add(conta_nova)
 
 
-
+        # Lógica de re-geração de recorrência (aplica-se apenas a transações não parceladas)
         if transacao_editada and not transacao_editada.parcelado:
             is_mestra = transacao_editada.id_original == transacao_editada.id or transacao_editada.id_original is None
 
@@ -357,6 +402,7 @@ def editarTransacao():
                     if transacao_editada.id_original is None:
                         transacao_editada.id_original = transacao_editada.id
                     
+                    # Deleta ocorrências futuras
                     Transacoes.query.filter(
                         Transacoes.id_original == transacao_editada.id_original,
                         Transacoes.id != transacao_editada.id,
@@ -367,12 +413,14 @@ def editarTransacao():
                     db.session.add(transacao_editada)
                     db.session.flush()
                     
+                    # Gera novas ocorrências futuras
                     ocorrencias_geradas = gerar_proximas_transacoes_recorrentes(transacao_editada, db, Transacoes)
                     
                     db.session.commit()
                     flash(f'{tipo} mestra atualizada. {ocorrencias_geradas} ocorrências futuras/passadas regeradas!', 'success')
                     
                 else:
+                    # Deleta todas as recorrências se o tipo mudou para 'Sem recorrencia'
                     Transacoes.query.filter(
                         Transacoes.id_original == transacao_editada.id, 
                         Transacoes.id != transacao_editada.id,
@@ -388,10 +436,12 @@ def editarTransacao():
                     flash(f'{tipo} convertida para transação simples. Ocorrências futuras excluídas.', 'success')
 
             else:
+                # Transação individual (não mestra)
                 db.session.commit()
                 flash(f'{tipo} individual atualizada com sucesso', 'success')
         
         else:
+            # Transação parcelada (não tem lógica de re-geração de recorrência aqui)
             db.session.commit()
             flash(f'{tipo} atualizada com sucesso', 'success')
 
@@ -405,7 +455,7 @@ def editarTransacao():
 
 
 # -------------------------------------
-# Deleção de Transação
+# Deleção de Transação (A lógica de deleção não foi alterada)
 # -------------------------------------
 @transacao_bp.route('/deletar/<int:transacao_id>', methods=['GET', 'POST'])
 @login_required
@@ -423,24 +473,24 @@ def deletarTransacao(transacao_id):
             flash('Transação não encontrada', 'error')
             return redirect(url_for('transacao.acessarTransacao'))
         
-        
+        # Lógica de deleção para transação simples (não parcelada e não recorrente)
         if not transacao.parcelado and not transacao.recorrente:
             
-            #Estorno de Limite do Cartão (Despesa)
+            # Estorno de Limite do Cartão (Despesa)
             if transacao.tipo == 'Despesa' and transacao.cartao_id:
                 cartao = Cartoes.query.filter_by(id=transacao.cartao_id, usuario_id=usuario_id).first()
                 if cartao:
                     cartao.limite_disponivel += transacao.valor 
                     db.session.add(cartao)
 
-            #Estorno de Saldo da Conta (Despesa)
+            # Estorno de Saldo da Conta (Despesa)
             elif transacao.tipo == 'Despesa' and not transacao.cartao_id:
                 conta = Contas.query.filter_by(id=transacao.conta_id, usuario_id=usuario_id).first()
                 if conta and transacao.data_transacao <= hoje:
                     conta.saldo_inicial += transacao.valor
                     db.session.add(conta)
             
-            #Estorno de Saldo da Conta (Receita)
+            # Estorno de Saldo da Conta (Receita)
             elif transacao.tipo == 'Receita':
                 conta = Contas.query.filter_by(id=transacao.conta_id, usuario_id=usuario_id).first()
                 if conta and transacao.data_transacao <= hoje:
@@ -454,10 +504,12 @@ def deletarTransacao(transacao_id):
             return redirect(url_for('transacao.acessarTransacao'))
 
 
+        # Lógica de deleção para séries (parcelada ou recorrente)
         id_mestra = transacao.id_original if transacao.id_original else transacao.id
         mestra = Transacoes.query.filter_by(id=id_mestra, usuario_id=usuario_id).first()
         
         if mestra:
+            # Estorno de Limite do Cartão (Despesa parcelada/recorrente)
             if mestra.tipo == 'Despesa' and mestra.cartao_id:
                 cartao = Cartoes.query.filter_by(id=mestra.cartao_id, usuario_id=usuario_id).first()
                 if cartao:
@@ -466,10 +518,12 @@ def deletarTransacao(transacao_id):
                     
 
             if mestra.conta_id:
+                # Estorno de Saldo da Conta (Despesa ou Receita parcelada/recorrente)
                 deve_estornar_saldo = (mestra.tipo == 'Receita') or (mestra.tipo == 'Despesa' and not mestra.cartao_id)
                 if deve_estornar_saldo:
                     conta = Contas.query.filter_by(id=mestra.conta_id, usuario_id=usuario_id).first()
                     if conta:
+                        # Busca todas as transações da série que já deveriam ter compensado o saldo
                         transacoes_da_serie_realizadas = Transacoes.query.filter(
                             (Transacoes.id_original == id_mestra) | (Transacoes.id == id_mestra),
                             Transacoes.usuario_id == usuario_id,
@@ -477,17 +531,19 @@ def deletarTransacao(transacao_id):
                             Transacoes.parcela_atual != 0
                         ).all()
                         
+                        # Soma o valor total a ser estornado
                         valor_total_estorno_saldo = sum(t.valor for t in transacoes_da_serie_realizadas)
                         
                         if valor_total_estorno_saldo > 0:
                             if mestra.tipo == 'Despesa':
-                                conta.saldo_inicial += valor_total_estorno_saldo
+                                conta.saldo_inicial += valor_total_estorno_saldo # Despesa estornada (soma)
                             elif mestra.tipo == 'Receita':
-                                conta.saldo_inicial -= valor_total_estorno_saldo
+                                conta.saldo_inicial -= valor_total_estorno_saldo # Receita estornada (subtrai)
                             db.session.add(conta)
             
             is_parcelado = mestra.parcelado
             
+            # Deleção de todas as transações da série (mestra e filhas)
             Transacoes.query.filter(
                 (Transacoes.id == id_mestra) | (Transacoes.id_original == id_mestra),
                 Transacoes.usuario_id == usuario_id

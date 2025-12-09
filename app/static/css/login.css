@@ -2,9 +2,9 @@
    Variáveis de Cores
 ========================================== */
 :root {
-    --color-dark: #1D2128; /* Fundo e Botão */
-    --color-accent: #3C90C0; /* Fundo do Lado Criativo */
-    --color-light: #ffffff; /* Texto */
+    --color-dark: #1D2128;
+    --color-accent: #3C90C0;
+    --color-light: #ffffff;
 }
 
 /* ==========================================
@@ -13,13 +13,13 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif; /* Melhoria de fonte para modernidade */
-    background-color: var(--color-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-accent); 
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Garantir que a tela de login não role */
+    overflow: hidden; 
 }
 
 .main-screen {
@@ -30,11 +30,18 @@ body {
 }
 
 /* ==========================================
-   Lado Esquerdo Criativo (Diagonal)
+   Lado Esquerdo Criativo (Diagonal) - 60%
+   FUNDO PRETO
 ========================================== */
 .creative-side {
-    flex: 1; /* Ocupa 50% */
-    background-color: var(--color-accent); /* Azul claro */
+    flex: 3;
+    
+   
+    background: radial-gradient(
+    circle at center,
+    #1A1C20 0%, 
+    #0A0B0D 100% 
+  );
     color: var(--color-light);
     display: flex;
     flex-direction: column;
@@ -42,42 +49,83 @@ body {
     align-items: center;
     padding: 2rem;
     
-    /* Cria a divisão em ângulo usando clip-path */
     clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
-    
-    /* Adiciona sombra para profundidade (opcional) */
-    box-shadow: 10px 0 20px rgba(0, 0, 0, 0.3);
-}
-
-.creative-title {
-    font-size: 4rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
+    box-shadow: 10px 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .creative-slogan {
     font-size: 1.5rem;
-    margin-bottom: 3rem;
+    margin-top: 40px; 
+    margin-bottom: 0;
     text-align: center;
     font-style: italic;
-}
-
-.creative-illustration {
-    display: flex;
-    gap: 20px;
-}
-
-.creative-illustration i {
-    color: var(--color-dark); /* Ícones em cor escura para contraste */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: 300;
+    color: var(--color-light); 
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 /* ==========================================
-   Lado Direito com Formulário de Login
+   ESTILOS DA LOGO MONEVO (Fiel ao Original)
+========================================== */
+.logo-text {
+    font-size: 70px;
+    font-weight: 800;
+    color: white; 
+    line-height: 1; 
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); 
+}
+
+.part1, .part3 {
+    color: white; 
+}
+
+.part2 {
+    color: var(--color-accent); 
+}
+
+.part4 {
+    color: white;
+    position: relative;
+}
+
+.part4::after {
+    content: 'o';
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--color-accent);
+    clip-path: inset(0 0 0 50%);
+    z-index: 1;
+}
+
+.dot {
+    width: 18px; 
+    height: 18px;
+    background-color: var(--color-accent);
+    border-radius: 50%;
+    position: absolute;
+    left: 50%; 
+    transform: translateX(-50%);
+}
+
+.dot-top {
+    top: -30px; 
+}
+
+.dot-bottom {
+    bottom: -30px; 
+}
+
+/* ==========================================
+   Lado Direito com Formulário de Login - 40%
+   FUNDO AZUL
 ========================================== */
 .login-form-side {
-    flex: 1; /* Ocupa os outros 50% */
-    background-color: var(--color-dark); /* Azul escuro */
+    flex: 2;
+    background-color: var(--color-accent); 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,7 +134,7 @@ body {
 .login-container {
     padding: 3rem;
     border-radius: 10px;
-    background-color: rgba(60, 144, 192, 0.1); /* Um toque do azul, mas transparente, sobre o escuro */
+    background-color: rgba(29, 33, 40, 0.8);
     color: var(--color-light);
     max-width: 450px;
     width: 90%;
@@ -100,26 +148,26 @@ h2 {
     font-weight: 600;
 }
 
-/* Campos de Input */
+
 .form-label {
     font-weight: 500;
 }
 
 .input-group-text {
-    background-color: var(--color-accent);
-    border: 1px solid var(--color-accent);
+    background-color: var(--color-dark); 
+    border: 1px solid var(--color-dark);
     color: var(--color-light);
 }
 
 .form-control {
-    border: 1px solid var(--color-accent);
+    border: 1px solid var(--color-dark);
 }
 
 /* ==========================================
    Botão de Login
 ========================================== */
 .botao-login {
-    background-color: var(--color-accent);
+    background-color: var(--color-dark); 
     color: var(--color-light);
     border: none;
     padding: 12px 20px;
@@ -131,9 +179,8 @@ h2 {
 }
 
 .botao-login:hover {
-    background-color: #5AA1D1; /* Um tom ligeiramente mais claro do azul */
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(60, 144, 192, 0.4);
+    box-shadow: 0 5px 15px rgba(29, 33, 40, 0.4);
 }
 
 /* ==========================================
@@ -162,12 +209,12 @@ h2 {
 }
 
 .texto-central span {
-    color: rgba(255, 255, 255, 0.5); /* Separador sutil */
+    color: rgba(255, 255, 255, 0.5);
 }
 
 
 /* ==========================================
-   Sistema de Mensagens (Flash) - Ajuste de Posição
+   Sistema de Mensagens (Flash)
 ========================================== */
 #flash-container {
     position: fixed;
@@ -180,8 +227,6 @@ h2 {
     gap: 10px;
     align-items: center;
 }
-
-/* Restante do CSS do Flash (manter como está) */
 
 .flash-message {
     padding: 15px 25px;
