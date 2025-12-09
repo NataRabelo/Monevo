@@ -40,10 +40,11 @@ def cadastrarCategoria():
 # -------------------------------------
 # Edição de Categoria
 # -------------------------------------
-@categoria_bp.route('/editar/<int:categoria_id>', methods=['POST'])
+@categoria_bp.route('/editar/', methods=['POST'])
 @login_required
-def editarCategoria(categoria_id):
+def editarCategoria():
     try:
+        categoria_id = request.form.get("categoria_id")
         categoria = Categorias.query.get(categoria_id)
 
         if not categoria:
