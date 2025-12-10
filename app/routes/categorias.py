@@ -14,8 +14,8 @@ def cadastrarCategoria():
     try:
         if request.method == "POST":
             usuario = current_user
-            nome = request.form.get('nome')
-            tipo = request.form.get('tipo')
+            nome = request.form.get('nome_categoria')
+            tipo = request.form.get('tipo_categoria')
 
             new_categoria = Categorias(
                 usuario_id=usuario.id,
@@ -51,8 +51,8 @@ def editarCategoria():
             flash('Categoria não encontrada', 'error')
             return redirect(url_for('transacao.acessarTransacao'))
 
-        categoria.nome = request.form.get('nome') or categoria.nome
-        categoria.tipo = request.form.get('tipo') or categoria.tipo
+        categoria.nome = request.form.get('nome_categoria') or categoria.nome
+        categoria.tipo = request.form.get('tipo_categoria') or categoria.tipo
 
         db.session.commit()
         flash('Categoria atualizada com sucesso', 'success')

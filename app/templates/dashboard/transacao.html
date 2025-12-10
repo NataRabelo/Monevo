@@ -16,16 +16,6 @@
     </button>
   </div>
 
-  <div class="import-banner d-flex flex-column flex-md-row align-items-md-center justify-content-between shadow-sm p-3 mb-4 rounded">
-    <div class="d-flex align-items-center gap-2">
-      <i class="fas fa-file-import fs-4 text-info"></i> <span class="fw-semibold">Importação OFX</span>
-    </div>
-
-    <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalImportarOFX">
-      <i class="fas fa-upload me-1"></i> Importar OFX
-    </button>
-  </div>
-
   <div class="row mb-4">
     <div class="col-md-6 mb-3">
       <div class="card valor-card receita-card shadow-lg p-3 border-0"> 
@@ -770,51 +760,6 @@
         </div>
       </div>
     </div>
-
-
-    <!-- ========================= MODAL IMPORTAR OFX ========================= -->
-    <div class="col-lg-12">
-      <div class="modal fade" id="modalImportarOFX" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-
-            <div class="modal-header">
-              <h5 class="modal-title"><i class="bi bi-upload me-1"></i> Importar Arquivo OFX</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-
-              <form action="{{ url_for('ofx.importar_ofx') }}" method="POST" enctype="multipart/form-data">
-
-                <div class="mb-3">
-                  <label class="form-label">Selecione o arquivo OFX</label>
-                  <input type="file" class="form-control" name="arquivo_ofx" accept=".ofx" required>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Conta vinculada</label>
-                  <select class="form-select" name="conta_id" required>
-                    <option value="" disabled selected>Selecione</option>
-                    {% for conta in contas %}
-                    <option value="{{ conta.id }}">{{ conta.nome_conta }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="text-end">
-                  <button type="submit" class="btn-modal btn-modal-dark">Importar</button>
-                </div>
-
-              </form>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div> <!-- fim row -->
 </div> <!-- fim container -->
 

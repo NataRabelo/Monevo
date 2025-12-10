@@ -107,3 +107,41 @@ document.getElementById("modalEditarCategoria").addEventListener("hidden.bs.moda
 document.addEventListener("hidden.bs.modal", () => {
     document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
 });
+
+// ================= BLOQUEIO DE CAMPOS RECORRÊNCIA E PARCELAS =================
+document.addEventListener("DOMContentLoaded", function () {
+
+  function configurarBloqueios(parcelasInputId, recorrenciaSelectId) {
+    const parcelasInput = document.getElementById(parcelasInputId);
+    const recorrenciaSelect = document.getElementById(recorrenciaSelectId);
+
+    if (!parcelasInput || !recorrenciaSelect) return;
+
+    // Quando número de parcelas muda
+    parcelasInput.addEventListener("input", function () {
+      const parcelas = parseInt(parcelasInput.value);
+
+      if (parcelas > 1) {
+        recorrenciaSelect.value = "Sem recorrencia";
+        recorrenciaSelect.disabled = true;
+      } else {
+        recorrenciaSelect.disabled = false;
+      }
+    });
+
+    // Quando recorrência muda
+    recorrenciaSelect.addEventListener("change", function () {
+      if (recorrenciaSelect.value !== "Sem recorrencia") {
+        parcelasInput.value = 1;
+        parcelasInput.disabled = true;
+      } else {
+        parcelasInput.disabled = false;
+      }
+    });
+  }
+
+  // Aplicar nos dois modais
+  configurarBloqueios("parcelas-receita", "recorrencia-receita");
+  configurarBloqueios("parcelas-despesa", "recorrencia-despesa");
+
+});

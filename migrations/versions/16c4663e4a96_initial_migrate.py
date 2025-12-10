@@ -1,8 +1,8 @@
-"""Initial migration
+"""Initial migrate
 
-Revision ID: faf5ffe5ad18
+Revision ID: 16c4663e4a96
 Revises: 
-Create Date: 2025-12-07 19:55:19.202753
+Create Date: 2025-12-10 00:35:20.935813
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'faf5ffe5ad18'
+revision = '16c4663e4a96'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -100,8 +100,8 @@ def upgrade():
     sa.Column('conta_id', sa.Integer(), nullable=False),
     sa.Column('saldo_inicial', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('mes_ano', sa.Date(), nullable=False),
-    sa.ForeignKeyConstraint(['conta_id'], ['contas.id'], ),
-    sa.ForeignKeyConstraint(['usuario_id'], ['usuarios.id'], ),
+    sa.ForeignKeyConstraint(['conta_id'], ['contas.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['usuario_id'], ['usuarios.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('conta_id', 'mes_ano', name='_conta_mes_uc')
     )
@@ -116,6 +116,9 @@ def upgrade():
     sa.Column('valor', sa.Float(), nullable=False),
     sa.Column('data_transacao', sa.Date(), nullable=False),
     sa.Column('recorrencia', sa.String(), nullable=True),
+    sa.Column('parcelas_total', sa.Integer(), nullable=True),
+    sa.Column('parcela_atual', sa.Integer(), nullable=True),
+    sa.Column('parcelado', sa.Boolean(), nullable=True),
     sa.Column('id_original', sa.Integer(), nullable=True),
     sa.Column('recorrente', sa.Boolean(), nullable=True),
     sa.Column('criado_em', sa.DateTime(), nullable=True),
