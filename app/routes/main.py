@@ -17,7 +17,6 @@ main_bp = Blueprint('main', __name__)
 def index():
     return redirect(url_for('auth.login'))
 
-        
 # -------------------------------------
 # Rota do menu principal
 # -------------------------------------
@@ -31,7 +30,7 @@ def menu():
         mes_atual = hoje.month
         ano_atual = hoje.year
 
-        # --- NOVA LÓGICA DE FILTRAGEM ---
+        # --- LÓGICA DE FILTRAGEM ---
         # Garantir que apenas as transações *filhas* ou *únicas* (parcela_atual > 0) sejam somadas.
         # Transações mestras (parcela_atual = 0) contêm o valor total da série e devem ser excluídas.
         
@@ -43,7 +42,7 @@ def menu():
             Transacoes.usuario_id == current_user.id,
             db.func.extract('month', Transacoes.data_transacao) == mes_atual,
             db.func.extract('year', Transacoes.data_transacao) == ano_atual,
-            Transacoes.parcela_atual > 0 # <--- FILTRO CHAVE ADICIONADO
+            Transacoes.parcela_atual > 0 # <--- FILTRO CHAVE
         ).scalar() or 0
 
         # 2. Total Despesa do Mês
@@ -54,7 +53,7 @@ def menu():
             Transacoes.usuario_id == current_user.id,
             db.func.extract('month', Transacoes.data_transacao) == mes_atual,
             db.func.extract('year', Transacoes.data_transacao) == ano_atual,
-            Transacoes.parcela_atual > 0 # <--- FILTRO CHAVE ADICIONADO
+            Transacoes.parcela_atual > 0 # <--- FILTRO CHAVE
         ).scalar() or 0
         
         # ... restante da função ...

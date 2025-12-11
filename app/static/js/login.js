@@ -1,3 +1,6 @@
+  /* =============================
+     Flash Message Fade Out
+  ============================= */
 const flashMessages = document.querySelectorAll('.flash-message');
 
 flashMessages.forEach(msg => {

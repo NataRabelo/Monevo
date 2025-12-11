@@ -67,7 +67,7 @@ def cadastrarConta():
         return redirect(url_for('conta.acessarConta'))
 
 # -------------------------------------
-# Edição de Conta (ATUALIZADA)
+# Edição de Conta
 # -------------------------------------
 @conta_bp.route('/editar', methods=['GET', 'POST'])
 @login_required

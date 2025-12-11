@@ -59,11 +59,9 @@ def cadastroUsuario():
             current_app.logger.warning(f'Erro ao cadastrar usuário: {e}')
             return redirect(url_for('main.menu'))
 
-
 # -------------------------------------
 # Edição de Usuário
 # -------------------------------------
-
 @user_bp.route('/editar/', methods=['GET', 'POST'])
 @login_required
 def editarUsuario():
@@ -99,11 +97,9 @@ def editarUsuario():
         current_app.logger.warning(f'Erro ao editar usuário: {e}')
         return redirect(url_for('main.menu'))
 
-
 # -------------------------------------
 # Deleção de Usuário
 # -------------------------------------
-
 @user_bp.route('/deletar/', methods=['GET', 'POST'])
 @login_required
 def deletarUsuario():
@@ -132,11 +128,9 @@ def deletarUsuario():
         current_app.logger.warning(f'Erro ao deletar usuario: {e}')
         return redirect(url_for('main.menu'))
 
-
 # -------------------------------------
 # Listagem de Usuários
 # -------------------------------------
-
 @user_bp.route('/listar', methods=['GET', 'POST'])
 @login_required
 def listarUsuario():

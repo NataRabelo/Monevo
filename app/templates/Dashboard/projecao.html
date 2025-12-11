@@ -14,77 +14,86 @@
 
     <div class="row">
         <div class="col-md-3">
-            <div class="card-info">
-                <h6>Saldo atual (Mês Anterior):</h6>
-                <h5 class="text-saldo">R$ 0,00</h5>
+            
+            <div class="p-3 mb-4 rounded-3" style="background-color: #232832; border: 1px solid #3c434d;">
+                <label for="filtro_cartao_mes" class="form-label fw-semibold text-white mb-1">Visão dos Cards:</label>
+                <select id="filtro_cartao_mes" class="form-select">
+                    <option value="">Carregando...</option>
+                </select>
             </div>
             <div class="card-info">
-                <h6>Receitas Projetadas:</h6>
+                <h6>Saldo Inicial da Projeção (Atual):</h6>
+                <h5 class="text-saldo text-info">R$ 0,00</h5>
+            </div>
+            
+            <div class="card-info">
+                <h6>Receitas Projetadas (Mês Selecionado):</h6>
                 <h5 class="text-receita">R$ 0,00</h5>
             </div>
             <div class="card-info">
-                <h6>Despesas Projetadas:</h6>
+                <h6>Despesas Projetadas (Mês Selecionado):</h6>
                 <h5 class="text-despesa">R$ 0,00</h5>
             </div>
             <div class="card-info">
-                <h6>Resultado Projetado:</h6>
+                <h6>Resultado do Mês Selecionado:</h6>
                 <h5 class="text-resultado-pos">+ R$ 0,00</h5>
             </div>
+            
+            <div class="card-info">
+                <h6>Saldo Acumulado no Mês Selecionado:</h6>
+                <h5 class="text-saldo-acumulado-card text-primary-light">R$ 0,00</h5>
+            </div>
+            <div class="card-info">
+                <h6>Saldo Projetado Final (12 meses):</h6>
+                <h5 class="text-saldo-final-projecao text-success-light">R$ 0,00</h5>
+            </div>
+            
+            <h5 class="mt-4 mb-3 text-white text-center">Recomendação (Mês Selecionado)</h5>
+
+            <div class="card-info card-recomendacao">
+                <h6>Gasto Máx. Recomendado (85%):</h6>
+                <h5 class="text-necessidade-max text-warning">R$ 0,00</h5>
+            </div>
+            
+            <div class="card-info card-recomendacao">
+                <h6>Investimento Mín. Sugerido (15%):</h6>
+                <h5 class="text-investimento-min text-success-light">R$ 0,00</h5>
+            </div>
+
         </div>
 
         <div class="col-md-9">
-
-            <div class="p-3 mb-4 rounded-3" style="background-color: #232832; border: 1px solid #3c434d;">
-                <div class="d-flex flex-wrap align-items-end">
-
-                    <div class="col-6 col-sm-3 mb-2 me-sm-2">
-                        <label for="data_inicio" class="form-label fw-semibold text-white mb-1">Período
-                            (Início):</label>
-                        <input id="data_inicio" type="date" class="form-control">
-                    </div>
-
-                    <div class="col-6 col-sm-3 mb-2 me-sm-2">
-                        <label for="data_fim" class="form-label fw-semibold text-white mb-1">Período (Fim):</label>
-                        <input id="data_fim" type="date" class="form-control">
-                    </div>
-
-                    <div class="col-12 col-sm-3 mb-2 me-sm-2">
-                        <label for="tipo_projecao" class="form-label fw-semibold text-white mb-1">Tipo:</label>
-                        <select id="tipo_projecao" class="form-select">
-                            <option value="mensal">Mensal</option>
-                            <option value="semanal">Semanal</option>
-                            <option value="anual">Anual</option>
-                        </select>
-                    </div>
-
-                    <div class="col-12 col-sm-auto mb-2">
-                        <button class="btn btn-custom w-100 w-sm-auto">Gerar Projeção</button>
-                    </div>
-
-                </div>
-            </div>
-
+            
             <div class="row">
-                <div class="col-md-8 mb-4">
-                    <div class="chart-container h-100">
-                        <h6><i class="fas fa-chart-bar me-2"></i>Receitas x Despesas por Período</h6>
+                <div class="col-12 mb-4">
+                    <div class="chart-container">
+                        <h6><i class="fas fa-chart-bar me-2"></i>Receitas x Despesas (12 Meses)</h6>
                         <canvas id="graficoBarra"></canvas>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-4 mb-4">
-                    <div class="chart-container h-100 d-flex flex-column justify-content-center">
-                        <h6 class="text-center"><i class="fas fa-chart-pie me-2"></i>Proporção</h6>
-                        <canvas id="graficoPizza"></canvas>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="chart-container">
+                        <h6><i class="fas fa-chart-area me-2"></i>Fluxo de Caixa e Projeção de Investimento (12 Meses)</h6>
+                        <canvas id="graficoLinha"></canvas>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-12">
-                    <div class="chart-container">
-                        <h6><i class="fas fa-chart-area me-2"></i>Fluxo de Caixa (Evolução do Saldo)</h6>
-                        <canvas id="graficoLinha"></canvas>
+                <div class="col-md-6 mb-4">
+                    <div class="chart-container h-100 d-flex flex-column justify-content-center">
+                        <h6 class="text-center"><i class="fas fa-chart-pie me-2"></i>Proporção de Receitas</h6>
+                        <canvas id="graficoPizzaReceita"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="chart-container h-100 d-flex flex-column justify-content-center">
+                        <h6 class="text-center"><i class="fas fa-chart-pie me-2"></i>Proporção de Despesas</h6>
+                        <canvas id="graficoPizzaDespesa"></canvas>
                     </div>
                 </div>
             </div>
@@ -93,6 +102,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/projecao.js') }}"></script>

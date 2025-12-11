@@ -280,12 +280,8 @@ def cadastrarTransacao():
         current_app.logger.warning(f'Erro ao cadastrar transacao: {e}')
         return redirect(url_for('transacao.acessarTransacao'))
     
-
 # -------------------------------------
 # Edição de Transação
-# -------------------------------------
-# -------------------------------------
-# Edição de Transação (Ajustada para a nova lógica de compensação)
 # -------------------------------------
 @transacao_bp.route('/editar', methods=['POST'])
 @login_required
@@ -495,7 +491,7 @@ def editarTransacao():
         return redirect(url_for('transacao.acessarTransacao'))
 
 # -------------------------------------
-# Deleção de Transação (A lógica de deleção não foi alterada)
+# Deleção de Transação
 # -------------------------------------
 @transacao_bp.route('/deletar/<int:transacao_id>', methods=['GET', 'POST'])
 @login_required
