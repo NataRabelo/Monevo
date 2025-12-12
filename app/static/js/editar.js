@@ -122,3 +122,51 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+  /* =============================
+    Validacao de senha
+  ============================= */
+document.addEventListener("DOMContentLoaded", () => {
+    const campoSenha = document.getElementById("campo-senha");
+    const form = document.querySelector(".formulario-editar");
+
+    const msg = document.createElement("div");
+    msg.style.color = "red";
+    msg.style.marginTop = "5px";
+    msg.style.fontSize = "14px";
+    campoSenha.closest(".col-md-12").appendChild(msg);
+
+    function validarSenha(senha) {
+        const regras = [
+            { teste: /.{8,}/, msg: "• mínimo 8 caracteres" },
+            { teste: /[a-z]/, msg: "• pelo menos 1 letra minúscula" },
+            { teste: /[A-Z]/, msg: "• pelo menos 1 letra maiúscula" },
+            { teste: /[^A-Za-z0-9]/, msg: "• pelo menos 1 caractere especial" }
+        ];
+
+        const faltando = regras.filter(r => !r.teste.test(senha));
+
+        if (faltando.length === 0) {
+            msg.innerHTML = "";
+            return true;
+        }
+
+        msg.innerHTML = "A senha deve conter:<br>" + faltando.map(f => f.msg).join("<br>");
+        return false;
+    }
+
+    campoSenha.addEventListener("input", () => {
+        if (campoSenha.value.trim() !== "") {
+            validarSenha(campoSenha.value);
+        } else {
+            msg.innerHTML = "";
+        }
+    });
+
+    form.addEventListener("submit", (e) => {
+        if (campoSenha.value.trim() !== "" && !validarSenha(campoSenha.value)) {
+            e.preventDefault();
+            alert("Corrija a senha antes de continuar.");
+        }
+    });
+});

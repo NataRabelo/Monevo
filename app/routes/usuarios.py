@@ -103,7 +103,8 @@ def editarUsuario():
 
             senha = request.form.get('senha', '').strip()
             if senha:
-                usuario.senha = bcrypt.generate_password_hash(senha).decode('utf-8')
+                usuario.password_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
+
 
             db.session.commit()
             login_user(usuario)
