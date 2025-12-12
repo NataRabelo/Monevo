@@ -21,19 +21,44 @@ modalEditarReceita.addEventListener("show.bs.modal", function (event) {
     const valor = button.getAttribute("data-valor");
     const dataTransacao = button.getAttribute("data-data-transacao");
     const recorrencia = button.getAttribute("data-recorrencia");
+    const receitaJaIncluida = button.getAttribute("data-receita-ja-incluida"); // Novo campo
 
+    // Preenche os inputs
     document.getElementById("receita-id").value = receitaId;
     document.getElementById("edit-descricao-receita").value = descricao;
-    document.getElementById("edit-valor-transacao-receita").value = 
-            new Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL"
-            }).format(valor);
+
+    // Formata o valor corretamente
+    document.getElementById("edit-valor-transacao-receita").value =
+        new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        }).format(parseFloat(valor));
+
     document.getElementById("edit-categoria-receita").value = categoriaId;
     document.getElementById("edit-conta-transacao-receita").value = contaId;
     document.getElementById("edit-data-transacao-receita").value = dataTransacao;
     document.getElementById("edit-recorrencia-receita").value = recorrencia;
+
+    // === Checkbox "Receita já incluída no saldo" ===
+    const campo = document.getElementById("campoEditReceitaJaIncluida");
+    const checkbox = document.getElementById("edit_receita_ja_incluida");
+
+    // Define o estado do checkbox
+    checkbox.checked = receitaJaIncluida === "on";
+
+    // Exibe/oculta dinamicamente conforme recorrência
+    function atualizarVisibilidadeCampo() {
+        const rec = document.getElementById("edit-recorrencia-receita").value;
+        campo.style.display = (rec === "Sem recorrencia") ? "block" : "none";
+    }
+
+    atualizarVisibilidadeCampo();
+
+    // Aplica listener no select de recorrência (dentro do modal)
+    const selectRecorrencia = document.getElementById("edit-recorrencia-receita");
+    selectRecorrencia.onchange = atualizarVisibilidadeCampo;
 });
+
 
 // ================= MODAL EDITAR DESPESA =================
 const modalEditarDespesa = document.getElementById("modalEditarDespesa");

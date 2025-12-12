@@ -24,7 +24,7 @@ def obter_dados_projecao():
     hoje = datetime.now().date()
     
     # 1. Definição do período fixo (Mês Atual + 11 meses futuros = 12 meses totais)
-    data_inicio_projecao = hoje.replace(day=1) # Dia 1 do Mês Atual
+    data_inicio_projecao = hoje.replace(day=1)  # Dia 1 do Mês Atual
     data_fim_projecao = data_inicio_projecao + relativedelta(months=+12, days=-1)
     
     # Parâmetros opcionais para filtragem dos CARDS (Mês/Ano)
@@ -34,12 +34,12 @@ def obter_dados_projecao():
     # ===============================
     # 2. SALDO INICIAL DA PROJEÇÃO (Saldo ao final do Mês Anterior)
     # ===============================
-    
+
     # 2a. Saldo Inicial Básico (Definido pelo usuário na criação da conta)
     saldo_inicial_contas = db.session.query(func.sum(Contas.saldo_inicial))\
-                           .filter_by(usuario_id=usuario_id).scalar() or 0
+                        .filter_by(usuario_id=usuario_id).scalar() or 0
 
-    # 2b. Movimentos compensados ANTES do início do período de projeção (data_transacao < data_inicio_projecao)
+    # 2b. Movimentos compensados ANTES do início do período de projeção
     mov_anterior = db.session.query(
         func.sum(
             case(
@@ -49,31 +49,41 @@ def obter_dados_projecao():
         )
     ).filter(
         Transacoes.usuario_id == usuario_id,
-        Transacoes.data_transacao < data_inicio_projecao, # Filtro chave: APENAS movimentos ANTES do Mês 1
+        Transacoes.data_transacao < data_inicio_projecao,
         Transacoes.parcela_atual != 0 
     ).scalar() or 0
 
-    # Saldo Inicial da Projeção = Saldo Básico + Movimentos até o final do mês anterior
-    # Este é o ponto de partida para a iteração de 12 meses.
-    saldo_inicial_projecao = saldo_inicial_contas + mov_anterior
+    # 2c. RECEITAS do mês atual que JÁ ESTÃO no saldo real (devem ser removidas para evitar duplicidade)
+    receitas_mes_atual_incluidas = db.session.query(
+        func.sum(Transacoes.valor)
+    ).filter(
+        Transacoes.usuario_id == usuario_id,
+        extract('month', Transacoes.data_transacao) == data_inicio_projecao.month,
+        extract('year', Transacoes.data_transacao) == data_inicio_projecao.year,
+        Transacoes.tipo == "Receita"
+    ).scalar() or 0
 
+    # SALDO INICIAL CORRIGIDO
+    saldo_inicial_projecao = saldo_inicial_contas + mov_anterior - receitas_mes_atual_incluidas
 
     # ===============================
     # 3. DADOS MENSAIS E GLOBAIS (12 meses)
     # ===============================
     
     # Consulta unificada para Receita, Despesa, Categoria e Fluxo de Caixa Mensal
+    # OBS: trazemos também o flag receita_ja_incluida para tratar o mês inicial
     dados_mensais = db.session.query(
         extract('year', Transacoes.data_transacao).label("ano"),
         extract('month', Transacoes.data_transacao).label("mes"),
         Transacoes.tipo,
         Transacoes.valor,
         Categorias.nome.label("categoria_nome"),
+        Transacoes.receita_ja_incluida
     ).join(Categorias, Categorias.id == Transacoes.categoria_id)\
     .filter(
         Transacoes.usuario_id == usuario_id,
         Transacoes.data_transacao.between(data_inicio_projecao, data_fim_projecao),
-        Transacoes.parcela_atual != 0 # Ignora registros mestres
+        Transacoes.parcela_atual != 0  # Ignora registros mestres
     ).order_by("ano", "mes", Transacoes.data_transacao).all()
 
     # Estruturas para montagem dos gráficos
@@ -81,7 +91,22 @@ def obter_dados_projecao():
     dados_pizza_receita = {}
     dados_pizza_despesa = {}
 
-    for ano, mes, tipo_tx, valor, categoria_nome in dados_mensais:
+    # Mês inicial/ano inicial da projeção (para verificação de 'mês atual' do range)
+    mes_inicio = data_inicio_projecao.month
+    ano_inicio = data_inicio_projecao.year
+
+    for ano, mes, tipo_tx, valor, categoria_nome, receita_flag in dados_mensais:
+        # Se esta transação é uma RECEITA do MÊS INICIAL e foi marcada como já incluída,
+        # então IGNORAMOS esta transação para evitar duplicidade no saldo inicial/projeção.
+        if (
+            tipo_tx == "Receita"
+            and int(mes) == mes_inicio
+            and int(ano) == ano_inicio
+            and bool(receita_flag)
+        ):
+            # Pula esta transação (não conta para agregados do mês inicial)
+            continue
+
         chave_mes = f"{int(mes):02}/{int(ano)}"
         
         # Agrupamento Mensal (Gráfico 1 e 2)
@@ -93,7 +118,7 @@ def obter_dados_projecao():
         # Agrupamento de Pizza (Gráfico 3 e 4)
         if tipo_tx == "Receita":
             dados_pizza_receita[categoria_nome] = dados_pizza_receita.get(categoria_nome, 0.0) + float(valor)
-        else: # Despesa
+        else:  # Despesa
             dados_pizza_despesa[categoria_nome] = dados_pizza_despesa.get(categoria_nome, 0.0) + float(valor)
 
     # ===============================
@@ -104,7 +129,7 @@ def obter_dados_projecao():
     chaves_ordenadas = sorted(dados_mensais_agrupados.keys(), key=lambda x: datetime.strptime(x, "%m/%Y"))
 
     fluxo_linha = []
-    saldo_acumulado = saldo_inicial_projecao # Ponto de partida AGORA é o final do mês anterior
+    saldo_acumulado = saldo_inicial_projecao  # Ponto de partida: final do mês anterior
     saldo_investimento_acumulado = 0.0 
 
     for chave_mes in chaves_ordenadas:

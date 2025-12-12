@@ -18,7 +18,7 @@
 
   <div class="row mb-4">
     <div class="col-md-6 mb-3">
-      <div class="card valor-card receita-card shadow-lg p-3 border-0"> 
+      <div class="card valor-card receita-card shadow-lg p-3 border-0">
         <span class="label-card">Receitas Totais</span>
         <h2 class="valor-numero" id="total-receitas">
           {{ total_receita | currency }}
@@ -27,7 +27,7 @@
     </div>
 
     <div class="col-md-6 mb-3">
-      <div class="card valor-card despesa-card shadow-lg p-3 border-0"> 
+      <div class="card valor-card despesa-card shadow-lg p-3 border-0">
         <span class="label-card">Despesas Totais</span>
         <h2 class="valor-numero" id="total-despesas">
           {{ total_despesa | currency }}
@@ -54,12 +54,8 @@
         <ul class="nav nav-tabs mb-3 custom-tabs" id="transacaoTabs" role="tablist">
           {% for chave_mes_ano, grupo in transacoes_agrupadas.items() | reverse %}
           <li class="nav-item" role="presentation">
-            <button class="nav-link {% if loop.first %}active{% endif %} text-light" 
-              id="tab-{{ loop.revindex0 }}"
-              data-bs-toggle="tab" 
-              data-bs-target="#pane-{{ loop.revindex0 }}" 
-              type="button" 
-              role="tab"
+            <button class="nav-link {% if loop.first %}active{% endif %} text-light" id="tab-{{ loop.revindex0 }}"
+              data-bs-toggle="tab" data-bs-target="#pane-{{ loop.revindex0 }}" type="button" role="tab"
               aria-controls="pane-{{ loop.revindex0 }}"
               aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
               <i class="bi bi-calendar-check me-1"></i> {{ grupo.nome_mes }}
@@ -70,8 +66,8 @@
 
         <div class="tab-content" id="transacaoTabContent">
           {% for chave_mes_ano, grupo in transacoes_agrupadas.items() | reverse %}
-          <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
-            id="pane-{{ loop.revindex0 }}" role="tabpanel">
+          <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="pane-{{ loop.revindex0 }}"
+            role="tabpanel">
 
             <div class="row mb-4">
               <div class="col-md-6 mb-3">
@@ -101,8 +97,8 @@
 
                   <div class="d-flex justify-content-between align-items-center px-3 pt-3 pb-2 border-bottom">
                     <h4 class="mb-0 text-success">Receitas</h4>
-                    <button class="btn btn-success btn-sm rounded-pill" 
-                      data-bs-toggle="modal" data-bs-target="#modalCadastroReceita">
+                    <button class="btn btn-success btn-sm rounded-pill" data-bs-toggle="modal"
+                      data-bs-target="#modalCadastroReceita">
                       <i class="bi bi-plus-lg me-1"></i> Adicionar
                     </button>
                   </div>
@@ -123,51 +119,47 @@
                       <tbody>
                         {% set receitas = grupo.itens | selectattr('tipo', 'equalto', 'Receita') | list %}
                         {% if receitas %}
-                          {% for transacao in receitas %}
-                          <tr class="table-row-receita">
-                            <td>{{ transacao.categoria.nome }}</td>
+                        {% for transacao in receitas %}
+                        <tr class="table-row-receita">
+                          <td>{{ transacao.categoria.nome }}</td>
 
-                            <td class="coluna-descricao">
-                              <div class="limitar-texto" title="{{ transacao.descricao }}">
-                                {{ transacao.descricao }}
-                              </div>
-                            </td>
+                          <td class="coluna-descricao">
+                            <div class="limitar-texto" title="{{ transacao.descricao }}">
+                              {{ transacao.descricao }}
+                            </div>
+                          </td>
 
-                            <td>{{ transacao.conta.nome_conta }}</td>
+                          <td>{{ transacao.conta.nome_conta }}</td>
 
-                            <td class="fw-bold text-success">
-                              {{ transacao.valor | currency }}
-                            </td>
+                          <td class="fw-bold text-success">
+                            {{ transacao.valor | currency }}
+                          </td>
 
-                            <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
+                          <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
 
-                            <td>
-                              <div class="d-flex align-items-center gap-1">
+                          <td>
+                            <div class="d-flex align-items-center gap-1">
 
-                                <button class="btn btn-sm btn-outline-secondary" 
-                                  title="Editar Receita"
-                                  data-bs-toggle="modal" 
-                                  data-bs-target="#modalEditarReceita"
-                                  data-receita-id="{{ transacao.id }}"
-                                  data-conta-id="{{ transacao.conta_id }}"
-                                  data-categoria-id="{{ transacao.categoria_id }}"
-                                  data-descricao="{{ transacao.descricao }}"
-                                  data-valor="{{ transacao.valor }}"
-                                  data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
-                                  data-recorrencia="{{ transacao.recorrencia }}">
-                                  <i class="bi bi-pencil"></i>
+                              <button class="btn btn-sm btn-outline-secondary" title="Editar Receita"
+                                data-bs-toggle="modal" data-bs-target="#modalEditarReceita"
+                                data-receita-id="{{ transacao.id }}" data-conta-id="{{ transacao.conta_id }}"
+                                data-categoria-id="{{ transacao.categoria_id }}"
+                                data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
+                                data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
+                                data-recorrencia="{{ transacao.recorrencia }}"
+                                data-receita-ja-incluida="{{ 'on' if transacao.receita_ja_incluida else 'off' }}">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+                              <form method="POST"
+                                action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                  <i class="bi bi-trash"></i>
                                 </button>
-
-                                <form method="POST"
-                                  action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
-                                  <button type="submit" class="btn btn-sm btn-outline-danger">
-                                    <i class="bi bi-trash"></i>
-                                  </button>
-                                </form>
-                              </div>
-                            </td>
-                          </tr>
-                          {% endfor %}
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
                         {% else %}
                         <tr>
                           <td colspan="6" class="py-3">Nenhuma receita neste mês.</td>
@@ -186,8 +178,8 @@
                   <div class="d-flex justify-content-between align-items-center px-3 pt-3 pb-2 border-bottom">
                     <h4 class="mb-0 text-danger">Despesas</h4>
 
-                    <button class="btn btn-danger btn-sm rounded-pill"
-                      data-bs-toggle="modal" data-bs-target="#modalCadastroDespesa">
+                    <button class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
+                      data-bs-target="#modalCadastroDespesa">
                       <i class="bi bi-plus-lg me-1"></i> Adicionar
                     </button>
                   </div>
@@ -208,54 +200,50 @@
                       <tbody>
                         {% set despesas = grupo.itens | selectattr('tipo', 'equalto', 'Despesa') | list %}
                         {% if despesas %}
-                          {% for transacao in despesas %}
-                          <tr class="table-row-despesa">
+                        {% for transacao in despesas %}
+                        <tr class="table-row-despesa">
 
-                            <td>{{ transacao.categoria.nome }}</td>
+                          <td>{{ transacao.categoria.nome }}</td>
 
-                            <td class="coluna-descricao">
-                              <div class="limitar-texto" title="{{ transacao.descricao }}">
-                                {{ transacao.descricao }}
-                              </div>
-                            </td>
+                          <td class="coluna-descricao">
+                            <div class="limitar-texto" title="{{ transacao.descricao }}">
+                              {{ transacao.descricao }}
+                            </div>
+                          </td>
 
-                            <td>{{ transacao.conta.nome_conta }}</td>
+                          <td>{{ transacao.conta.nome_conta }}</td>
 
-                            <td class="fw-bold text-danger">
-                              {{ transacao.valor | currency }}
-                            </td>
+                          <td class="fw-bold text-danger">
+                            {{ transacao.valor | currency }}
+                          </td>
 
-                            <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
+                          <td>{{ transacao.data_transacao.strftime("%d/%m/%Y") }}</td>
 
-                            <td>
-                              <div class="d-flex align-items-center gap-1">
+                          <td>
+                            <div class="d-flex align-items-center gap-1">
 
-                                <button class="btn btn-sm btn-outline-secondary"
-                                  title="Editar"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#modalEditarDespesa"
-                                  data-despesa-id="{{ transacao.id }}"
-                                  data-conta-id="{{ transacao.conta_id }}"
-                                  data-categoria-id="{{ transacao.categoria_id }}"
-                                  data-cartao-id="{{ transacao.cartao_id if transacao.cartao_id else '' }}"
-                                  data-descricao="{{ transacao.descricao }}"
-                                  data-valor="{{ transacao.valor }}"
-                                  data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
-                                  data-recorrencia="{{ transacao.recorrencia }}">
-                                  <i class="bi bi-pencil"></i>
+                              <button class="btn btn-sm btn-outline-secondary" title="Editar" data-bs-toggle="modal"
+                                data-bs-target="#modalEditarDespesa" data-despesa-id="{{ transacao.id }}"
+                                data-conta-id="{{ transacao.conta_id }}"
+                                data-categoria-id="{{ transacao.categoria_id }}"
+                                data-cartao-id="{{ transacao.cartao_id if transacao.cartao_id else '' }}"
+                                data-descricao="{{ transacao.descricao }}" data-valor="{{ transacao.valor }}"
+                                data-data-transacao="{{ transacao.data_transacao.strftime('%Y-%m-%d') }}"
+                                data-recorrencia="{{ transacao.recorrencia }}">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+
+                              <form method="POST"
+                                action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                  <i class="bi bi-trash"></i>
                                 </button>
+                              </form>
 
-                                <form method="POST"
-                                  action="{{ url_for('transacao.deletarTransacao', transacao_id=transacao.id) }}">
-                                  <button type="submit" class="btn btn-sm btn-outline-danger">
-                                    <i class="bi bi-trash"></i>
-                                  </button>
-                                </form>
-
-                              </div>
-                            </td>
-                          </tr>
-                          {% endfor %}
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
                         {% else %}
                         <tr>
                           <td colspan="6" class="py-3">Nenhuma despesa neste mês.</td>
@@ -268,7 +256,7 @@
 
                 </div>
               </div>
-                          </div> <!-- fim row g-4 -->
+            </div> <!-- fim row g-4 -->
           </div> <!-- fim tab-pane -->
           {% endfor %}
         </div> <!-- fim tab-content -->
@@ -308,9 +296,9 @@
                   <select class="form-select" name="categoria_transacao" required>
                     <option value="" disabled selected>Selecione</option>
                     {% for categoria in categorias %}
-                      {% if categoria.tipo == 'Receita' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                      {% endif %}
+                    {% if categoria.tipo == 'Receita' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
                     {% endfor %}
                   </select>
                 </div>
@@ -334,7 +322,8 @@
 
                 <div class="mb-3">
                   <label class="form-label">Número de Parcelas</label>
-                  <input type="number" class="form-control" id="parcelas-receita" name="num_parcelas" min="1" value="1" required>
+                  <input type="number" class="form-control" id="parcelas-receita" name="num_parcelas" min="1" value="1"
+                    required>
                 </div>
 
                 <div class="mb-3">
@@ -346,6 +335,18 @@
                     <option value="Mensal">Mensal</option>
                     <option value="Anual">Anual</option>
                   </select>
+                </div>
+
+                <div id="campoReceitaJaIncluida" class="form-group mb-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="receita_ja_incluida" id="receita_ja_incluida" value="on">
+
+                    <label class="form-check-label fw-bold text-success ms-1" for="receita_ja_incluida"
+                      data-bs-toggle="tooltip" data-bs-placement="right"
+                      title="Marque esta opção apenas se o valor desta receita (do mês atual) já está contido no saldo informado ao cadastrar a conta. Isso impede duplicação no saldo final.">
+                      Receita já incluída no saldo
+                    </label>
+                  </div>
                 </div>
 
                 <div class="text-end">
@@ -389,9 +390,9 @@
                   <select class="form-select" name="categoria_transacao" required>
                     <option value="" disabled selected>Selecione</option>
                     {% for categoria in categorias %}
-                      {% if categoria.tipo == 'Despesa' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                      {% endif %}
+                    {% if categoria.tipo == 'Despesa' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
                     {% endfor %}
                   </select>
                 </div>
@@ -401,7 +402,8 @@
                   <select class="form-select" name="cartao">
                     <option value="">Não usar cartão</option>
                     {% for cartao in cartoes %}
-                    <option value="{{ cartao.id }}">{{ cartao.nome_cartao }} (Disp: {{ cartao.limite_disponivel | currency }})</option>
+                    <option value="{{ cartao.id }}">{{ cartao.nome_cartao }} (Disp: {{ cartao.limite_disponivel |
+                      currency }})</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -425,7 +427,8 @@
 
                 <div class="mb-3">
                   <label class="form-label">Número de Parcelas</label>
-                  <input type="number" class="form-control" id="parcelas-despesa" name="num_parcelas" min="1" value="1" required>
+                  <input type="number" class="form-control" id="parcelas-despesa" name="num_parcelas" min="1" value="1"
+                    required>
                 </div>
 
                 <div class="mb-3">
@@ -475,7 +478,8 @@
 
                 <div class="mb-3">
                   <label class="form-label">Valor</label>
-                  <input type="text" class="form-control currency" id="edit-valor-transacao-receita" name="valor_transacao" required>
+                  <input type="text" class="form-control currency" id="edit-valor-transacao-receita"
+                    name="valor_transacao" required>
                 </div>
 
                 <div class="mb-3">
@@ -483,9 +487,9 @@
                   <select class="form-select" id="edit-categoria-receita" name="categoria_transacao" required>
                     <option value="">Selecione</option>
                     {% for categoria in categorias %}
-                      {% if categoria.tipo == 'Receita' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                      {% endif %}
+                    {% if categoria.tipo == 'Receita' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
                     {% endfor %}
                   </select>
                 </div>
@@ -503,7 +507,8 @@
 
                   <div class="flex-fill">
                     <label class="form-label">Data</label>
-                    <input type="date" class="form-control" id="edit-data-transacao-receita" name="data_transacao" required>
+                    <input type="date" class="form-control" id="edit-data-transacao-receita" name="data_transacao"
+                      required>
                   </div>
                 </div>
 
@@ -518,6 +523,20 @@
                   </select>
                 </div>
 
+                <!-- NOVO CAMPO: Receita já incluída no saldo -->
+                <div id="campoEditReceitaJaIncluida" class="form-group mb-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="receita_ja_incluida"
+                      id="edit_receita_ja_incluida" value="on">
+
+                    <label class="form-check-label fw-bold text-success ms-1" for="edit_receita_ja_incluida"
+                      data-bs-toggle="tooltip" data-bs-placement="right"
+                      title="Marque esta opção apenas se o valor desta receita (do mês atual) já está contido no saldo informado ao cadastrar a conta. Isso impede duplicação no saldo final.">
+                      Receita já incluída no saldo
+                    </label>
+                  </div>
+                </div>
+
                 <div class="text-end">
                   <button type="submit" class="btn-modal btn-modal-dark">Salvar</button>
                 </div>
@@ -529,6 +548,7 @@
         </div>
       </div>
     </div>
+
 
     <!-- ========================= MODAL EDITAR DESPESA ========================= -->
     <div class="col-lg-12">
@@ -554,7 +574,8 @@
 
                 <div class="mb-3">
                   <label class="form-label">Valor</label>
-                  <input type="text" class="form-control currency" id="edit-valor-transacao-despesa" name="valor_transacao" required>
+                  <input type="text" class="form-control currency" id="edit-valor-transacao-despesa"
+                    name="valor_transacao" required>
                 </div>
 
                 <div class="mb-3">
@@ -562,9 +583,9 @@
                   <select class="form-select" id="edit-categoria-despesa" name="categoria_transacao" required>
                     <option value="">Selecione</option>
                     {% for categoria in categorias %}
-                      {% if categoria.tipo == 'Despesa' %}
-                      <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                      {% endif %}
+                    {% if categoria.tipo == 'Despesa' %}
+                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endif %}
                     {% endfor %}
                   </select>
                 </div>
@@ -574,7 +595,8 @@
                   <select class="form-select" id="edit-cartao-despesa" name="cartao">
                     <option value="">Não usar cartão</option>
                     {% for cartao in cartoes %}
-                    <option value="{{ cartao.id }}">{{ cartao.nome_cartao }} (Disp: {{ cartao.limite_disponivel | currency }})</option>
+                    <option value="{{ cartao.id }}">{{ cartao.nome_cartao }} (Disp: {{ cartao.limite_disponivel |
+                      currency }})</option>
                     {% endfor %}
                   </select>
                 </div>
@@ -592,7 +614,8 @@
 
                   <div class="flex-fill">
                     <label class="form-label">Data</label>
-                    <input type="date" class="form-control" id="edit-data-transacao-despesa" name="data_transacao" required>
+                    <input type="date" class="form-control" id="edit-data-transacao-despesa" name="data_transacao"
+                      required>
                   </div>
                 </div>
 
@@ -653,13 +676,14 @@
                       <td>{{ categoria.tipo }}</td>
                       <td>
                         <button class="btn btn-sm btn-outline-secondary open-editar-categoria"
-                          data-id="{{ categoria.id }}"
-                          data-nome="{{ categoria.nome }}"
+                          data-id="{{ categoria.id }}" data-nome="{{ categoria.nome }}"
                           data-tipo="{{ categoria.tipo }}">
                           <i class="bi bi-pencil"></i>
                         </button>
 
-                        <form method="POST" action="{{ url_for('categoria.deletarCategoria', categoria_id=categoria.id) }}" class="d-inline">
+                        <form method="POST"
+                          action="{{ url_for('categoria.deletarCategoria', categoria_id=categoria.id) }}"
+                          class="d-inline">
                           <button type="submit" class="btn btn-sm btn-outline-danger">
                             <i class="bi bi-trash"></i>
                           </button>
@@ -767,5 +791,9 @@
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/transacao.js') }}"></script>
-{% endblock %}
+<script>
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
 
+{% endblock %}
