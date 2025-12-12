@@ -62,7 +62,7 @@ def recuperar_senha_email():
         usuario = Usuarios.query.filter_by(email=destinatario).first()
 
         if not usuario:
-            flash("E-mail não encontrado no sistema.", 'error')
+            flash("Usuário não encontrado no sistema, por favor cadastre-se.")
             current_app.logger.warning(f"Tentativa de recuperação com e-mail inexistente: {destinatario}")
             return redirect(url_for('user.cadastroUsuario'))
 

@@ -14,8 +14,8 @@ conta_bp = Blueprint('conta', __name__, url_prefix='/conta')
 @login_required
 def acessarConta():
     if request.method == "GET":
-        contas = Contas.query.all()
-        cartoes = Cartoes.query.all()
+        contas = Contas.query.filter(Contas.usuario_id == current_user.id).all()
+        cartoes = Cartoes.query.filter(Cartoes.usuario_id == current_user.id).all()
         return render_template('dashboard/contas.html', contas=contas, cartoes=cartoes)
 
 # -------------------------------------

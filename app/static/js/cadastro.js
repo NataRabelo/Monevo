@@ -198,3 +198,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+
+// -------------------------------------------------------------
+// Controla mensagens flash na tela:
+// - adiciona efeito de fade-out após 3s
+// - remove o elemento do DOM quando a transição termina
+// -------------------------------------------------------------
+const flashMessages = document.querySelectorAll('.flash-message');
+
+flashMessages.forEach(msg => {
+    setTimeout(() => {
+        msg.classList.add('fade-out');
+    }, 3000);
+
+    msg.addEventListener('transitionend', () => {
+        msg.remove();
+    });
+});
