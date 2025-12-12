@@ -86,11 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
             selectFiltroMes.appendChild(option);
         });
         
-        // Adiciona a opção Anual por último (Visão Macro)
-        const optionAnual = document.createElement('option');
-        optionAnual.value = 'anual';
-        optionAnual.textContent = 'Visão Macro (Total 12 meses)';
-        selectFiltroMes.appendChild(optionAnual);
     }
 
 

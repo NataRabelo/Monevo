@@ -3,7 +3,7 @@
 {% block title %}Educação Financeira | Monevo{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -116,11 +116,15 @@
                     financeiro e economia:</p>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
-                            href="https://www.infomoney.com.br/" target="_blank">Infomoney</a></li>
+                            href="https://www.nerdwallet.com/" target="_blank">nerdwallet</a></li>
                     <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
-                            href="https://valor.globo.com/" target="_blank">Valor Econômico</a></li>
+                            href="https://www.morningstar.com/" target="_blank">Morningstar</a></li>
                     <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
-                            href="https://www.seudinheiro.com/" target="_blank">Seu Dinheiro</a></li>
+                            href="https://www.valor.com.br" target="_blank">Valor do Dinheiro</a></li>
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
+                            href="https://www.bloomberg.com/latinamerica" target="_blank">Bloomberg</a></li>
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
+                            href="https://www.investopedia.com" target="_blank">Investopedia</a></li>
                 </ul>
             </div>
         </div>
@@ -152,9 +156,11 @@
                     <li class="list-group-item bg-transparent border-secondary-subtle py-1"><strong>CDI:</strong>
                         Certificado de Depósito Interbancário</li>
                     <li class="list-group-item bg-transparent border-secondary-subtle py-1">
-                        <strong>IPCA:</strong> Índice Nacional de Preços ao Consumidor Amplo</li>
+                        <strong>IPCA:</strong> Índice Nacional de Preços ao Consumidor Amplo
+                    </li>
                     <li class="list-group-item bg-transparent border-secondary-subtle py-1">
-                        <strong>SELIC:</strong> Sistema Especial de Liquidação e de Custódia</li>
+                        <strong>SELIC:</strong> Sistema Especial de Liquidação e de Custódia
+                    </li>
                 </ul>
                 <a href="{{ url_for('educacional.glossario') }}" class="btn btn-sm btn-outline-info mt-3 w-100">
                     Ver Glossário Completo
