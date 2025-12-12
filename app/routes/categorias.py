@@ -2,6 +2,7 @@ from flask import Blueprint, current_app, render_template, request, flash, redir
 from app.models import Categorias, Transacoes
 from flask_login import current_user, login_required
 from app import db
+from app.utils import limpar_espacos
 
 categoria_bp = Blueprint('categoria', __name__, url_prefix='/categoria')
 
@@ -14,7 +15,7 @@ def cadastrarCategoria():
     try:
         if request.method == "POST":
             usuario = current_user
-            nome = request.form.get('nome_categoria')
+            nome = limpar_espacos(request.form.get('nome_categoria'))
             tipo = request.form.get('tipo_categoria')
 
             new_categoria = Categorias(
@@ -51,7 +52,7 @@ def editarCategoria():
             flash('Categoria não encontrada', 'error')
             return redirect(url_for('transacao.acessarTransacao'))
 
-        categoria.nome = request.form.get('nome_categoria') or categoria.nome
+        categoria.nome = limpar_espacos(request.form.get('nome_categoria')) or categoria.nome
         categoria.tipo = request.form.get('tipo_categoria') or categoria.tipo
 
         db.session.commit()

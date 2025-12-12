@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Calculadora de Reserva de Emergência{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-shield-alt me-2 text-warning"></i> Calculadora de Reserva de Emergência</h1>
+    <p class="lead text-white-50">Calcule o valor ideal para sua rede de segurança financeira e durma tranquilo.</p>
+    
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Seus Custos Mensais</h3>
+                <form id="formReservaEmergencia">
+                    <div class="mb-3">
+                        <label for="custoMensal" class="form-label text-white">Total de Despesas Fixas Essenciais (R$)</label>
+                        <input type="number" class="form-control" id="custoMensal" value="3000" min="0" required>
+                        <small class="form-text text-white-50">Apenas gastos indispensáveis: aluguel, alimentação, contas básicas, saúde.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mesesCobertura" class="form-label text-white">Meses de Cobertura Desejados (6 a 12)</label>
+                        <input type="number" class="form-control" id="mesesCobertura" value="6" min="6" max="12" required>
+                        <small class="form-text text-white-50">Se você tem emprego estável (6 meses). Se é autônomo ou variável (9-12 meses).</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-continuar w-100 mt-3">Calcular Reserva Ideal</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Seu Objetivo de Segurança</h3>
+                <div id="resultado" class="mb-4">
+                    <h4 class="text-white">Reserva de Emergência Ideal:</h4>
+                    <p class="fs-3 fw-bold text-warning-light">R$ 0,00</p>
+                </div>
+
+                <h4 class="text-white mt-4">O Conceito de Reserva</h4>
+                <p class="text-white-50">A Reserva de Emergência deve cobrir seus custos fixos pelo período que você levaria para se reestabelecer financeiramente após um evento inesperado (perda de emprego, doença, etc.).</p>
+                <div class="formula-block text-center mb-3">
+                    $$\text{RE Ideal} = \text{Custo Mensal Essencial} \times \text{Meses de Cobertura}$$
+                </div>
+                <div class="alert alert-info mt-3">
+                    <strong>Onde Guardar:</strong> A RE deve ser investida em produtos de <strong>Baixo Risco</strong> e <strong>Alta Liquidez</strong> (como Tesouro Selic ou CDBs diários). 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light mt-5"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('formReservaEmergencia').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 1. Coleta e conversão dos dados
+        const custoMensal = parseFloat(document.getElementById('custoMensal').value); // Despesas Essenciais
+        const mesesCobertura = parseInt(document.getElementById('mesesCobertura').value); // Meses Desejados
+
+        // 2. Cálculo da Reserva Ideal
+        const reservaIdeal = custoMensal * mesesCobertura;
+
+        // 3. Formatação e exibição dos resultados
+        const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+        const resultadoHTML = `
+            <h4 class="text-white">Reserva de Emergência Ideal:</h4>
+            <p class="fs-3 fw-bold text-warning-light">${formatarMoeda(reservaIdeal)}</p>
+            <p class="text-white">Com base em ${mesesCobertura} meses de cobertura.</p>
+            <div class="alert alert-warning mt-3">
+                Seu objetivo é acumular este valor em investimentos de alta liquidez.
+            </div>
+        `;
+
+        document.getElementById('resultado').innerHTML = resultadoHTML;
+    });
+</script>
+{% endblock %}

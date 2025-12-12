@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Educação Financeira | Monevo{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="hero-educacional text-center text-white">
+        <h1 class="display-4 fw-bold mb-3">📚 Central de Educação Financeira</h1>
+        <p class="lead mb-4">Seu guia completo para o sucesso financeiro. Aprenda a gerenciar, economizar e
+            investir de forma inteligente.</p>
+        <a href="{{ url_for('educacional.modulo1') }}" class="btn btn-lg btn-continuar">
+            <i class="fas fa-arrow-right me-2"></i> Começar Agora a Aprender
+        </a>
+    </div>
+
+    <h2 class="text-white mb-4"><i class="fas fa-book-open me-2 text-primary-light"></i> Trilhas de Aprendizagem
+    </h2>
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+            <div class="card-modulo p-3 h-100">
+                <div class="card-header-custom mb-3">
+                    <i class="fas fa-piggy-bank me-2"></i> Módulo 1: Orçamento Descomplicado
+                </div>
+                <h5 class="card-title">Onde está o meu dinheiro?</h5>
+                <p class="card-text text-white-50">Aprenda a mapear receitas, despesas e a construir um
+                    orçamento sólido.</p>
+                <a href="{{ url_for('educacional.modulo1') }}" class="btn btn-sm btn-continuar w-100 mt-2">
+                    <i class="fas fa-play me-1"></i> Acessar Conteúdo
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-modulo p-3 h-100">
+                <div class="card-header-custom mb-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i> Módulo 2: Livre-se das Dívidas
+                </div>
+                <h5 class="card-title">O Poder da Reserva de Emergência</h5>
+                <p class="card-text text-white-50">Estratégias para negociar dívidas, evitar juros e
+                    construir sua reserva de segurança.</p>
+                <a href="{{ url_for('educacional.modulo2') }}" class="btn btn-sm btn-continuar w-100 mt-2">
+                    <i class="fas fa-play me-1"></i> Acessar Conteúdo
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-modulo p-3 h-100">
+                <div class="card-header-custom mb-3">
+                    <i class="fas fa-chart-pie me-2"></i> Módulo 3: Seus Primeiros Investimentos
+                </div>
+                <h5 class="card-title">O Bê-á-bá do Investidor</h5>
+                <p class="card-text text-white-50">Renda Fixa, Renda Variável, e como montar uma
+                    carteira de investimentos ideal.</p>
+                <a href="{{ url_for('educacional.modulo3') }}" class="btn btn-sm btn-continuar w-100 mt-2">
+                    <i class="fas fa-play me-1"></i> Acessar Conteúdo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="text-white mb-4"><i class="fas fa-calculator me-2 text-primary-light"></i> Ferramentas e
+        Calculadoras</h2>
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+            <a href="{{ url_for('educacional.jurosCompostos') }}"
+                class="card-ferramenta p-4 d-block text-decoration-none h-100">
+                <i class="fas fa-dollar-sign fa-3x mb-2"></i>
+                <h5 class="text-white mb-1">Juros Compostos</h5>
+                <p class="text-white-50 mb-0 small">Calcule o crescimento do seu patrimônio ao longo do
+                    tempo.</p>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a href="{{ url_for('educacional.reservaEmergencia') }}"
+                class="card-ferramenta p-4 d-block text-decoration-none h-100">
+                <i class="fas fa-shield-alt fa-3x mb-2"></i>
+                <h5 class="text-white mb-1">Reserva de Emergência</h5>
+                <p class="text-white-50 mb-0 small">Descubra o valor ideal para sua segurança
+                    financeira.</p>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a href="{{ url_for('educacional.projecaoAposentadoria') }}"
+                class="card-ferramenta p-4 d-block text-decoration-none h-100">
+                <i class="fas fa-user-tie fa-3x mb-2"></i>
+                <h5 class="text-white mb-1">Projeção Aposentadoria</h5>
+                <p class="text-white-50 mb-0 small">Planeje seu futuro e a independência financeira.</p>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <a href="{{ url_for('educacional.amortizacaoDividas') }}"
+                class="card-ferramenta p-4 d-block text-decoration-none h-100">
+                <i class="fas fa-hand-holding-usd fa-3x mb-2"></i>
+                <h5 class="text-white mb-1">Amortização de Dívidas</h5>
+                <p class="text-white-50 mb-0 small">Simule como pagar suas dívidas mais rápido.</p>
+            </a>
+        </div>
+    </div>
+
+    <h2 class="text-white mb-4"><i class="fas fa-compass me-2 text-primary-light"></i> Recursos Adicionais</h2>
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card-recurso card-stat h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-newspaper fa-2x me-3"></i>
+                    <h5 class="card-title mb-0 text-uppercase">Mercado e Notícias</h5>
+                </div>
+                <p class="card-description mb-3">Links úteis para se manter atualizado sobre o mercado
+                    financeiro e economia:</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
+                            href="https://www.infomoney.com.br/" target="_blank">Infomoney</a></li>
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
+                            href="https://valor.globo.com/" target="_blank">Valor Econômico</a></li>
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1"><a
+                            href="https://www.seudinheiro.com/" target="_blank">Seu Dinheiro</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card-recurso card-stat h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-video fa-2x me-3"></i>
+                    <h5 class="card-title mb-0 text-uppercase">Vídeo Destaque</h5>
+                </div>
+                <p class="card-description mb-3">Assista o vídeo da semana sobre Dicas para Economizar:
+                </p>
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/zzWCbbnFPq4?si=1MpSUvfJW_9Lc8RK"
+                        title="Dicas de educação financeira" allowfullscreen class="rounded-3"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card-recurso card-stat h-100 p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-spell-check fa-2x me-3"></i>
+                    <h5 class="card-title mb-0 text-uppercase">Glossário Financeiro</h5>
+                </div>
+                <p class="card-description mb-3">Não sabe o que é CDI, IPCA ou Selic? Consulte nosso
+                    glossário!</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1"><strong>CDI:</strong>
+                        Certificado de Depósito Interbancário</li>
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1">
+                        <strong>IPCA:</strong> Índice Nacional de Preços ao Consumidor Amplo</li>
+                    <li class="list-group-item bg-transparent border-secondary-subtle py-1">
+                        <strong>SELIC:</strong> Sistema Especial de Liquidação e de Custódia</li>
+                </ul>
+                <a href="{{ url_for('educacional.glossario') }}" class="btn btn-sm btn-outline-info mt-3 w-100">
+                    Ver Glossário Completo
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

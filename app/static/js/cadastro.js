@@ -122,4 +122,31 @@ document.addEventListener('DOMContentLoaded', function () {
       mostrarErro('');
     }
   });
+
+  // -----------------------------------------------------------
+  // Mascara de celular dinâmica
+  // -----------------------------------------------------------
+  
+    const campo = document.getElementById('campo-celular');
+
+    campo.addEventListener('input', function () {
+        let valor = this.value.replace(/\D/g, '');
+        
+        // Limita a 11 dígitos reais
+        if (valor.length > 11) {
+            valor = valor.slice(0, 11);
+        }
+
+        if (valor.length <= 2) {
+            this.value = `(${valor}`;
+        } 
+        else if (valor.length <= 7) {
+            // (62) 9927
+            this.value = valor.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+        } 
+        else if (valor.length <= 11) {
+            // (62) 99272-8679
+            this.value = valor.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+        }
+    });
 });

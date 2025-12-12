@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}Calculadora de Juros Compostos{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-dollar-sign me-2 text-primary-light"></i> Calculadora de Juros Compostos</h1>
+    <p class="lead text-white-50">Descubra o futuro do seu patrimônio com o poder dos juros sobre juros.</p>
+    
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Insira os Dados para Simulação</h3>
+                <form id="formJurosCompostos">
+                    <div class="mb-3">
+                        <label for="capital" class="form-label text-white">Capital Inicial (R$)</label>
+                        <input type="number" class="form-control" id="capital" value="1000" min="0" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="aporte" class="form-label text-white">Aporte Mensal (R$)</label>
+                        <input type="number" class="form-control" id="aporte" value="200" min="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="taxa" class="form-label text-white">Taxa de Juros Anual (%)</label>
+                        <input type="number" class="form-control" id="taxa" value="10" step="0.1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="periodo" class="form-label text-white">Período (Anos)</label>
+                        <input type="number" class="form-control" id="periodo" value="15" min="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-continuar w-100">Calcular Projeção</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Entenda o Cálculo</h3>
+                <div id="resultado" class="mb-4">
+                    <h4 class="text-white">Montante Total Projetado:</h4>
+                    <p class="fs-3 fw-bold text-success-light">R$ 0,00</p>
+                    <p class="text-white-50">*(Os valores reais dependem da rentabilidade e impostos)*</p>
+                </div>
+                
+                <h4 class="text-white mt-4">A Fórmula: O Segredo da Multiplicação</h4>
+                <p class="text-white-50">O cálculo do Montante (M) inclui o crescimento do Capital Inicial e a série de Aportes Mensais, ambos submetidos aos juros. É fundamental entender que os juros incidem sobre o montante total, e não apenas sobre o capital. </p>
+                <div class="formula-block text-center mb-3">
+                    $$M = P(1+i)^n + A \left[\frac{(1+i)^n - 1}{i}\right] \times (1+i)$$
+                </div>
+                <p class="small text-white-50">Onde: <strong>P</strong> = Capital Inicial, <strong>i</strong> = Taxa de juros por período, <strong>n</strong> = Número de períodos, <strong>A</strong> = Aporte periódico.</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light mt-5"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('formJurosCompostos').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 1. Coleta e conversão dos dados
+        const P = parseFloat(document.getElementById('capital').value); // Capital Inicial
+        const A = parseFloat(document.getElementById('aporte').value);  // Aporte Mensal
+        const taxaAnual = parseFloat(document.getElementById('taxa').value) / 100; // Taxa Anual (%)
+        const anos = parseInt(document.getElementById('periodo').value); // Período (Anos)
+        
+        // 2. Conversão para o período mensal
+        const i_mensal = Math.pow(1 + taxaAnual, 1/12) - 1; // Taxa mensal real (aproximação composta)
+        const n_meses = anos * 12; // Total de meses
+
+        let montanteTotal = 0;
+
+        // 3. Cálculo do Montante (M) - Fórmula simplificada para Juros + Aportes
+        
+        // Contribuição do Capital Inicial (P * (1 + i_mensal)^n_meses)
+        const montanteCapital = P * Math.pow(1 + i_mensal, n_meses);
+
+        // Contribuição dos Aportes (Fórmula do Valor Futuro de uma Anuidade)
+        // FV = A * [((1 + i_mensal)^n_meses - 1) / i_mensal]
+        const montanteAportes = A * ((Math.pow(1 + i_mensal, n_meses) - 1) / i_mensal);
+
+        montanteTotal = montanteCapital + montanteAportes;
+        
+        // 4. Cálculo dos Valores Reais
+        const totalInvestido = P + (A * n_meses);
+        const totalJuros = montanteTotal - totalInvestido;
+
+        // 5. Formatação e exibição dos resultados
+        const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+        const resultadoHTML = `
+            <h4 class="text-white">Montante Total Projetado:</h4>
+            <p class="fs-3 fw-bold text-success-light">${formatarMoeda(montanteTotal)}</p>
+            <p class="text-white">Total Investido: ${formatarMoeda(totalInvestido)}</p>
+            <p class="text-white">Total de Juros Ganhos: ${formatarMoeda(totalJuros)}</p>
+        `;
+
+        document.getElementById('resultado').innerHTML = resultadoHTML;
+    });
+</script>
+{% endblock %}

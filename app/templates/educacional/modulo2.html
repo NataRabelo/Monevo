@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Módulo 2: Livre-se das Dívidas{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-exclamation-triangle me-2 text-danger"></i> Módulo 2: Livre-se das Dívidas</h1>
+    <p class="lead text-white-50">Estratégias para negociar juros, quitar o passivo e blindar seu futuro financeiro.</p>
+
+    <div class="card-modulo p-4 mb-4">
+        <h2>Lição 2.1: Priorizando o Pagamento (Juros vs. Montante)</h2>
+        <p>Nem toda dívida é igual. A prioridade máxima são as dívidas com os <strong>juros mais altos</strong>, pois elas consomem sua renda mais rapidamente.</p>
+        <p>A taxa de juros do cheque especial ou rotativo do cartão de crédito é geralmente a maior inimiga. Use nossa Calculadora de Amortização de Dívidas para visualizar o impacto.</p>
+        
+        <h4 class="mt-3">Métodos de Quitação:</h4>
+        <ul class="lista-educacional">
+            <li><strong>Método Bola de Neve (Snowball):</strong> Pague primeiro a <strong>menor dívida</strong> e use o dinheiro economizado para pagar a próxima, ganhando motivação.</li>
+            <li><strong>Método Avalanche (Avalanche):</strong> Pague primeiro a dívida com os <strong>maiores juros</strong>, economizando mais no longo prazo (matematicamente superior).</li>
+        </ul>
+        <div class="text-center mt-4">
+             <a href="{{ url_for('educacional.amortizacaoDividas') }}" class="btn btn-warning"><i class="fas fa-calculator me-2"></i> Simule a Amortização Agora</a>
+        </div>
+    </div>
+
+    <div class="card-modulo p-4 mb-4">
+        <h2>Lição 2.2: Construindo sua Reserva de Emergência</h2>
+        <p>A Reserva de Emergência (RE) é o seu "colchão" financeiro, essencial para cobrir imprevistos sem precisar contrair novas dívidas.</p>
+        <p>🎯 <strong>Meta:</strong> Acumular o equivalente a <strong>6 a 12 meses</strong> dos seus custos fixos mensais.</p>
+        <p>O dinheiro da RE deve ser mantido em investimentos de <strong>alta liquidez</strong> (resgate rápido) e <strong>baixo risco</strong> (CDBs diários, Tesouro Selic). </p>
+        
+        <div class="alert alert-success">
+            <strong>Lembre-se:</strong> A RE não é investimento para multiplicar patrimônio, é um seguro contra a pobreza. Nunca a use para compras não essenciais.
+        </div>
+        <div class="text-center mt-4">
+             <a href="{{ url_for('educacional.reservaEmergencia') }}" class="btn btn-warning"><i class="fas fa-calculator me-2"></i> Calcule o Tamanho da sua RE</a>
+        </div>
+    </div>
+
+    <div class="card-modulo p-4 mb-4 text-center">
+        <p class="mb-3">✅ <strong>Próximo Passo:</strong> Com as dívidas sob controle e a Reserva de Emergência em construção, é hora de fazer o seu dinheiro crescer!</p>
+        <a href="{{ url_for('educacional.modulo3') }}" class="btn btn-lg btn-continuar"><i class="fas fa-forward me-2"></i> Próximo Módulo: Seus Primeiros Investimentos</a>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}

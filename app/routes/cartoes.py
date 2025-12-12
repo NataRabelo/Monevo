@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, render_template, request, flash, redirect, url_for
-from app.utils import limpar_currency
+from app.utils import limpar_currency, limpar_espacos
 from flask_login import current_user, login_required
 from app.models import Cartoes, Transacoes
 from app import db
@@ -17,7 +17,7 @@ def cadastrarCartao():
     try: 
         usuario = current_user.id
 
-        nome_cartao             = request.form.get('nome_cartao')
+        nome_cartao             = limpar_espacos(request.form.get('nome_cartao'))
         bandeira                = request.form.get('bandeira')
         limite                  = limpar_currency(request.form.get('limite'))
         limite_disponivel       = limite
@@ -66,7 +66,7 @@ def editarCartao():
             return render_template('cartao/editar')
         
         if request.method == 'POST':
-            cartao.nome_cartao              = request.form.get('nome_cartao') or cartao.nome_cartao
+            cartao.nome_cartao              = limpar_espacos(request.form.get('nome_cartao')) or cartao.nome_cartao
             cartao.bandeira                 = request.form.get('bandeira') or cartao.bandeira
             cartao.limite                   = limpar_currency(request.form.get('limite') or cartao.limite)
             cartao.limite_disponivel        = cartao.limite

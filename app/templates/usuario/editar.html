@@ -15,6 +15,9 @@
 </head>
 
 <body>
+    <!-- FLASH MENSAGENS -->
+    {% include 'partials/flash_messages.html' %}
+
     <div class="main-wrapper-editar">
 
         <form action="{{ url_for('user.editarUsuario') }}" method="POST" class="formulario-editar">
@@ -87,11 +90,12 @@
                     <i class="fas fa-save"></i> Salvar Edição
                 </button>
 
-                <button type="button" class="botao-voltar" onclick="history.back()">
+                <button type="button" class="botao-voltar" onclick='window.location.href="{{ url_for("main.menu") }}"'>
                     <i class="fas fa-arrow-left"></i> Voltar
                 </button>
-                
-                <button type="button" class="botao-deletar" data-bs-toggle="modal" data-bs-target="#modalConfirmarExclusao">
+
+                <button type="button" class="botao-deletar" data-bs-toggle="modal"
+                    data-bs-target="#modalConfirmarExclusao">
                     <i class="fas fa-trash-alt"></i> Deletar
                 </button>
             </div>
@@ -105,7 +109,8 @@
             <div class="modal-content">
 
                 <div class="modal-header modal-custom-header">
-                    <h5 class="modal-title" id="modalExcluirLabel"><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h5>
+                    <h5 class="modal-title" id="modalExcluirLabel"><i class="fas fa-exclamation-triangle"></i> Confirmar
+                        Exclusão</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
 

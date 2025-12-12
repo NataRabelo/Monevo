@@ -74,66 +74,15 @@
         </div>
     </div>
 
-    <section class="area-educacional mt-5 pt-4 border-top border-secondary-subtle">
-        <h2 class="titulo-educacional text-center mb-5">
-            <i class="fas fa-graduation-cap me-2 text-primary-light"></i>Área Educacional
-        </h2>
-
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <div class="card-educacional sombra h-100">
-                    <div class="card-header-custom header-video">
-                        <i class="fas fa-video me-2"></i>Vídeos sobre Finanças
-                    </div>
-                    <div class="card-body-custom">
-                        <p class="texto-descricao mb-3">
-                            Assista conteúdos selecionados para aprender a gerenciar melhor seu dinheiro.
-                        </p>
-
-                        <div class="ratio ratio-16x9 mb-3">
-                            <iframe src="https://www.youtube.com/embed/zzWCbbnFPq4?si=1MpSUvfJW_9Lc8RK"
-                                title="Dicas de educação financeira" allowfullscreen class="rounded-3"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="card-educacional sombra h-100">
-                    <div class="card-header-custom header-noticia">
-                        <i class="fas fa-newspaper me-2"></i>Notícias e Atualizações
-                    </div>
-                    <div class="card-body-custom">
-                        <p class="texto-descricao mb-3">
-                            Fique por dentro das principais novidades do mercado financeiro.
-                        </p>
-
-                        <ul class="lista-noticias list-group list-group-flush">
-                            <li class="list-group-item">
-                                <a href="https://www.infomoney.com.br/" target="_blank">
-                                    📈 **Infomoney** – Últimas notícias sobre economia
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="https://g1.globo.com/economia/" target="_blank">
-                                    💰 **G1 Economia** – Dicas e atualizações financeiras
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="https://valor.globo.com/" target="_blank">
-                                    🏦 **Valor Econômico** – Mercado e investimentos
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="https://www.seudinheiro.com/" target="_blank">
-                                    💡 **Seu Dinheiro** – Guias e análises de finanças pessoais
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <h2 class="text-center text-white mb-4 pt-4 border-top border-secondary-subtle">Educação Financeira</h2>
+    <div class="row row-cols-1 justify-content-center mb-5">
+        <div class="col-md-6 col-lg-4">
+            <a href="{{ url_for('educacional.acessarEducacional') }}" class="menu-tile tile-roxo h-100">
+                <i class="fas fa-graduation-cap fa-3x mb-3"></i>
+                <h4 class="mb-1">Central de Aprendizagem</h4>
+                <p class="text-white-50">Cursos, calculadoras e artigos para dominar suas finanças.</p>
+            </a>
         </div>
-    </section>
+    </div>
 </div>
 {% endblock %}

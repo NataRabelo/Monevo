@@ -2,7 +2,7 @@ from flask import Blueprint, current_app, render_template, request, flash, redir
 from app.models import Contas, Cartoes, SaldoInicial, Transacoes
 from flask_login import current_user, login_required
 from app import db
-from app.utils import limpar_currency
+from app.utils import limpar_currency, limpar_espacos
 from datetime import datetime
 
 conta_bp = Blueprint('conta', __name__, url_prefix='/conta')
@@ -27,8 +27,8 @@ def cadastrarConta():
     try:
         usuario_id = current_user.id
 
-        nome_conta      = request.form.get('nome_conta')
-        instituicao     = request.form.get('instituicao')
+        nome_conta      = limpar_espacos(request.form.get('nome_conta'))
+        instituicao     = limpar_espacos(request.form.get('instituicao'))
         tipo_conta      = request.form.get('tipo_conta')
         saldo_atual     = limpar_currency(request.form.get('saldo_inicial'))
         
@@ -91,8 +91,8 @@ def editarConta():
         if request.method == "POST":
             novo_saldo_vivo_str     = request.form.get('saldo_inicial')
             novo_saldo_vivo         = limpar_currency(novo_saldo_vivo_str)
-            conta.nome_conta        = request.form.get('nome_conta') or conta.nome_conta
-            conta.instituicao       = request.form.get('instituicao') or conta.instituicao
+            conta.nome_conta        = limpar_espacos(request.form.get('nome_conta')) or conta.nome_conta
+            conta.instituicao       = limpar_espacos(request.form.get('instituicao')) or conta.instituicao
             conta.tipo_conta        = request.form.get('tipo_conta') or conta.tipo_conta
             
             if novo_saldo_vivo is not None:

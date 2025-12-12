@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-spell-check me-2"></i> {{ titulo }}</h1>
+    <p class="lead text-white-50">Desvende a linguagem do mercado financeiro de A a Z.</p>
+
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group list-group-flush sticky-top">
+                <li class="list-group-item bg-transparent"><a href="#c" class="text-white">C</a></li>
+                <li class="list-group-item bg-transparent"><a href="#i" class="text-white">I</a></li>
+                <li class="list-group-item bg-transparent"><a href="#s" class="text-white">S</a></li>
+                </ul>
+        </div>
+
+        <div class="col-md-9">
+            
+            <h3 id="c" class="text-primary-light mt-4">C</h3>
+            <div class="card-modulo p-3 mb-3">
+                <h5>CDI (Certificado de Depósito Interbancário)</h5>
+                <p>Taxa de juros média dos empréstimos diários realizados entre bancos. É o principal indexador de rentabilidade da Renda Fixa no Brasil, servindo como benchmark para fundos e investimentos como o CDB.</p>
+            </div>
+            
+            <h3 id="i" class="text-primary-light mt-4">I</h3>
+            <div class="card-modulo p-3 mb-3">
+                <h5>IPCA (Índice Nacional de Preços ao Consumidor Amplo)</h5>
+                <p>O índice oficial de inflação do Brasil. Ele mede a variação de preços de uma cesta de produtos e serviços consumidos pelas famílias brasileiras, sendo fundamental para corrigir valores e investimentos atrelados à inflação.</p>
+            </div>
+
+            <h3 id="s" class="text-primary-light mt-4">S</h3>
+            <div class="card-modulo p-3 mb-3">
+                <h5>SELIC (Sistema Especial de Liquidação e de Custódia)</h5>
+                <p>A taxa básica de juros da economia brasileira, definida pelo Comitê de Política Monetária (Copom) do Banco Central. Ela é usada para controlar a inflação e impacta diretamente todas as taxas de juros do país, desde empréstimos até investimentos.</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light mt-5"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}

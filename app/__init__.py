@@ -142,6 +142,9 @@ def create_app(config_class=None):
     from app.routes.projecoes import projecao_bp
     app.register_blueprint(projecao_bp)
 
+    from app.routes.educacional import educacional_bp
+    app.register_blueprint(educacional_bp)
+
 
     # -------------------------------------
     # Registro do Filtro Jinja2

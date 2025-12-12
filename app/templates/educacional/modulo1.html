@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Módulo 1: Orçamento Descomplicado{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-piggy-bank me-2 text-warning"></i> Módulo 1: Orçamento Descomplicado</h1>
+    <p class="lead text-white-50">Aprenda o essencial para mapear suas finanças e construir a base do seu sucesso financeiro.</p>
+
+    <div class="card-modulo p-4 mb-4">
+        <h2>Lição 1.1: Onde o seu Dinheiro Vive?</h2>
+        <p>Antes de qualquer corte ou investimento, você precisa conhecer o seu ponto de partida. Isso significa rastrear cada centavo que entra e que sai.</p>
+        <p>Use a Central de Transações do Monevo para categorizar todas as movimentações dos últimos 3 meses. As categorias essenciais são:</p>
+        <ul>
+            <li>Receitas Fixas: Salário, Aluguéis recebidos, Pensões.</li>
+            <li>Despesas Fixas: Aluguel, Prestação, Internet, Plano de Saúde.</li>
+            <li>Despesas Variáveis: Supermercado, Lazer, Transporte (gasolina), Roupas.</li>
+            <li>Despesas Extras/Anuais: IPVA, Matrículas, Viagens.</li>
+        </ul>
+    </div>
+
+    <div class="card-modulo p-4 mb-4">
+        <h2>Lição 1.2: A Regra de Ouro: 50-30-20</h2>
+        <p>Esta é uma estrutura simples, mas poderosa, para guiar a distribuição da sua renda mensal líquida (depois dos impostos).</p>
+        <p>É uma ótima meta a ser alcançada no seu planejamento orçamentário. 
+
+[Image of 50-30-20 budget rule diagram]
+</p>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="alert alert-info h-100">
+                    <h4 class="alert-heading">50% Necessidades</h4>
+                    <p>Itens essenciais para a sua sobrevivência (moradia, alimentação, transporte básico, contas fixas).</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="alert alert-warning h-100">
+                    <h4 class="alert-heading">30% Desejos</h4>
+                    <p>Tudo o que é opcional e melhora a qualidade de vida (restaurantes, academia, hobbies, viagens). Estes são os gastos que você pode cortar.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="alert alert-success h-100">
+                    <h4 class="alert-heading">20% Poupança/Dívidas</h4>
+                    <p>Destinado a quitar dívidas e construir o seu futuro financeiro (investimentos, reserva de emergência).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-modulo p-4 mb-4 text-center">
+        <p class="mb-3">✅ Próximo Passo: Mantenha seu orçamento categorizado por 30 dias e depois acesse o Módulo 2 para aprender a se livrar das dívidas.</p>
+        <a href="{{ url_for('educacional.modulo2') }}" class="btn btn-lg btn-continuar"><i class="fas fa-forward me-2"></i> Próximo Módulo: Livre-se das Dívidas</a>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@ from flask import Blueprint, current_app, render_template, request, flash, redir
 from app.models import Categorias, Contas, Cartoes, Transacoes 
 from app.services.agrupador import agrupar_transacoes_por_mes
 from app.services.recorrencia_servico import gerar_proximas_transacoes_recorrentes
-from app.utils import limpar_currency, formatar_currency 
+from app.utils import limpar_currency, formatar_currency, limpar_espacos 
 from flask_login import current_user, login_required
 from app import db
 from dateutil.relativedelta import relativedelta
@@ -92,7 +92,7 @@ def cadastrarTransacao():
         cartao_id_raw      = request.form.get('cartao')
         categoria_id_raw   = request.form.get('categoria_transacao')
         tipo               = request.form.get('tipo_transacao')
-        descricao          = request.form.get('descricao')
+        descricao          = limpar_espacos(request.form.get('descricao'))
         valor_parcela      = limpar_currency(request.form.get('valor_transacao'))
         data_str           = request.form.get('data_transacao')
         recorrencia        = request.form.get('recorrencia')
@@ -369,7 +369,7 @@ def editarTransacao():
             # Atualiza campos na transação (incluindo a flag, que salvamos conforme aplicabilidade)
             receita.conta_id = novo_conta_id
             receita.categoria_id = to_int_or_none(request.form.get('categoria_transacao')) or receita.categoria_id
-            receita.descricao = request.form.get('descricao') or receita.descricao
+            receita.descricao = limpar_espacos(request.form.get('descricao')) or receita.descricao
             receita.valor = novo_valor
             receita.data_transacao = nova_data
             receita.recorrencia = nova_recorrencia_str
@@ -442,7 +442,7 @@ def editarTransacao():
             despesa.conta_id = novo_conta_id or despesa.conta_id
             despesa.cartao_id = novo_cartao_id
             despesa.categoria_id = to_int_or_none(request.form.get('categoria_transacao')) or despesa.categoria_id
-            despesa.descricao = request.form.get('descricao') or despesa.descricao
+            despesa.descricao = limpar_espacos(request.form.get('descricao')) or despesa.descricao
             despesa.valor = novo_valor or despesa.valor
             despesa.data_transacao = nova_data
             despesa.recorrencia = nova_recorrencia_str

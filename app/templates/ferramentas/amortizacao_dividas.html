@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Simulador de Amortização de Dívidas{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-hand-holding-usd me-2 text-danger"></i> Simulador de Amortização de Dívidas</h1>
+    <p class="lead text-white-50">Veja quanto tempo e dinheiro você economiza acelerando o pagamento das suas dívidas.</p>
+    
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Dados da Sua Dívida</h3>
+                <form id="formAmortizacao">
+                    <div class="mb-3">
+                        <label for="saldoDevedor" class="form-label text-white">Saldo Devedor Atual (R$)</label>
+                        <input type="number" class="form-control" id="saldoDevedor" value="10000" min="0" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taxaJurosMensal" class="form-label text-white">Taxa de Juros Mensal (%)</label>
+                        <input type="number" class="form-control" id="taxaJurosMensal" value="2" step="0.1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="parcelaAtual" class="form-label text-white">Valor da Parcela Atual (R$)</label>
+                        <input type="number" class="form-control" id="parcelaAtual" value="500" min="0" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amortizacaoExtra" class="form-label text-white">Valor Extra para Amortizar (R$)</label>
+                        <input type="number" class="form-control" id="amortizacaoExtra" value="100" min="0">
+                        <small class="form-text text-white-50">Quanto a mais você pode pagar mensalmente.</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-continuar w-100 mt-3">Comparar Amortização</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Resultado da Comparação</h3>
+                <div id="resultado" class="mb-4">
+                    <h4 class="text-white">Pagamento Padrão:</h4>
+                    <p class="fw-bold text-danger-light">Duração: X Meses | Juros Totais: R$ Y</p>
+                    <h4 class="text-white mt-3">Com Amortização Extra:</h4>
+                    <p class="fw-bold text-success-light">Duração: Z Meses | Juros Totais: R$ W</p>
+                    <p class="text-white-50 mt-2">Você economiza <strong>R$ (Y-W)</strong> em juros!</p>
+                </div>
+
+                <h4 class="text-white mt-4">Como a Amortização Funciona</h4>
+                <p class="text-white-50">Ao pagar um valor extra, você está reduzindo o <strong>saldo devedor</strong> da sua dívida. Como os juros são calculados sobre o saldo devedor, a próxima parcela terá menos juros e mais amortização de capital. Isso acelera drasticamente a quitação e economiza milhares em juros. </p>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light mt-5"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Função financeira para calcular o número de períodos (meses)
+    // NPER = log( (i * PV) / A + 1 ) / log(1 + i)  -- Fórmula simplificada (PV=Valor Presente, i=Taxa, A=Pagamento)
+    function calcularMeses(PV, i, A) {
+        if (i === 0) return PV / A;
+        return Math.log(A / (A - PV * i)) / Math.log(1 + i);
+    }
+    
+    // Função financeira para calcular o total de juros
+    function calcularJurosTotal(PV, i, meses, A) {
+        // PV: Saldo devedor, i: taxa, meses: duração, A: parcela
+        const totalPago = meses * A;
+        const totalJuros = totalPago - PV;
+        return totalJuros;
+    }
+
+    document.getElementById('formAmortizacao').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 1. Coleta e conversão dos dados
+        const PV = parseFloat(document.getElementById('saldoDevedor').value);
+        const taxaMensal = parseFloat(document.getElementById('taxaJurosMensal').value) / 100;
+        const A_padrao = parseFloat(document.getElementById('parcelaAtual').value);
+        const A_extra = parseFloat(document.getElementById('amortizacaoExtra').value);
+        
+        // Parcela com amortização extra
+        const A_acelerado = A_padrao + A_extra;
+
+        // 2. Cálculo do Cenário Padrão
+        const mesesPadrao = calcularMeses(PV, taxaMensal, A_padrao);
+        const jurosPadrao = calcularJurosTotal(PV, taxaMensal, mesesPadrao, A_padrao);
+
+        // 3. Cálculo do Cenário Acelerado
+        const mesesAcelerado = calcularMeses(PV, taxaMensal, A_acelerado);
+        const jurosAcelerado = calcularJurosTotal(PV, taxaMensal, mesesAcelerado, A_acelerado);
+
+        // 4. Economia
+        const economiaJuros = jurosPadrao - jurosAcelerado;
+        const economiaMeses = mesesPadrao - mesesAcelerado;
+
+        // 5. Formatação e exibição
+        const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+        const resultadoHTML = `
+            <h4 class="text-white">Pagamento Padrão:</h4>
+            <p class="fw-bold text-danger-light">
+                Duração: ${Math.round(mesesPadrao)} Meses | Juros Totais: ${formatarMoeda(jurosPadrao)}
+            </p>
+            <h4 class="text-white mt-3">Com Amortização Extra (R$ ${A_extra.toFixed(2)}):</h4>
+            <p class="fw-bold text-success-light">
+                Duração: ${Math.round(mesesAcelerado)} Meses | Juros Totais: ${formatarMoeda(jurosAcelerado)}
+            </p>
+            <div class="alert alert-success mt-3">
+                Você economiza <span class="fw-bold">${formatarMoeda(economiaJuros)}</span> em juros e quita
+                <span class="fw-bold">${economiaMeses.toFixed(1)}</span> meses mais cedo!
+            </div>
+        `;
+
+        document.getElementById('resultado').innerHTML = resultadoHTML;
+    });
+</script>
+{% endblock %}

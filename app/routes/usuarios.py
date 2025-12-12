@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for
-from flask_login import current_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Usuarios
 from app import bcrypt, db
 from app.utils import limpar_espacos
@@ -67,7 +67,7 @@ def cadastroUsuario():
 def editarUsuario():
     try:
         user_id = current_user.id
-        usuario = Usuarios.query.filter(Usuarios.id == user_id).first()
+        usuario = Usuarios.query.get(user_id)
 
         if not usuario:
             flash('Usuário não encontrado.', 'error')
@@ -76,18 +76,38 @@ def editarUsuario():
         if request.method == "GET":
             return render_template("usuario/editar.html", usuario=usuario)
 
+        novo_email = request.form.get('email')
+        email_existente = Usuarios.query.filter(
+            Usuarios.email == novo_email,
+            Usuarios.id != usuario.id
+        ).first()
+        if email_existente:
+            flash('O email informado já está em uso por outro usuário.', 'error')
+            return redirect(url_for('user.editarUsuario'))
+
+        novo_cpf = request.form.get('cpf')
+        cpf_existente = Usuarios.query.filter(
+            Usuarios.cpf == novo_cpf,
+            Usuarios.id != usuario.id
+        ).first()
+        if cpf_existente:
+            flash('O CPF informado já está em uso por outro usuário.', 'error')
+            return redirect(url_for('user.editarUsuario'))
+
         if request.method == "POST":
-            usuario.nome        = limpar_espacos(request.form.get('nome') or usuario.nome)
-            usuario.sobrenome   = limpar_espacos(request.form.get('sobrenome') or usuario.sobrenome)
-            usuario.email       = limpar_espacos(request.form.get('email') or usuario.email)
+            usuario.nome        = limpar_espacos(request.form.get('nome')) or usuario.nome
+            usuario.sobrenome   = limpar_espacos(request.form.get('sobrenome')) or usuario.sobrenome
+            usuario.email       = limpar_espacos(novo_email) or usuario.email
             usuario.celular     = request.form.get('celular') or usuario.celular
-            usuario.cpf         = request.form.get('cpf') or usuario.cpf
+            usuario.cpf         = novo_cpf or usuario.cpf
 
             senha = request.form.get('senha', '').strip()
             if senha:
-                usuario.senha   = bcrypt.generate_password_hash(senha).decode('utf-8')
+                usuario.senha = bcrypt.generate_password_hash(senha).decode('utf-8')
 
             db.session.commit()
+            login_user(usuario)
+
             flash('Usuário editado com sucesso!', 'success')
             return redirect(url_for('main.menu'))
 
@@ -96,6 +116,7 @@ def editarUsuario():
         flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao editar usuário: {e}')
         return redirect(url_for('main.menu'))
+
 
 # -------------------------------------
 # Deleção de Usuário
