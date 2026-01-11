@@ -1,0 +1,65 @@
+/* Estilos de Exemplo para cards e botões educativos */
+    .hero-educacional {
+        background: linear-gradient(135deg, #1f2a40 0%, #007bff 100%);
+        padding: 4rem 0;
+        border-radius: 0.75rem;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-modulo {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        border: 1px solid #34495e;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 0.5rem;
+        min-height: 100%;
+    }
+
+    .card-modulo:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-modulo .card-header-custom {
+        background-color: #34495e;
+        padding: 0.75rem 1.25rem;
+        font-weight: bold;
+        border-bottom: 1px solid #496684;
+    }
+
+    .btn-continuar {
+        background-color: #2ecc71;
+        border-color: #2ecc71;
+        color: white;
+        transition: background-color 0.2s;
+    }
+
+    .btn-continuar:hover {
+        background-color: #27ae60;
+        border-color: #27ae60;
+    }
+
+    .card-ferramenta {
+        background-color: #1a2434;
+        border: 1px solid #34495e;
+        border-radius: 0.5rem;
+    }
+
+    .card-ferramenta i {
+        color: #f39c12;
+        /* Laranja para ícones de ferramentas */
+    }
+
+    .card-recurso i {
+        color: #3498db;
+        /* Azul para ícones de recursos */
+    }
+
+    .badge-progresso {
+        background-color: #e67e22;
+    }
+
+    li.list-group-item.bg-transparent.border-secondary-subtle.py-1 {
+        color: #ecf0f1;
+    }

@@ -1,74 +1,108 @@
-/* ======= ESTILO GERAL ======= */
+/* =========================================
+   Variáveis de Cores
+========================================= */
+:root {
+    --color-dark: #1D2128; /* Fundo Principal e Ação Primária/Secundária */
+    --color-accent: #3C90C0; /* Fundo do Formulário */
+    --color-light: #ffffff; /* Texto */
+    --color-danger: #dc3545; /* Ação de Deletar */
+}
+
+/* -------------------------
+   Estilo Geral e Fundo
+------------------------- */
 body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: var(--color-dark);
+    min-height: 100vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #1D2128;
-    font-family: "Poppins", sans-serif;
-    margin: 0;
+    /* Permite rolagem se o formulário for muito longo */
 }
 
-#titulo-site {
-    color: #ffffff;
-    text-align: center;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 2rem;
-}
-
-/* ======= FORMULÁRIO ======= */
-.formulario-editar {
-    background-color: #3C90C0;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    max-width: 700px;
+.main-wrapper-editar {
     width: 100%;
-    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0; 
+}
+
+/* Removido #titulo-site para layout de tela cheia */
+#titulo-site {
+    display: none;
+}
+
+/* -------------------------
+   Formulário
+------------------------- */
+.formulario-editar {
+    /* Cor de Destaque no Formulário */
+    background-color: var(--color-accent);
+    color: var(--color-light);
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    max-width: 700px;
+    width: 90%;
+    margin: auto;
 }
 
 .titulo-formulario {
     text-align: center;
-    color: #ffffff;
-    margin-bottom: 1.5rem;
-    font-size: 1.6rem;
+    color: var(--color-light);
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
 }
 
+/* -------------------------
+   Inputs e Labels
+------------------------- */
 label {
-    color: #ffffff;
+    color: var(--color-light);
+    font-weight: 500;
 }
 
 .input-group-text {
-    background-color: #1D2128;
-    color: #ffffff;
-    border: none;
+    /* Ícones em destaque: Fundo Escuro no formulário Azul Claro */
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    border: 1px solid var(--color-dark);
 }
 
 .form-control {
-    border: none;
-    outline: none;
+    border: 1px solid var(--color-dark);
+    background-color: var(--color-light); /* Input branco para legibilidade */
+    color: var(--color-dark);
 }
 
-/* ======= BOTÕES ======= */
+/* Placeholder */
+.form-control::placeholder {
+    color: #6c757d;
+}
+
+/* -------------------------
+   Botões de Ação
+------------------------- */
 .botoes-acoes {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    margin-top: 1.5rem;
+    gap: 15px;
+    margin-top: 2rem;
 }
 
-/* Estilo base para todos os botões */
 .botoes-acoes button {
     flex: 1;
-    padding: 10px 15px;
+    padding: 12px 15px;
     border: none;
-    border-radius: 5px;
-    font-size: 15px;
-    color: #ffffff;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-light);
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -77,80 +111,123 @@ label {
     gap: 8px;
 }
 
-/* Botão Salvar */
+/* Botão Salvar (Ação Primária) */
 .botao-enviar {
-    background-color: #1D2128;
+    background-color: var(--color-dark);
 }
+
 .botao-enviar:hover {
     background-color: #2C313A;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(29, 33, 40, 0.5);
 }
 
-/* Botão Deletar */
-.botao-deletar {
-    background-color: #dc3545;
-}
-.botao-deletar:hover {
-    background-color: #2C313A;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
-}
-
-/* Botão Voltar */
+/* Botão Voltar (Ação Secundária) */
 .botao-voltar {
-    background-color: #1D2128;
-}
-.botao-voltar:hover {
-    background-color: #2C313A;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
+    background-color: #5AA1D1; /* Um tom de azul mais suave para diferenciar, mas ainda na paleta */
 }
 
-/* ======= MODAL ======= */
+.botao-voltar:hover {
+    background-color: #74B8E0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(60, 144, 192, 0.5);
+}
+
+/* Botão Deletar (Ação Perigosa) */
+.botao-deletar {
+    background-color: var(--color-danger);
+}
+
+.botao-deletar:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5);
+}
+
+/* -------------------------
+   Modal de Exclusão (Ajustes de cores)
+------------------------- */
 .modal-content {
-    border-radius: 10px;
-    background-color: #f8f9fa;
+    border-radius: 12px;
+    background-color: var(--color-light);
+}
+
+.modal-custom-header {
+    border-bottom: 1px solid #eee;
 }
 
 .modal-title {
-    font-weight: 600;
+    color: var(--color-dark);
+    font-weight: 700;
 }
 
 .modal-body {
-    color: #333333;
-    font-size: 15px;
+    color: var(--color-dark);
 }
 
 .btn-cancelar {
-    background-color: #1D2128;
-    color: #ffffff;
+    background-color: #adb5bd; /* Cinza Neutro */
+    color: var(--color-dark);
     border: none;
-    transition: all 0.3s ease;
 }
+
 .btn-cancelar:hover {
-    background-color: #2C313A;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
-    color: #ffffff;
+    background-color: #9ea7ae;
+    transform: none;
+    box-shadow: none;
 }
 
 .btn-excluir {
-    background-color: #dc3545;
-    color: #ffffff;
+    background-color: var(--color-danger);
+    color: var(--color-light);
     border: none;
-    transition: all 0.3s ease;
-}
-.btn-excluir:hover {
-    background-color: #2C313A;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(29, 33, 40, 0.5);
-    color: #ffffff;
 }
 
-/* ======= ÍCONES ======= */
-.input-group-text {
-    background-color: #ffffff; /* Fundo branco */
-    color: #000000; /* Ícone preto */
-    border: none;
+.btn-excluir:hover {
+    background-color: #c82333;
+    transform: none;
+    box-shadow: none;
+}
+
+/* =========================================
+   FLASH MESSAGES
+========================================= */
+#flash-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.flash-message {
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: #fff;
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+}
+
+.flash-message.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.flash-message.success {
+    background: #4BB543;
+}
+
+.flash-message.error {
+    background: #FF4C4C;
+}
+
+.flash-message.warning {
+    background: #FFB700;
 }

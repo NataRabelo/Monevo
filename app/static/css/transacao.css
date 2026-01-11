@@ -1,0 +1,213 @@
+/* -------------------------
+   Estilo Global
+------------------------- */
+body {
+  background: #1D2128;
+  color: #FFF;
+}
+
+.text-color{
+  color: white !important;
+}
+
+/* -------------------------
+   Banners de Informação
+------------------------- */
+.import-banner {
+  background: #3C90C0;
+  border-left: 4px solid #3C90C0;
+}
+
+/* -------------------------
+   Campos Desabilitados
+------------------------- */
+input[disabled],
+select[disabled] {
+  background-color: #2b2f36 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  cursor: not-allowed;
+}
+
+/* -------------------------
+   Cards de Valores
+------------------------- */
+.valor-card {
+  border-radius: 14px;
+  text-align: center;
+  transition: 0.3s ease;
+  border-left: 5px solid;
+  background-color: #2b2f36;
+}
+
+.valor-card:hover {
+  transform: scale(1.03);
+}
+
+.receita-card {
+  background: #7ac99321;
+  border: 1px solid #6DC98B;
+  border-color: #28a745;
+}
+
+.despesa-card {
+  background: #ff757521;
+  border: 1px solid #FF8686;
+  border-color: #dc3545;
+}
+
+.label-card {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color: #ccc;
+  text-transform: uppercase;
+}
+
+.valor-numero {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* -------------------------
+   Tabelas
+------------------------- */
+.caixa-table {
+  background-color: #2b2f36;
+  border: 1px solid #3c434d;
+  border-radius: 14px;
+}
+
+.table-dark {
+  --bs-table-bg: #1D2128;
+  --bs-table-border-color: #3c434d;
+  --bs-table-striped-bg: #212529;
+}
+
+.table-dark > :not(caption) > * > * {
+  color: #fff;
+  background-color: transparent;
+}
+
+.thead-receita th {
+  background-color: #1a4f27 !important;
+  color: #fff !important;
+  border-bottom: 2px solid #28a745;
+}
+
+.thead-despesa th {
+  background-color: #4f1d23 !important;
+  color: #fff !important;
+  border-bottom: 2px solid #dc3545;
+}
+
+.table-hover > tbody > tr:hover {
+  --bs-table-hover-bg: #3c434d;
+}
+
+.coluna-descricao {
+  max-width: 350px;
+  padding: 0 10px;
+}
+
+.caixa-table .table > tbody.table-group-divider > tr > td {
+  background-color: #384251 !important;
+  border-top: 2px solid #1D2128 !important;
+}
+
+.limitar-texto {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+/* -------------------------
+   Abas (Custom Tabs)
+------------------------- */
+.table-color {
+  background-color: #3c434d;
+}
+
+.custom-tabs .nav-link {
+  color: #ffffff;
+  background-color: #2b2f36;
+  border-color: #3c434d;
+}
+
+.custom-tabs .nav-link.active {
+  color: #fff;
+  background-color: #1D2128;
+  border-color: #3c434d;
+  border-bottom-color: #1D2128;
+}
+
+.table-dark thead.thead-dark-custom {
+  color: #fff;
+}
+
+.custom-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.custom-tabs .nav-item {
+  flex-shrink: 0;
+}
+
+/* -------------------------
+   Scroll Personalizado
+------------------------- */
+.custom-tabs::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-tabs::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 10px;
+}
+
+.custom-tabs::-webkit-scrollbar-thumb {
+  background: #555555;
+  border-radius: 10px;
+}
+
+.custom-tabs::-webkit-scrollbar-thumb:hover {
+  background: #777777;
+}
+
+/* -------------------------
+   Botões e Modais
+------------------------- */
+.btn-adicionar {
+  background-color: #3C90C0;
+  color: #ffffff;
+}
+
+.btn-adicionar:hover {
+  background-color: #3C90C0;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #1e7e34;
+  border-color: #1e7e34;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+}

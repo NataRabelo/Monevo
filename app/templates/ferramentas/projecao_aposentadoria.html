@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}Projeção de Aposentadoria{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-user-tie me-2 text-info"></i> Projeção de Aposentadoria (Independência Financeira)</h1>
+    <p class="lead text-white-50">Planeje o montante necessário para que seus investimentos gerem sua renda mensal desejada.</p>
+    
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Defina sua Meta</h3>
+                <form id="formProjecaoAposentadoria">
+                    <div class="mb-3">
+                        <label for="rendaDesejada" class="form-label text-white">Renda Mensal Desejada na Aposentadoria (R$)</label>
+                        <input type="number" class="form-control" id="rendaDesejada" value="5000" min="1000" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taxaRetornoReal" class="form-label text-white">Taxa de Retorno Real Anual (%)</label>
+                        <input type="number" class="form-control" id="taxaRetornoReal" value="6" step="0.1" required>
+                        <small class="form-text text-white-50">Retorno acima da inflação (ex: 10% de juros - 4% de inflação = 6%).</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-continuar w-100 mt-3">Calcular Patrimônio Necessário</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-ferramenta p-4 h-100">
+                <h3 class="text-white mb-4">Sua "Fórmula da Riqueza"</h3>
+                <div id="resultado" class="mb-4">
+                    <h4 class="text-white">Patrimônio Alvo Necessário (Milhão):</h4>
+                    <p class="fs-3 fw-bold text-info-light">R$ 0,00</p>
+                </div>
+
+                <h4 class="text-white mt-4">A Regra dos 4% (Retirada Segura)</h4>
+                <p class="text-white-50">Muitos especialistas usam a Regra dos 4% (ou o inverso, 25x o gasto anual) para estimar o patrimônio necessário. Se você retira 4% ao ano, a probabilidade de o dinheiro durar mais de 30 anos é alta, pois o restante continua investido e rendendo acima da inflação. </p>
+                <div class="formula-block text-center mb-3">
+                    $$\text{Patrimônio Alvo} = \text{Renda Anual Desejada} \times \frac{1}{\text{Taxa de Retirada Segura}}$$
+                </div>
+                <p class="small text-white-50">*(Exemplo: R$ 60.000 / 0.04 = R$ 1.500.000)*</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light mt-5"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('formProjecaoAposentadoria').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 1. Coleta e conversão dos dados
+        const rendaMensalDesejada = parseFloat(document.getElementById('rendaDesejada').value); // Renda Mensal
+        const taxaRetornoRealAnual = parseFloat(document.getElementById('taxaRetornoReal').value) / 100; // Taxa Real Anual (%)
+
+        // 2. Conversão para Renda Anual
+        const rendaAnualDesejada = rendaMensalDesejada * 12;
+
+        // 3. Determinação da Taxa de Retirada (Regra dos 4% ou taxa real inversa)
+        // Usamos a fórmula: Patrimônio Alvo = Renda Anual / Taxa de Retirada.
+        // Se a Taxa de Retorno Real Anual for de 4% ou mais, o Patrimônio Alvo = 25 x Renda Anual (1 / 0.04 = 25).
+        
+        let taxaRetiradaSegura = 0.04; // Regra dos 4% (25x) como padrão
+        let patrimonioAlvo = 0;
+
+        if (taxaRetornoRealAnual > 0) {
+            // Se a taxa de retorno real for usada como taxa de retirada segura
+            taxaRetiradaSegura = taxaRetornoRealAnual; 
+        } else {
+             // Caso a taxa de retorno seja zero ou negativa, usamos a regra dos 4% para dar uma estimativa
+             taxaRetiradaSegura = 0.04;
+        }
+
+        patrimonioAlvo = rendaAnualDesejada / taxaRetiradaSegura;
+
+        // 4. Formatação e exibição dos resultados
+        const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 0 // Mostrar sem centavos para metas altas
+        });
+
+        const resultadoHTML = `
+            <h4 class="text-white">Patrimônio Alvo Necessário:</h4>
+            <p class="fs-3 fw-bold text-info-light">${formatarMoeda(patrimonioAlvo)}</p>
+            <p class="text-white">Para gerar uma renda de ${formatarMoeda(rendaMensalDesejada)} por mês, assumindo uma retirada anual de ${ (taxaRetiradaSegura * 100).toFixed(2) }%. </p>
+        `;
+
+        document.getElementById('resultado').innerHTML = resultadoHTML;
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Módulo 3: Seus Primeiros Investimentos{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/educacional.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4"><i class="fas fa-chart-pie me-2 text-primary"></i> Módulo 3: Seus Primeiros Investimentos</h1>
+    <p class="lead text-white-50">Entenda a diferença entre Renda Fixa e Variável e dê os primeiros passos para multiplicar seu patrimônio.</p>
+
+    <div class="card-modulo p-4 mb-4">
+        <h2>Lição 3.1: Entendendo Risco e Retorno</h2>
+        <p>Todo investimento é um balanço entre <strong>Risco</strong> (chance de perder dinheiro) e <strong>Retorno</strong> (quanto você pode ganhar). 
+
+[Image of risk-return trade-off graph]
+</p>
+        <p>Responda à sua <strong>Análise de Perfil de Investidor (API)</strong> para saber qual nível de risco você está disposto a correr:</p>
+        <ul>
+            <li><strong>Conservador:</strong> Prioriza segurança e liquidez (Renda Fixa).</li>
+            <li><strong>Moderado:</strong> Busca segurança, mas aceita pequeno risco para maior retorno.</li>
+            <li><strong>Agressivo/Arrojado:</strong> Aceita grandes flutuações e riscos em busca de altos retornos (Renda Variável).</li>
+        </ul>
+    </div>
+
+    <div class="card-modulo p-4 mb-4">
+        <h2>Lição 3.2: O Bê-á-Bá dos Investimentos</h2>
+        <h4 class="text-success-light mt-3">Renda Fixa (RF): Você empresta dinheiro</h4>
+        <p>São investimentos mais previsíveis e seguros. Você sabe as regras de rentabilidade no momento da aplicação. <strong>Exemplos:</strong> Tesouro Direto (Selic/IPCA), CDB, LCI/LCA.</p>
+
+        <h4 class="text-danger-light mt-3">Renda Variável (RV): Você vira sócio</h4>
+        <p>São investimentos com rentabilidade incerta, dependendo do desempenho do mercado. O risco é maior, mas o potencial de retorno também é. <strong>Exemplos:</strong> Ações (Bolsa), Fundos Imobiliários (FIIs), Câmbio (Moedas).</p>
+
+        <div class="alert alert-warning">
+            <strong>Importante:</strong> Nunca comece na Renda Variável sem ter sua Reserva de Emergência concluída na Renda Fixa!
+        </div>
+    </div>
+
+    <div class="card-modulo p-4 mb-4 text-center">
+        <p class="mb-3">🔥 <strong>Próximo Passo:</strong> Explore as ferramentas de projeção e veja como aplicar Juros Compostos ao seu favor.</p>
+        <a href="{{ url_for('educacional.jurosCompostos') }}" class="btn btn-lg btn-continuar"><i class="fas fa-calculator me-2"></i> Use a Calculadora de Juros Compostos</a>
+    </div>
+
+    <a href="{{ url_for('educacional.acessarEducacional') }}" class="btn btn-outline-light"><i class="fas fa-arrow-left me-2"></i> Voltar à Central</a>
+</div>
+{% endblock %}

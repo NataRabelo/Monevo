@@ -1,12 +1,14 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for
-from app.services.registrar_requisicao import registrar_requisicao
-from flask_login import current_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Usuarios
 from app import bcrypt, db
+from app.utils import limpar_espacos
 
 user_bp = Blueprint('user', __name__, url_prefix='/usuario')
 
-
+# -------------------------------------
+# Cadastro de Usuário
+# -------------------------------------
 @user_bp.route('/cadastrar', methods=["POST", "GET"])
 def cadastroUsuario():
     if request.method == "GET":
@@ -14,8 +16,8 @@ def cadastroUsuario():
 
     if request.method == "POST":
         try:
-            nome            = request.form.get('nome')
-            sobrenome       = request.form.get('sobrenome')
+            nome            = limpar_espacos(request.form.get('nome'))
+            sobrenome       = limpar_espacos(request.form.get('sobrenome'))
             email           = request.form.get('email')
             celular         = request.form.get('celular')
             cpf             = request.form.get('cpf')
@@ -26,11 +28,11 @@ def cadastroUsuario():
             validar_cpf     = Usuarios.query.filter_by(cpf=cpf).first()
             
             if validar_email:
-                flash('Email já associado a uma conta', 'warning')
+                flash('Email já associado a uma conta', 'error')
                 current_app.logger.info(f'Email já associado a uma conta: {email}')
                 return redirect(url_for('auth.login'))
             if validar_cpf :
-                flash('CPF já associado a uma conta', 'warning')
+                flash('CPF já associado a uma conta', 'error')
                 current_app.logger.info('CPF já associado a uma conta')
                 return redirect(url_for('auth.login'))
             else:
@@ -53,45 +55,75 @@ def cadastroUsuario():
 
         except Exception as e:
             db.session.rollback()
-            flash('Ocorreu algum erro inesperado')
+            flash('Ocorreu algum erro inesperado', 'error')
             current_app.logger.warning(f'Erro ao cadastrar usuário: {e}')
             return redirect(url_for('main.menu'))
 
+# -------------------------------------
+# Edição de Usuário
+# -------------------------------------
 @user_bp.route('/editar/', methods=['GET', 'POST'])
+@login_required
 def editarUsuario():
     try:
         user_id = current_user.id
-        usuario = Usuarios.query.filter(Usuarios.id == user_id).first()
+        usuario = Usuarios.query.get(user_id)
 
         if not usuario:
-            flash('Usuário não encontrado.')
+            flash('Usuário não encontrado.', 'error')
             return redirect(url_for('main.menu'))
 
         if request.method == "GET":
             return render_template("usuario/editar.html", usuario=usuario)
 
+        novo_email = request.form.get('email')
+        email_existente = Usuarios.query.filter(
+            Usuarios.email == novo_email,
+            Usuarios.id != usuario.id
+        ).first()
+        if email_existente:
+            flash('O email informado já está em uso por outro usuário.', 'error')
+            return redirect(url_for('user.editarUsuario'))
+
+        novo_cpf = request.form.get('cpf')
+        cpf_existente = Usuarios.query.filter(
+            Usuarios.cpf == novo_cpf,
+            Usuarios.id != usuario.id
+        ).first()
+        if cpf_existente:
+            flash('O CPF informado já está em uso por outro usuário.', 'error')
+            return redirect(url_for('user.editarUsuario'))
+
         if request.method == "POST":
-            usuario.nome        = request.form.get('nome') or usuario.nome
-            usuario.sobrenome   = request.form.get('sobrenome') or usuario.sobrenome
-            usuario.email       = request.form.get('email') or usuario.email
+            usuario.nome        = limpar_espacos(request.form.get('nome')) or usuario.nome
+            usuario.sobrenome   = limpar_espacos(request.form.get('sobrenome')) or usuario.sobrenome
+            usuario.email       = limpar_espacos(novo_email) or usuario.email
             usuario.celular     = request.form.get('celular') or usuario.celular
-            usuario.cpf         = request.form.get('cpf') or usuario.cpf
+            usuario.cpf         = novo_cpf or usuario.cpf
 
             senha = request.form.get('senha', '').strip()
             if senha:
-                usuario.senha   = bcrypt.generate_password_hash(senha).decode('utf-8')
+                usuario.password_hash = bcrypt.generate_password_hash(senha).decode('utf-8')
+
 
             db.session.commit()
-            flash('Usuário editado com sucesso!')
+            login_user(usuario)
+
+            flash('Usuário editado com sucesso!', 'success')
             return redirect(url_for('main.menu'))
 
     except Exception as e:
         db.session.rollback()
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao editar usuário: {e}')
         return redirect(url_for('main.menu'))
 
+
+# -------------------------------------
+# Deleção de Usuário
+# -------------------------------------
 @user_bp.route('/deletar/', methods=['GET', 'POST'])
+@login_required
 def deletarUsuario():
     try:
         
@@ -99,7 +131,7 @@ def deletarUsuario():
         usuario = Usuarios.query.filter(Usuarios.id == user_id).first()
 
         if not usuario:
-            flash('Usuário não encontrado')
+            flash('Usuário não encontrado', 'error')
             return redirect(url_for('main.menu'))
         
         if request.method == "GET":
@@ -109,28 +141,32 @@ def deletarUsuario():
             logout_user()
             db.session.delete(usuario)
             db.session.commit()
-            flash('Sua conta foi excluída com sucesso.')
+            flash('Sua conta foi excluída com sucesso.', 'success')
             return redirect(url_for('auth.login'))
 
     except Exception as e:
         db.session.rollback()
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'Erro ao deletar usuario: {e}')
         return redirect(url_for('main.menu'))
 
+# -------------------------------------
+# Listagem de Usuários
+# -------------------------------------
 @user_bp.route('/listar', methods=['GET', 'POST'])
+@login_required
 def listarUsuario():
     try:
         usuarios = Usuarios.query.all()
 
         if not usuarios:
-            flash('Nenhum usuário cadastrado no sistema')
+            flash('Nenhum usuário cadastrado no sistema', 'error')
             return redirect(url_for('usuario.cadastrar'))
         
         if request.method == "GET":
             render_template('usuario/listar.html', usuarios = usuarios)
         
     except Exception as e:
-        flash('Ocorreu algum erro inesperado')
+        flash('Ocorreu algum erro inesperado', 'error')
         current_app.logger.warning(f'erro ao listar usuários: {e}')
         return redirect(url_for('main.menu'))

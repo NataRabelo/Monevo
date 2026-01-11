@@ -1,83 +1,132 @@
-/* ===== FUNDO GERAL ===== */
-body {
-    background-color: #1D2128;
-    color: #ffffff;
-}
-
-
-/* ===== NAVBAR ===== */
-.barra-navegacao {
-    background-color: #3C90C0 !important;
-}
-
-.barra-navegacao .link-navegacao,
-.barra-navegacao .link-navegacao i {
-    color: white !important;
-}
-
-.barra-navegacao .link-navegacao:hover {
-    color: #dddddd !important;
-}
-
-
-/* ===== CONTEÚDO CENTRAL ===== */
-.tela-central {
-    padding: 20px;
-}
-
+/* ==========================================
+   Cartões de Informação Lateral
+========================================== */
 .card-info {
-    background-color: #3C90C0;
-    border: none;
+    background-color: #232832;
+    border: 1px solid #3c434d;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     color: white;
-    border-radius: 0.75rem;
     margin-bottom: 1rem;
     text-align: center;
-    padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    padding: 1.5rem 1rem;
 }
 
+.card-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-info h6 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #bdbdbd;
+}
+
+.card-info h5 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* Cores específicas */
+.text-saldo,
+.text-resultado-pos { color: #3C90C0; }
+
+.text-receita { color: #4CAF50; }
+
+.text-despesa,
+.text-resultado-neg { color: #FF5252; }
+
+
+/* ==========================================
+   Containers de Gráfico
+========================================== */
 .chart-container {
-    background-color: #2B2F38;
-    border-radius: 0.75rem;
-    padding: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #2b2f36;
+    border: 1px solid #3c434d;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
+.chart-container h6 {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #e0e0e0;
+}
+
+
+/* ==========================================
+   Elementos de Formulário
+========================================== */
 .form-control,
 .form-select {
-    background-color: #2B2F38;
+    background-color: #2b2f36;
     color: white;
-    border: none;
+    border: 1px solid #3c434d;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
 }
 
 .form-control:focus,
 .form-select:focus {
     box-shadow: 0 0 0 0.2rem rgba(60, 144, 192, 0.4);
-    border: none;
+    border-color: #3C90C0;
     color: white;
-    background-color: #2B2F38;
-}
-
-/* ===== BOTÕES ===== */
-.btn-custom {
-    background-color: #3C90C0;
-    color: white;
-    font-weight: 500;
-}
-
-.btn-custom:hover {
-    background-color: #3582AD;
-    color: white;
+    background-color: #2b2f36;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
-.tipo-projecao {
-    width: 150px;
+
+/* ==========================================
+   Botão Principal
+========================================== */
+.btn-custom {
+    background-color: #3C90C0;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.campo-data {
-    width: 180px;
+.btn-custom:hover {
+    background-color: #2a698a;
+    color: white;
+    transform: translateY(-1px);
+}
+
+
+/* ==========================================
+   Título da Página
+========================================== */
+.titulo-pagina {
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    padding-bottom: 6px;
+    position: relative;
+}
+
+.titulo-pagina::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    background-color: #3C90C0;
+    border-radius: 2px;
 }

@@ -1,0 +1,200 @@
+/* =========================================
+   BASE
+========================================= */
+body {
+    background-color: #1D2128;
+    color: #FFFFFF;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.texto-central {
+    text-align: center;
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+.custom-navbar {
+    background-color: #232832;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 0.75rem 0;
+}
+
+.custom-navbar .navbar-brand {
+    color: #ffffff !important;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: #3C90C0 !important;
+}
+
+.custom-navbar .logo-icon {
+    color: #3C90C0;
+}
+
+.custom-navbar .menu-link {
+    color: #cccccc !important;
+    font-weight: 500;
+    padding: 8px 12px !important;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.custom-navbar .menu-link:hover {
+    color: #ffffff !important;
+    background-color: #3c434d;
+}
+
+.custom-navbar .active-link {
+    color: #ffffff !important;
+    background-color: #3C90C0;
+    font-weight: 600;
+}
+
+.custom-navbar .active-link:hover {
+    background-color: #317da7;
+}
+
+.custom-navbar .btn-logout {
+    color: #FF5252 !important;
+    font-weight: 600;
+}
+
+.custom-navbar .btn-logout:hover {
+    color: #ffffff !important;
+    background-color: #C62828;
+}
+
+@media (max-width: 991px) {
+    .custom-navbar .navbar-nav {
+        margin-top: 10px;
+        padding-bottom: 10px;
+        border-top: 1px solid #3c434d;
+    }
+
+    .custom-navbar .nav-item {
+        margin: 5px 0;
+    }
+}
+
+/* =========================================
+   CONTEÚDO PRINCIPAL
+========================================= */
+main {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+/* =========================================
+   BOTÕES
+========================================= */
+.btn-modal {
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-modal-dark {
+    background-color: #3C90C0;
+    color: #fff;
+    border: none;
+}
+
+.btn-modal-dark:hover {
+    background-color: #317da7;
+}
+
+/* =========================================
+   MODAIS
+========================================= */
+.modal-content {
+    background-color: #2b2f36;
+    border-radius: 12px;
+    color: #ffffff;
+    border: 1px solid #3c434d;
+}
+
+.modal-header {
+    border-bottom: 1px solid #3c434d;
+}
+
+.modal-body label {
+    color: #ccc;
+}
+
+.form-control,
+.form-select {
+    background-color: #1D2128;
+    color: #fff;
+    border: 1px solid #3c434d;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #3C90C0;
+    box-shadow: none;
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
+/* =========================================
+   FLASH MESSAGES
+========================================= */
+#flash-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.flash-message {
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: #fff;
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+}
+
+.flash-message.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.flash-message.success {
+    background: #4BB543;
+}
+
+.flash-message.error {
+    background: #FF4C4C;
+}
+
+.flash-message.warning {
+    background: #FFB700;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .nav-link i {
+        margin-right: 6px;
+    }
+}

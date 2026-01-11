@@ -1,15 +1,20 @@
-# -*- coding: utf-8 -*-
 import os
 import logging
 from flask import Flask
 from flask.cli import load_dotenv
 from logging.handlers import RotatingFileHandler
+from app.utils import formatar_currency
 from config import DevelopmentConfig, ProductionConfig
 from app.extensions import db, bcrypt, migrate, login_manager, mail
 
-# Carrega as variáveis de ambiente do arquivo .env
+# -------------------------------------
+# Carregamento das variáveis de ambiente
+# -------------------------------------
 load_dotenv()
 
+# -------------------------------------
+# Configuração do sistema de logging
+# -------------------------------------
 def configure_logging(app):
 
     if app.config.get("LOG_TO_STDOUT"):
@@ -17,11 +22,9 @@ def configure_logging(app):
         stream_handler.setLevel(logging.INFO)
         app.logger.addHandler(stream_handler)
     else:
-        # Cria o diretório de logs se não existir
         if not os.path.exists("logs"):
             os.mkdir("logs")
         
-        # Configura o handler de arquivo rotativo
         file_handler = RotatingFileHandler(
             "logs/servidor.log", maxBytes=5 * 1024 * 1024, backupCount=3
         )
@@ -36,6 +39,9 @@ def configure_logging(app):
     app.logger.setLevel(logging.INFO)
     app.logger.info("Aplicativo Flask iniciado")
 
+# -------------------------------------
+# Fábrica do aplicativo Flask
+# -------------------------------------    
 def create_app(config_class=None):
     if config_class is None:
         env = os.getenv("FLASK_ENV", "development")
@@ -47,13 +53,17 @@ def create_app(config_class=None):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Cria o diretório de instância se não existir
+    # -------------------------------------
+    # Cria o diretório de instância, se não existir
+    # -------------------------------------
     try:
         os.makedirs(app.instance_path, exist_ok=True)
     except OSError:
         pass
 
-    # Define o caminho do banco de dados
+    # -------------------------------------
+    # Definição do banco de dados
+    # -------------------------------------
     if app.config["DEBUG"]:
         db_path = os.path.join(app.instance_path, "development.db")
     else:
@@ -61,13 +71,17 @@ def create_app(config_class=None):
 
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 
-    # Inicializa as extensões com o aplicativo
+    # -------------------------------------
+    # Inicialização das extensões
+    # -------------------------------------
     db.init_app(app)
     bcrypt.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
-    # Configurações do servidor SMTP (exemplo Gmail)
+    # -------------------------------------
+    # Configurações do Flask-Mail
+    # -------------------------------------
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 465
     app.config['MAIL_USE_SSL'] = True
@@ -77,24 +91,33 @@ def create_app(config_class=None):
 
     mail.init_app(app)
 
-    # Configurações do login_manager
+    # -------------------------------------
+    # Configurações do Login Manager
+    # -------------------------------------
     login_manager.login_view = "main.index"
     login_manager.login_message_category = "info"
 
-    # Configura o logging
+    # -------------------------------------
+    # Iniciando o sistema de logging
+    # -------------------------------------
     configure_logging(app)
 
-    # Importa os models para evitar import circular
+    # -------------------------------------
+    # Importa os modelos
+    # -------------------------------------
     from . import models
-    from .models import Usuarios  # Supondo que seu modelo de usuário se chama User
+    from .models import Usuarios
 
-    # Função para carregar o usuário logado
+    # -------------------------------------
+    # Carregador de usuário
+    # -------------------------------------
     @login_manager.user_loader
     def load_user(user_id):
-        # Busca o usuário no banco de dados
         return Usuarios.query.get(int(user_id))
 
-    # Registra os blueprints
+    # -------------------------------------
+    # Registro dos Blueprints
+    # -------------------------------------
     from app.routes.main import main_bp
     app.register_blueprint(main_bp)
 
@@ -115,5 +138,17 @@ def create_app(config_class=None):
 
     from app.routes.transacoes import transacao_bp
     app.register_blueprint(transacao_bp)
+
+    from app.routes.projecoes import projecao_bp
+    app.register_blueprint(projecao_bp)
+
+    from app.routes.educacional import educacional_bp
+    app.register_blueprint(educacional_bp)
+
+
+    # -------------------------------------
+    # Registro do Filtro Jinja2
+    # -------------------------------------
+    app.jinja_env.filters["currency"] = formatar_currency
 
     return app

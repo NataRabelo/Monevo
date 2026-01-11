@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinição de Senha | Monevo</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        /* Variáveis de Cores (Serão usadas nos estilos inline) */
+        :root {
+            --color-dark: #1D2128;
+            --color-accent: #3C90C0;
+            --color-light: #ffffff;
+            --color-text: #333333;
+            --color-secondary-text: #666666;
+        }
+
+        /* Estilos globais e de corpo para e-mail */
+        body, table, td, a { 
+            -webkit-text-size-adjust: 100%; 
+            -ms-text-size-adjust: 100%; 
+        }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        table { border-collapse: collapse !important; }
+        body { 
+            height: 100% !important; 
+            margin: 0 !important; 
+            padding: 0 !important; 
+            width: 100% !important; 
+            background-color: #f4f4f4; 
+            font-family: sans-serif; 
+        }
+
+        /* Estilos do Botão (Garante que o link seja exibido como botão) */
+        .button {
+            background-color: #3C90C0; /* Azul Claro */
+            color: #ffffff !important;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+    
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f4;">
+        <tr>
+            <td align="center" style="padding: 30px 0;">
+                
+                <table border="0" cellpadding="0" cellspacing="0" width="600" class="container" style="max-width: 600px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                    
+                    <tr>
+                        <td align="center" style="padding: 30px 20px 20px 20px; background-color: #1D2128; border-radius: 12px 12px 0 0; color: #ffffff;">
+                            <h1 style="margin: 0; font-size: 30px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                Monevo
+                            </h1>
+                            <p style="margin: 5px 0 0 0; font-size: 16px; opacity: 0.9; color: #3C90C0;">Recuperação de Senha</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="left" style="padding: 30px 40px 30px 40px; background-color: #ffffff;">
+                            
+                            <h3 style="color: #1D2128; margin: 0 0 15px 0; font-size: 20px;">Olá, <strong>{{ usuario.nome }}</strong>!</h3>
+                            
+                            <p style="color: #333333; font-size: 16px; line-height: 24px; margin: 0 0 30px 0;">
+                                Recebemos sua solicitação para <strong>redefinir sua senha</strong>. Para prosseguir e definir uma nova senha, clique no botão seguro abaixo.
+                            </p>
+                            
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td align="center" style="padding: 10px 0 30px 0;">
+                                        <a href="{{ reset_link }}" class="button" style="background-color: #3C90C0; color: #ffffff !important; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                                            REDEFINIR MINHA SENHA
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="color: #666666; font-size: 14px; line-height: 20px; margin: 0 0 10px 0; text-align: center; border-top: 1px solid #eeeeee; padding-top: 20px;">
+                                Se você <strong>não solicitou</strong> esta alteração, por favor, ignore este e-mail. Sua senha permanecerá a mesma.
+                            </p>
+                            
+                            <p style="color: #999999; font-size: 12px; line-height: 18px; margin: 0; text-align: center;">
+                                Ou acesse o link (copie e cole no navegador):<br>
+                                <a href="{{ reset_link }}" style="color: #3C90C0; word-break: break-all;">{{ reset_link }}</a>
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" style="padding: 20px 0; font-size: 12px; color: #999999; background-color: #ffffff; border-radius: 0 0 12px 12px; border-top: 1px solid #eeeeee;">
+                            <p style="margin: 0;">&copy; {{ current_year }} Monevo. Todos os direitos reservados.</p>
+                        </td>
+                    </tr>
+
+                </table>
+                </td>
+        </tr>
+    </table>
+    </body>
+</html>

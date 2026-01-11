@@ -1,13 +1,14 @@
+  /* =============================
+     Flash Message Fade Out
+  ============================= */
+const flashMessages = document.querySelectorAll('.flash-message');
 
-document.addEventListener("DOMContentLoaded", function () {
-    let flashMessages = document.querySelectorAll('.flash-message');
-        if (flashMessages.length > 0) {
-            setTimeout(() => {
-                flashMessages.forEach(msg => {
-                    msg.style.transition = "opacity 0.5s ease";
-                    msg.style.opacity = "0";
-                    setTimeout(() => msg.remove(), 500);
-                });
-            }, 3000);
-        }
+flashMessages.forEach(msg => {
+    setTimeout(() => {
+        msg.classList.add('fade-out');
+    }, 3000);
+
+    msg.addEventListener('transitionend', () => {
+        msg.remove();
     });
+});
